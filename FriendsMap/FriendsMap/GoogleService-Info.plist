@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>257850060947-mam74t5dbdv1l0svokrgam2tvt20jo32.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.257850060947-mam74t5dbdv1l0svokrgam2tvt20jo32</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBEvXrENNWbR4Wtdrkne7MNSPMgx5eyODU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>257850060947</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>breaktime.FriendsMap</string>
+	<key>PROJECT_ID</key>
+	<string>lab3-friendsmap</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lab3-friendsmap.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:257850060947:ios:c03ab1756a7c1ee94edd66</string>
+</dict>
+</plist>
