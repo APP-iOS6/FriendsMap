@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginTextFieldModifier: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .font(.system(size: 12))
+            .font(.system(size: 16))
             .foregroundStyle(.white)
             .padding()
             .textInputAutocapitalization(.never) // 처음 문자 자동으로 대문자로 바꿔주는 기능 막기

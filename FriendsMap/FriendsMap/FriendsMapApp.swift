@@ -23,13 +23,14 @@ struct FriendsMapApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     @StateObject private var authStore = AuthenticationStore()
+    @StateObject private var profileStore = ProfileStore()
+    
   var body: some Scene {
     WindowGroup {
       NavigationView {
-//        ContentView()
-//              .environmentObject(authStore)
-          ProfileSettingView()
+        ContentView()
               .environmentObject(authStore)
+              .environmentObject(profileStore)
       }
     }
   }
