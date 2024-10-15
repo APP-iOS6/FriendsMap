@@ -547,7 +547,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2CFEBAB72CBE567D002DB27D /* FirebaseFirestore */ = {
 		CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CEFED8982CBCF20A003938E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
