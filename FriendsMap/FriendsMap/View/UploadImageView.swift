@@ -82,6 +82,51 @@ struct UploadImageView: View {
                             }
                         }
                     Spacer()
+                    
+                    if((uiImage?.isSymbolImage) != nil) {
+                        Button(action: {
+                            
+                        }) {
+                            Text("등록하기")
+                        }
+                    }
+                    
+                }
+                .navigationTitle("사진 등록하기")
+            }
+        }
+    }
+    
+    // 메타데이터 추출 함수
+    func extractMetadata(from data: Data) {
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else {
+            print("이미지 소스를 생성할 수 없습니다.")
+            return
+        }
+        
+        if let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] {
+            metadata = properties
+            print("메타데이터: \(metadata)") // 메타데이터 확인용 출력
+            
+            if let gpsData = metadata["{GPS}"] as? [String: Any] {
+                if let latitude = gpsData["Latitude"] as? Double,
+                   let latitudeRef = gpsData["LatitudeRef"] as? String,
+                   let longitude = gpsData["Longitude"] as? Double,
+                   let longitudeRef = gpsData["LongitudeRef"] as? String {
+                    
+                    // 위도 및 경도를 북위/남위, 동경/서경을 반영하여 처리
+                    let lat = (latitudeRef == "N" ? latitude : -latitude)
+                    let lon = (longitudeRef == "E" ? longitude : -longitude)
+                    
+                    print("위도: \(lat), 경도: \(lon)")
+                    
+                    imagelatitude = lat
+                    imagelongitude = lon
+                    position = .automatic
+                    
+                    
+                } else {
+                    print("위치 정보가 없습니다.")
                 }
                 
                 if uiImage != nil {
