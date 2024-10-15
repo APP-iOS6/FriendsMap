@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B82E59702CBD10E300749657 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E596F2CBD10E300749657 /* MainView.swift */; };
+		B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E59712CBE01FF00749657 /* MainViewModel.swift */; };
 		CE8C79502CBD059200992D4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE8C794F2CBD059200992D4C /* GoogleService-Info.plist */; };
 		CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */; };
 		CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */; };
@@ -26,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B82E596F2CBD10E300749657 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		B82E59712CBE01FF00749657 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		CE8C794F2CBD059200992D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageView.swift; sourceTree = "<group>"; };
 		CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageViewModel.swift; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */,
+				B82E596F2CBD10E300749657 /* MainView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -70,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */,
+				B82E59712CBE01FF00749657 /* MainViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -201,12 +207,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */,
+				B82E59702CBD10E300749657 /* MainView.swift in Sources */,
 				CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */,
 				CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */,
 				CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */,
 				CEFED8D72CBD015F003938E2 /* Content.swift in Sources */,
 				CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
+				B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
