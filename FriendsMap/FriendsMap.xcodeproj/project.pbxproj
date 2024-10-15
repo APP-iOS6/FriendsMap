@@ -26,6 +26,7 @@
 		FB9D007E2CBDF43B002874C1 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D007D2CBDF43B002874C1 /* SignUpView.swift */; };
 		FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */; };
 		FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */; };
+		FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00852CBDF65E002874C1 /* SignInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		FB9D007D2CBDF43B002874C1 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewCommon.swift; sourceTree = "<group>"; };
 		FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldModifier.swift; sourceTree = "<group>"; };
+		FB9D00852CBDF65E002874C1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 		FB9D007C2CBDF424002874C1 /* LoginView */ = {
 			isa = PBXGroup;
 			children = (
+				FB9D00852CBDF65E002874C1 /* SignInView.swift */,
 				FB9D007D2CBDF43B002874C1 /* SignUpView.swift */,
 				FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */,
 			);
@@ -242,6 +245,7 @@
 				CEFED8D72CBD015F003938E2 /* Content.swift in Sources */,
 				CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */,
 				FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */,
+				FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
