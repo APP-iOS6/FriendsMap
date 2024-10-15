@@ -118,28 +118,4 @@ extension AuthenticationStore {
             return false
         }
     }
-    
-    func createProfile(nickname: String, image: String) async {
-        do {
-            let profile = Profile(nickname: nickname, image: image)
-            let db = Firestore.firestore()
-            try await db.collection("User").document("수민테스트1").collection("Profile").document("profileDoc").setData([
-                "nickname": profile.nickname,
-                "image": profile.image,
-            ])
-        } catch {
-            print(error)
-        }
-        
-//        do {
-//            let profile = Profile(nickname: nickname, image: image)
-//            let db = Firestore.firestore()
-//            try await db.collection("User").document(email).collection("Profile").document("profileDoc").setData([
-//                "nickname": profile.nickname,
-//                "image": profile.image,
-//            ])
-//        } catch {
-//            print(error)
-//        }
-    }
 }
