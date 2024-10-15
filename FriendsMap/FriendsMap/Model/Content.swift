@@ -13,5 +13,4 @@ struct Content {
     var text: String? // 게시글 내용
     var likeCount: Int = 0  // 좋아요 수
     var contentDate: Date // 업로드 날짜
-    
 }

@@ -1,4 +1,3 @@
-//
 //  FriendsMapApp.swift
 //  FriendsMap
 //
