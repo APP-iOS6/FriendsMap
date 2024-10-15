@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         
         if authStore.authenticationState == .authenticated {
-            testView()
+            MainView()
         } else if authStore.authenticationState == .unauthenticated{
             switch authStore.flow {
             case .login :
