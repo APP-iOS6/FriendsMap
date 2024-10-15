@@ -88,7 +88,7 @@ struct SignInView: View {
                 
             }
             .frame(width:proxy.size.width, height: proxy.size.height)
-            .background(.bgcolor)
+            .background(.loginViewBG)
         }
     }
 }
