@@ -52,9 +52,9 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            Button(action: {
-                                print("Move to My Page")
-                            }) {
+                            NavigationLink {
+                                ImageManagementView()
+                            } label: {
                                 Image(systemName: "person.crop.circle")
                                     .resizable()
                                     .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
