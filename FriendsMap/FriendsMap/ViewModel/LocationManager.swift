@@ -37,4 +37,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             region.center = newCoordinate
         }
     }
+    
+    // 사용자의 현재 위치로 지도를 이동하는 메서드
+    func updateRegionToUserLocation() {
+        if let currentLocation = locationManager.location {
+            let newCoordinate = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
+            region = MKCoordinateRegion(
+                center: newCoordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            )
+        } else {
+            // 위치를 가져올 수 없는 경우 처리 (필요시 알림 메시지 추가 가능)
+            print("현재 위치를 가져올 수 없습니다.")
+        }
+    }
 }
