@@ -17,6 +17,7 @@ extension AuthenticationStore {
         authenticationState = .authenticating
         do {
             try await Auth.auth().signIn(withEmail: email, password: password)
+            print("succeeded")
             authenticationState = .authenticated
             return true
         } catch {

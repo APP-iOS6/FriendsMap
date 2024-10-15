@@ -14,23 +14,41 @@ struct ContentView: View {
     @State var isSignUp: Bool = false
     var body: some View {
         
-        switch authStore.authenticationState {
-        case .authenticated :
-            Button("로그아웃") {
-                authStore.signOut()
-            }
-            .buttonStyle(.borderedProminent)
-        case .unauthenticated :
+        if authStore.authenticationState == .authenticated {
+            testView()
+        } else if authStore.authenticationState == .unauthenticated{
             switch authStore.flow {
             case .login :
                 SignInView()
             case .signUp :
                 SignUpView()
-            } 
-        case .authenticating:
-            VStack {
+            }
+        }
+    }
+}
+
+struct testView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
+    @EnvironmentObject var profileStore: ProfileStore
+    
+    var body: some View {
+        VStack {
+            if profileStore.isLoadingProfile {
                 ProgressView()
-                Text("loading...")
+            } else {
+                if profileStore.isProfileCreated {
+                    Button("logout") {
+                        authStore.flow = .login
+                        authStore.signOut()
+                    }
+                } else {
+                    ProfileSettingView()
+                }
+            }
+        }
+        .onAppear {
+            Task {
+                await profileStore.loadProfile(email: authStore.email)
             }
         }
     }

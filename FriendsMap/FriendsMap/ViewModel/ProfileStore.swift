@@ -15,8 +15,19 @@ import FirebaseFirestore
 class ProfileStore: ObservableObject {
     
     @Published var profile: Profile = Profile(nickname: "", image: "")
+    @Published var isProfileCreated: Bool = false
+    @Published var isLoadingProfile: Bool = false
+    
     
     private let db = Firestore.firestore()
+    
+    func didCreateProfile() -> Bool { // 프로필 생성 유무 확인
+        if profile.nickname.isEmpty || profile.image.isEmpty {
+            return false
+        }
+        return true
+    }
+    
     
     //이미지, 닉네임 저장 함수 (회원가입할 때)
     func createProfile(email: String, nickname: String, image: String) async {
@@ -33,8 +44,9 @@ class ProfileStore: ObservableObject {
     
     //이미지, 닉네임 로드 함수
     func loadProfile(email: String) async {
+        isLoadingProfile = true
         do {
-            let snapshots = try await db.collection("User").document(email).collection("Profile").getDocuments()
+            let snapshots = try await db.collection("User").document("수민테스트1").collection("Profile").getDocuments()
             
             for document in snapshots.documents {
                 let docData = document.data()
@@ -45,10 +57,14 @@ class ProfileStore: ObservableObject {
                     nickname: nickname!,
                     image: image!
                 )
+                if nickname != "" && image != "" {
+                    isProfileCreated = true
+                }
             }
         } catch{
             print("\(error)")
         }
+        isLoadingProfile = false
     }
     
     
