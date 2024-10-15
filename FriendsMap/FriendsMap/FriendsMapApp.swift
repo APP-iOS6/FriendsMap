@@ -25,7 +25,16 @@ struct FriendsMapApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
+          let sampleUser = User(
+              profile: Profile(nickname: "샬라샬라샬라", image: ""),
+              email: "aaa@gmail.com",
+              contents: [],
+              friends: [],
+              requestList: ["request1@gmail.com", "request2@gmail.com"],
+              receiveList: ["request1@gmail.com", "request2@gmail.com"]
+          )
+          let viewModel = FriendViewModel(currentUser: sampleUser)
+          FriendListView(viewModel: viewModel)
       }
     }
   }
