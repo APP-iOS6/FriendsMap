@@ -9,18 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var authStore: AuthenticationStore
+    @EnvironmentObject var profileStore: ProfileStore
     @State var isLogin: Bool = false
     @State var isSignUp: Bool = false
     var body: some View {
         
-        if isLogin {
-            Text("로그인했습니다")
-        } else {
+        switch authStore.authenticationState {
+        case .authenticated :
+            Button("로그아웃") {
+                authStore.signOut()
+            }
+            .buttonStyle(.borderedProminent)
+        case .unauthenticated :
             switch authStore.flow {
             case .login :
                 SignInView()
             case .signUp :
                 SignUpView()
+            } 
+        case .authenticating:
+            VStack {
+                ProgressView()
+                Text("loading...")
             }
         }
     }
@@ -28,4 +38,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AuthenticationStore())
+        .environmentObject(ProfileStore())
 }

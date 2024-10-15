@@ -48,7 +48,6 @@ class AuthenticationStore: ObservableObject {
     @Published var displayName: String = ""
     
     
-    
     init() {
         registerAuthStateHandler()
         
