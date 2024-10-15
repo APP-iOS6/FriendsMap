@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isLogin: Bool = false
+    @State var isSignUp: Bool = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        if isLogin {
+            Text("로그인했습니다")
+        } else {
+            if isSignUp {
+                SignUpView(isSignUp: $isSignUp)
+            } else {
+                SignInView(isSignUp: $isSignUp)
+            }
         }
-        .padding()
     }
 }
 

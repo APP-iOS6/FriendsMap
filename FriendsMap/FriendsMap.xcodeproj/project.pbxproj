@@ -30,6 +30,8 @@
 		FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */; };
 		FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */; };
 		FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00852CBDF65E002874C1 /* SignInView.swift */; };
+		FB9D00882CBDF80D002874C1 /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00872CBDF80D002874C1 /* ProfileSettingView.swift */; };
+		FB9D008A2CBDFE93002874C1 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00892CBDFE8D002874C1 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewCommon.swift; sourceTree = "<group>"; };
 		FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldModifier.swift; sourceTree = "<group>"; };
 		FB9D00852CBDF65E002874C1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		FB9D00872CBDF80D002874C1 /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
+		FB9D00892CBDFE8D002874C1 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,7 @@
 				CEFED88F2CBCF0E5003938E2 /* ContentView.swift */,
 				CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */,
 				FB9D00812CBDF4AD002874C1 /* Modifier */,
+				FB9D00892CBDFE8D002874C1 /* ImagePicker.swift */,
 				CE8C794F2CBD059200992D4C /* GoogleService-Info.plist */,
 				CEFED8CF2CBCF43D003938E2 /* Info.plist */,
 				CEFED8CE2CBCF2E3003938E2 /* FriendsMap.entitlements */,
@@ -148,6 +153,7 @@
 			children = (
 				FB9D00852CBDF65E002874C1 /* SignInView.swift */,
 				FB9D007D2CBDF43B002874C1 /* SignUpView.swift */,
+				FB9D00872CBDF80D002874C1 /* ProfileSettingView.swift */,
 				FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */,
 			);
 			path = LoginView;
@@ -254,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77A2CA732CBDFAA700C18CF4 /* AuthEmail.swift in Sources */,
+				FB9D008A2CBDFE93002874C1 /* ImagePicker.swift in Sources */,
 				CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */,
 				77A2CA6F2CBDFA8500C18CF4 /* AuthStore.swift in Sources */,
 				FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */,
@@ -265,6 +272,7 @@
 				CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */,
 				77A2CA712CBDFA9700C18CF4 /* AuthGoogle.swift in Sources */,
 				FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */,
+				FB9D00882CBDF80D002874C1 /* ProfileSettingView.swift in Sources */,
 				FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
 			);

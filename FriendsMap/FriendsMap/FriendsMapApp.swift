@@ -26,11 +26,8 @@ struct FriendsMapApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-//        ContentView()
-          SignInView()
+        ContentView()
               .environmentObject(authStore)
-//          SignUpView()
-//              .environmentObject(authStore)
       }
     }
   }

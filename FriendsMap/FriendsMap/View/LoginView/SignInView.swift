@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignInView: View {
+    @Binding var isSignUp: Bool
     @State var email: String = ""
     @State var password: String = ""
     @State var warningText: String = ""
@@ -99,7 +100,7 @@ struct SignInView: View {
                     }
                     
                     Button {
-                        
+                        // 애플 로그인 로직
                     } label: {
                         ZStack {
                             Circle()
@@ -112,11 +113,22 @@ struct SignInView: View {
                     }
                 }
                 .frame(height: proxy.size.height * 0.1)
-                .padding(.bottom, proxy.size.height * 0.1)
                 
+                HStack {
+                    Text("아직 회원이 아니신가요?")
+                        .foregroundStyle(.white.opacity(0.7))
+                    
+                    Button{
+                        isSignUp.toggle()
+                    } label : {
+                        Text("회원가입")
+                            .foregroundStyle(.white.opacity(0.8))
+                            .underline()
+                    }
+                }
             }
             .frame(width:proxy.size.width, height: proxy.size.height)
-            .background(.bg)
+            .background(.loginViewBG)
         }
     }
 }
