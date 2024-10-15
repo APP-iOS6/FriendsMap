@@ -64,7 +64,7 @@ struct ProfileSettingView: View {
                     
                     
                     Button {
-                        
+                        // 닉네임 중복 확인 로직
                     } label : {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -82,7 +82,7 @@ struct ProfileSettingView: View {
                 Spacer()
                 
                 Button {
-                    
+                    // 유저 정보 관리하는 vm에서 로그인 했다고 업데이트하기
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)

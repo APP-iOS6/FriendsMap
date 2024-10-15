@@ -25,7 +25,7 @@ struct FriendsMapApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-          ProfileSettingView()
+          ContentView()
       }
     }
   }
