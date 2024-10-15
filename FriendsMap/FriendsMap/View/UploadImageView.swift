@@ -87,7 +87,7 @@ struct UploadImageView: View {
                 if uiImage != nil {
                     Button(action: {
                         Task {
-                            await ViewModels.addImage(Content(text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
+                            await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
                             dismiss()
                         }
                     }) {

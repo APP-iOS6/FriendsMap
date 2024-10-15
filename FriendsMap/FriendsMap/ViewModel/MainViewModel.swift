@@ -23,9 +23,10 @@ class MainViewModel: ObservableObject {
             var savedPosts: [Content] = [] // 임시 저장 공간
             
             for document in userCollection.documents {
-                let image: String = document.documentID
+                let id: String = document.documentID
                 
                 let docData = document.data()
+                let image = docData["image"] as? String ?? ""
                 let text = docData["text"] as? String ?? ""
                 let likeCount = docData["likeCount"] as? Int ?? 0
                 
@@ -35,7 +36,7 @@ class MainViewModel: ObservableObject {
                 let latitude = docData["latitude"] as? Double ?? 0.0
                 let longitude = docData["longitude"] as? Double ?? 0.0
                 
-                let post = Content(image: image, text: text, likeCount: likeCount, contentDate: contentDate, latitude: latitude, longitude: longitude)
+                let post = Content(id: id, image: image, text: text, likeCount: likeCount, contentDate: contentDate, latitude: latitude, longitude: longitude)
                 savedPosts.append(post)
             }
             
