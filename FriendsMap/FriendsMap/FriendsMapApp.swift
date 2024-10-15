@@ -23,6 +23,8 @@ struct FriendsMapApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var uploadViewModel = UploadImageViewModel()
     @StateObject private var mainViewModel = MainViewModel()
+    @StateObject private var authStore = AuthenticationStore()
+    @StateObject private var profileStore = ProfileStore()
     
     var body: some Scene {
         WindowGroup {
@@ -30,6 +32,8 @@ struct FriendsMapApp: App {
                 ContentView()
                     .environmentObject(uploadViewModel)
                     .environmentObject(mainViewModel)
+                    .environmentObject(authStore)
+                    .environmentObject(profileStore)
             }
         }
     }

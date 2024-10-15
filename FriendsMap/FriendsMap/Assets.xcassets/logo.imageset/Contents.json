@@ -1,17 +1,39 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
       "filename" : "logo.png",
+=======
+<<<<<<< HEAD
+      "filename" : "logo.png",
+=======
+      "filename" : "logo_text.png",
+>>>>>>> main
+>>>>>>> dev/feat/loginView
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+<<<<<<< HEAD
       "filename" : "logo 1.png",
+=======
+<<<<<<< HEAD
+=======
+      "filename" : "logo_text@2x.png",
+>>>>>>> main
+>>>>>>> dev/feat/loginView
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+<<<<<<< HEAD
       "filename" : "logo 2.png",
+=======
+<<<<<<< HEAD
+=======
+      "filename" : "logo_text@3x.png",
+>>>>>>> main
+>>>>>>> dev/feat/loginView
       "idiom" : "universal",
       "scale" : "3x"
     }
