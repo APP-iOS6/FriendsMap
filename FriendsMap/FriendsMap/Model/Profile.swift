@@ -9,5 +9,5 @@ import SwiftUI
 
 struct Profile {
     var nickname: String
-    var image: String?
+    var image: String
 }
