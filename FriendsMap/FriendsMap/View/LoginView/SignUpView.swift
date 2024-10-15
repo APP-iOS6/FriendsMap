@@ -12,6 +12,11 @@ struct SignUpView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var passwordForCheck: String = ""
+    @State var warningText: String = ""
+    
+    @EnvironmentObject var authStore: AuthenticationStore
+    
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationStack {

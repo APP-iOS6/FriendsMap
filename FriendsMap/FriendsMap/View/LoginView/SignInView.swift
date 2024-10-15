@@ -11,6 +11,10 @@ struct SignInView: View {
     @Binding var isSignUp: Bool
     @State var email: String = ""
     @State var password: String = ""
+    @State var warningText: String = ""
+    @State var isGoogleLogin: Bool = false
+    
+    @EnvironmentObject var authStore: AuthenticationStore
     
     var body: some View {
         GeometryReader { proxy in
@@ -32,12 +36,35 @@ struct SignInView: View {
                     .keyboardType(.emailAddress)
                     .frame(width: proxy.size.width * 0.85)
                     .padding(.top, proxy.size.height * 0.06)
-              
+                
                 createTextField(placeholder: "Password", varName: $password, isSecure: true)
                     .frame(width: proxy.size.width * 0.85)
-                            
+                
+                if !warningText.isEmpty {
+                    Text(warningText)
+                        .font(.system(size: 20))
+                        .foregroundStyle(.white)
+                }
+                
                 Button {
-                    // 파베 로그인 로직
+                    warningText = ""
+                    
+                    if email.isEmpty {
+                        warningText = "이메일을 입력해주세요"
+                        return
+                    }
+                    
+                    if password.isEmpty {
+                        warningText = "비밀번호를 입력해주세요"
+                        return
+                    }
+                    
+                    Task {
+                        let success = await authStore.signInWithEmailPassword(email: email, password: password)
+                        if !success {
+                            warningText = "아이디 또는 비밀번호가 일치하지 않습니다"
+                        }
+                    }
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -58,7 +85,9 @@ struct SignInView: View {
                 
                 HStack(spacing : proxy.size.width * 0.1) {
                     Button {
-                        // 구글 로그인 로직
+                        Task {
+                            isGoogleLogin =  await authStore.signInWithGoogle()
+                        }
                     } label: {
                         ZStack {
                             Circle()
@@ -80,7 +109,6 @@ struct SignInView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                           
                         }
                     }
                 }
@@ -106,6 +134,6 @@ struct SignInView: View {
 }
 
 #Preview {
-    @State var isSignUp: Bool = false
-    SignInView(isSignUp: $isSignUp)
+    SignInView()
+        .environmentObject(AuthenticationStore()) 
 }
