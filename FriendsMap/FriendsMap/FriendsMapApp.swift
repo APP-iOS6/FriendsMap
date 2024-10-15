@@ -22,10 +22,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct FriendsMapApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
+    @StateObject private var authStore = AuthenticationStore()
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
+//        ContentView()
+          SignInView()
+              .environmentObject(authStore)
+//          SignUpView()
+//              .environmentObject(authStore)
       }
     }
   }

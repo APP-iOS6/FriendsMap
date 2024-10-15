@@ -11,6 +11,11 @@ struct SignUpView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var passwordForCheck: String = ""
+    @State var warningText: String = ""
+    
+    @EnvironmentObject var authStore: AuthenticationStore
+    
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         GeometryReader { proxy in
@@ -33,19 +38,47 @@ struct SignUpView: View {
                     .keyboardType(.emailAddress)
                     .frame(width: proxy.size.width * 0.85)
                     .padding(.top, proxy.size.height * 0.02)
-              
-                createTextField(placeholder: "비밀번호", varName: $password, isSecure: true)
+                
+                createTextField(placeholder: "비밀번호", varName: $password, isSecure: false)
                     .frame(width: proxy.size.width * 0.85)
                     .padding(.top, proxy.size.height * 0.02)
-                                
-                createTextField(placeholder: "비밀번호 확인", varName: $passwordForCheck, isSecure: true)
+                
+                createTextField(placeholder: "비밀번호 확인", varName: $passwordForCheck, isSecure: false)
                     .frame(width: proxy.size.width * 0.85)
                     .padding(.top, proxy.size.height * 0.02)
+                
+                if !warningText.isEmpty {
+                    Text(warningText)
+                        .font(.system(size: 20))
+                        .foregroundStyle(.white)
+                }
                 
                 Spacer()
                 
                 Button {
+                    warningText = ""
                     
+                    if email.isEmpty {
+                        warningText = "이메일을 입력해주세요"
+                        return
+                    }
+                    
+                    if password.isEmpty || passwordForCheck.isEmpty {
+                        warningText = "비밀번호를 입력해주세요"
+                        return
+                    }
+                    
+                    if password != passwordForCheck {
+                        warningText = "비밀번호가 일치하지 않습니다"
+                        return
+                    }
+                    
+                    Task {
+                        let success = await authStore.signUpWithEmailPassword(email: email, password: password)
+                        if !success {
+                            warningText = "회원가입에 실패하였습니다"
+                        }
+                    }
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -60,7 +93,7 @@ struct SignUpView: View {
                 
             }
             .frame(width:proxy.size.width, height: proxy.size.height)
-            .background(.bgcolor)
+            .background(.bg)
         }
     }
 }
