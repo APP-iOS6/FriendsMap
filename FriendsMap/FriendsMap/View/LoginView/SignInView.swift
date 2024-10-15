@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SignInView: View {
-    @Binding var isSignUp: Bool
     @State var email: String = ""
     @State var password: String = ""
     @State var warningText: String = ""
@@ -119,7 +118,7 @@ struct SignInView: View {
                         .foregroundStyle(.white.opacity(0.7))
                     
                     Button{
-                        isSignUp.toggle()
+                        authStore.switchFlow()
                     } label : {
                         Text("회원가입")
                             .foregroundStyle(.white.opacity(0.8))

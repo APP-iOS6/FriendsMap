@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @State var isLogin: Bool = false
     @State var isSignUp: Bool = false
     var body: some View {
@@ -15,10 +16,11 @@ struct ContentView: View {
         if isLogin {
             Text("로그인했습니다")
         } else {
-            if isSignUp {
-                SignUpView(isSignUp: $isSignUp)
-            } else {
-                SignInView(isSignUp: $isSignUp)
+            switch authStore.flow {
+            case .login :
+                SignInView()
+            case .signUp :
+                SignUpView()
             }
         }
     }
