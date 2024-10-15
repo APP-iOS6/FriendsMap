@@ -19,6 +19,10 @@ struct UploadImageView: View {
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
     @State var selectedImageData: Data? = nil
+    @Environment(\.dismiss) var dismiss
+    
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
         GeometryReader { geometry in
@@ -29,10 +33,9 @@ struct UploadImageView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
+                        .frame(height: screenHeight * 0.3)
+                        .padding()
                 }
-                
-                Spacer()
                 
                 HStack(alignment: .center) {
                     Spacer()
@@ -46,8 +49,7 @@ struct UploadImageView: View {
                                     Image(systemName: "photo.on.rectangle.angled")
                                     Text("갤러리에서 사진 가져오기")
                                 }
-                                .frame(width: geometry.size.width * 0.85, height: geometry.size.height * 0.1)
-                                .frame(minHeight: geometry.size.height * 0.1, maxHeight: geometry.size.height * 0.2)
+                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                                 .background(.blue)
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
@@ -56,9 +58,8 @@ struct UploadImageView: View {
                                     Image(systemName: "photo.on.rectangle.angled")
                                     Text("사진 교체")
                                 }
-                                .frame(width: geometry.size.width * 0.85, height: geometry.size.height * 0.1)
-                                .frame(minHeight: geometry.size.height * 0.1, maxHeight: geometry.size.height * 0.2)
-                                .background(.blue)
+                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
+                                .background(.green)
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
                             }
@@ -82,17 +83,16 @@ struct UploadImageView: View {
                         }
                     Spacer()
                 }
-                .frame(width: .infinity)
                 
                 if uiImage != nil {
                     Button(action: {
                         Task {
                             await ViewModels.addImage(Content(text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
+                            dismiss()
                         }
                     }) {
                         Text("등록하기")
-                            .frame(width: geometry.size.width * 0.85, height: geometry.size.height * 0.1)
-                            .frame(minHeight: geometry.size.height * 0.1, maxHeight: geometry.size.height * 0.2)
+                            .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                             .background(.blue)
                             .foregroundStyle(.white)
                             .cornerRadius(10)

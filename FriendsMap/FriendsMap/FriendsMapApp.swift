@@ -22,12 +22,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct FriendsMapApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var uploadViewModel = UploadImageViewModel()
+    @StateObject private var mainViewModel = MainViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 ContentView()
                     .environmentObject(uploadViewModel)
+                    .environmentObject(mainViewModel)
             }
         }
     }

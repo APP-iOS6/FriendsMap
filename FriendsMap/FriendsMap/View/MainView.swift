@@ -19,7 +19,7 @@ struct MainView: View {
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @StateObject private var locationManager = LocationManager()
-    
+    @EnvironmentObject private var mainViewModel: MainViewModel
     
     var body: some View {
         GeometryReader { geometry in
@@ -104,12 +104,17 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             .sheet(isPresented: $isShowingSheet) {
                                 UploadImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude)
-                                    .presentationDetents(selectedLatitude == nil ? [.fraction(0.3)] : [.medium])
+                                    .presentationDetents(selectedLatitude == nil ? [.fraction(0.2)] : [.medium])
                             }
                         }
                     }
                 }
                 .navigationBarHidden(true)
+            }
+        }
+        .onAppear {
+            Task {
+               await mainViewModel.loadPosts()
             }
         }
     }
@@ -119,5 +124,6 @@ struct MainView: View {
 #Preview {
     MainView()
         .environmentObject(UploadImageViewModel())
+        .environmentObject(MainViewModel())
 }
 
