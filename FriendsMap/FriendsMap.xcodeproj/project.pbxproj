@@ -7,14 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CA7299C2CBDF81400FD6F64 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA7299B2CBDF81400FD6F64 /* ProfileView.swift */; };
-		2CA7299E2CBE012600FD6F64 /* ProfileManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA7299D2CBE012600FD6F64 /* ProfileManagementView.swift */; };
-		2CA729A02CBE075900FD6F64 /* ImageManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA7299F2CBE075900FD6F64 /* ImageManagementView.swift */; };
-		2CA729A22CBE2C7400FD6F64 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA729A12CBE2C7400FD6F64 /* ProfileViewModel.swift */; };
-		2CFEBAB52CBE54D3002DB27D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2CFEBAB42CBE54D3002DB27D /* GoogleService-Info.plist */; };
-		2CFEBAB82CBE567D002DB27D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFEBAB72CBE567D002DB27D /* FirebaseFirestore */; };
-		B82E59702CBD10E300749657 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E596F2CBD10E300749657 /* MainView.swift */; };
-		B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E59712CBE01FF00749657 /* MainViewModel.swift */; };
 		B82E59702CBD10E300749657 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E596F2CBD10E300749657 /* MainView.swift */; };
 		B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E59712CBE01FF00749657 /* MainViewModel.swift */; };
 		B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F6D222CBE472A00D59FF1 /* LocationManager.swift */; };
@@ -36,21 +28,9 @@
 		CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D22CBCF6EB003938E2 /* User.swift */; };
 		CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D42CBD0144003938E2 /* Profile.swift */; };
 		CEFED8D72CBD015F003938E2 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D62CBD015C003938E2 /* Content.swift */; };
-		E0BCB8CE2CBDEDF900FF2391 /* FriendListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCB8CD2CBDEDE200FF2391 /* FriendListView.swift */; };
-		E0BCB8D02CBDEF2600FF2391 /* FriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCB8CF2CBDEF1900FF2391 /* FriendViewModel.swift */; };
-		E0BCB8D22CBDF42200FF2391 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCB8D12CBDF41800FF2391 /* AddFriendView.swift */; };
-		E0BCB8D42CBDFA7600FF2391 /* FriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCB8D32CBDFA6600FF2391 /* FriendRequestView.swift */; };
-		E0BCB8D72CBE018A00FF2391 /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCB8D62CBE018400FF2391 /* ColorSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2CA7299B2CBDF81400FD6F64 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		2CA7299D2CBE012600FD6F64 /* ProfileManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagementView.swift; sourceTree = "<group>"; };
-		2CA7299F2CBE075900FD6F64 /* ImageManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManagementView.swift; sourceTree = "<group>"; };
-		2CA729A12CBE2C7400FD6F64 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
-		2CFEBAB42CBE54D3002DB27D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		B82E596F2CBD10E300749657 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		B82E59712CBE01FF00749657 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		B82E596F2CBD10E300749657 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		B82E59712CBE01FF00749657 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		B82F6D222CBE472A00D59FF1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -66,11 +46,6 @@
 		CEFED8D22CBCF6EB003938E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEFED8D42CBD0144003938E2 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		CEFED8D62CBD015C003938E2 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
-		E0BCB8CD2CBDEDE200FF2391 /* FriendListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListView.swift; sourceTree = "<group>"; };
-		E0BCB8CF2CBDEF1900FF2391 /* FriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModel.swift; sourceTree = "<group>"; };
-		E0BCB8D12CBDF41800FF2391 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
-		E0BCB8D32CBDFA6600FF2391 /* FriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestView.swift; sourceTree = "<group>"; };
-		E0BCB8D62CBE018400FF2391 /* ColorSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +59,6 @@
 				CEFED8AC2CBCF20A003938E2 /* FirebaseDatabase in Frameworks */,
 				CEFED8A02CBCF20A003938E2 /* FirebaseAppCheck in Frameworks */,
 				CEFED8A42CBCF20A003938E2 /* FirebaseAuth in Frameworks */,
-				2CFEBAB82CBE567D002DB27D /* FirebaseFirestore in Frameworks */,
 				CE95DF3B2CBE8C8D006F2732 /* FirebaseFirestore in Frameworks */,
 				CEFED8CB2CBCF293003938E2 /* GoogleSignIn in Frameworks */,
 				CEFED8A82CBCF20A003938E2 /* FirebaseCore in Frameworks */,
@@ -94,22 +68,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2CFEBAB62CBE567D002DB27D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		CE8C79512CBD0A2700992D4C /* View */ = {
 			isa = PBXGroup;
 			children = (
 				CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */,
-				2CA7299B2CBDF81400FD6F64 /* ProfileView.swift */,
-				2CA7299F2CBE075900FD6F64 /* ImageManagementView.swift */,
-				2CA7299D2CBE012600FD6F64 /* ProfileManagementView.swift */,
-				B82E596F2CBD10E300749657 /* MainView.swift */,
-				E0BCB8CC2CBDED9300FF2391 /* MyPageFriend */,
 				B82E596F2CBD10E300749657 /* MainView.swift */,
 			);
 			path = View;
@@ -119,9 +81,6 @@
 			isa = PBXGroup;
 			children = (
 				CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */,
-				2CA729A12CBE2C7400FD6F64 /* ProfileViewModel.swift */,
-				B82E59712CBE01FF00749657 /* MainViewModel.swift */,
-				E0BCB8CF2CBDEF1900FF2391 /* FriendViewModel.swift */,
 				B82E59712CBE01FF00749657 /* MainViewModel.swift */,
 				B82F6D222CBE472A00D59FF1 /* LocationManager.swift */,
 			);
@@ -139,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				CEFED8912CBCF0E5003938E2 /* FriendsMap */,
-				2CFEBAB62CBE567D002DB27D /* Frameworks */,
 				CE95DF392CBE8C8D006F2732 /* Frameworks */,
 				CEFED87A2CBCF09D003938E2 /* Products */,
 			);
@@ -166,37 +124,17 @@
 		CEFED8912CBCF0E5003938E2 /* FriendsMap */ = {
 			isa = PBXGroup;
 			children = (
-				E0BCB8D52CBE017A00FF2391 /* Color */,
 				CEFED88B2CBCF0E5003938E2 /* Model */,
 				CE8C79512CBD0A2700992D4C /* View */,
 				CE8C79542CBD0DFF00992D4C /* ViewModel */,
 				CEFED88F2CBCF0E5003938E2 /* ContentView.swift */,
 				CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */,
-				2CFEBAB42CBE54D3002DB27D /* GoogleService-Info.plist */,
 				CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */,
 				CEFED8CF2CBCF43D003938E2 /* Info.plist */,
 				CEFED8CE2CBCF2E3003938E2 /* FriendsMap.entitlements */,
 				CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */,
 			);
 			path = FriendsMap;
-			sourceTree = "<group>";
-		};
-		E0BCB8CC2CBDED9300FF2391 /* MyPageFriend */ = {
-			isa = PBXGroup;
-			children = (
-				E0BCB8CD2CBDEDE200FF2391 /* FriendListView.swift */,
-				E0BCB8D12CBDF41800FF2391 /* AddFriendView.swift */,
-				E0BCB8D32CBDFA6600FF2391 /* FriendRequestView.swift */,
-			);
-			path = MyPageFriend;
-			sourceTree = "<group>";
-		};
-		E0BCB8D52CBE017A00FF2391 /* Color */ = {
-			isa = PBXGroup;
-			children = (
-				E0BCB8D62CBE018400FF2391 /* ColorSet.swift */,
-			);
-			path = Color;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,7 +161,6 @@
 				CEFED8C52CBCF20A003938E2 /* FirebaseStorageCombine-Community */,
 				CEFED8CA2CBCF293003938E2 /* GoogleSignIn */,
 				CEFED8CC2CBCF293003938E2 /* GoogleSignInSwift */,
-				2CFEBAB72CBE567D002DB27D /* FirebaseFirestore */,
 				CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */,
 				CE95DF3C2CBE8C92006F2732 /* FirebaseStorage */,
 			);
@@ -275,7 +212,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEFED8932CBCF0E5003938E2 /* Assets.xcassets in Resources */,
-				2CFEBAB52CBE54D3002DB27D /* GoogleService-Info.plist in Resources */,
 				CE95DF382CBE8820006F2732 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -287,24 +223,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0BCB8CE2CBDEDF900FF2391 /* FriendListView.swift in Sources */,
-				E0BCB8D42CBDFA7600FF2391 /* FriendRequestView.swift in Sources */,
 				CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */,
-				2CA729A02CBE075900FD6F64 /* ImageManagementView.swift in Sources */,
-				2CA7299E2CBE012600FD6F64 /* ProfileManagementView.swift in Sources */,
-				2CA7299C2CBDF81400FD6F64 /* ProfileView.swift in Sources */,
-				B82E59702CBD10E300749657 /* MainView.swift in Sources */,
-				E0BCB8D02CBDEF2600FF2391 /* FriendViewModel.swift in Sources */,
-				E0BCB8D72CBE018A00FF2391 /* ColorSet.swift in Sources */,
 				B82E59702CBD10E300749657 /* MainView.swift in Sources */,
 				B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */,
 				CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */,
 				CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */,
 				CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */,
-				2CA729A22CBE2C7400FD6F64 /* ProfileViewModel.swift in Sources */,
 				CEFED8D72CBD015F003938E2 /* Content.swift in Sources */,
 				CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */,
-				E0BCB8D22CBDF42200FF2391 /* AddFriendView.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
 				B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */,
 			);
@@ -547,7 +473,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2CFEBAB72CBE567D002DB27D /* FirebaseFirestore */ = {
 		CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CEFED8982CBCF20A003938E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
