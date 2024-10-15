@@ -12,6 +12,9 @@ struct ProfileSettingView: View {
     @State private var profileImage: UIImage = UIImage()
     @State private var isPresented: Bool = false
     
+    @EnvironmentObject var authStore: AuthenticationStore
+    @EnvironmentObject private var profileStore: ProfileStore
+    
     var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 20) {
@@ -83,6 +86,10 @@ struct ProfileSettingView: View {
                 
                 Button {
                     // 유저 정보 관리하는 vm에서 로그인 했다고 업데이트하기
+                    Task {
+                        await profileStore.createProfile(email: authStore.email, nickname: nickname, image: "파베 테스트1")
+                    }
+                    //이미지 url 변환 필요함! 나중에 추가
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)

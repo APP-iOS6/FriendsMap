@@ -26,7 +26,9 @@ struct FriendsMapApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
+//        ContentView()
+//              .environmentObject(authStore)
+          ProfileSettingView()
               .environmentObject(authStore)
       }
     }
