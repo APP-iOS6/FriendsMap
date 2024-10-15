@@ -23,6 +23,9 @@
 		CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D22CBCF6EB003938E2 /* User.swift */; };
 		CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D42CBD0144003938E2 /* Profile.swift */; };
 		CEFED8D72CBD015F003938E2 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8D62CBD015C003938E2 /* Content.swift */; };
+		FB9D007E2CBDF43B002874C1 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D007D2CBDF43B002874C1 /* SignUpView.swift */; };
+		FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */; };
+		FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +41,9 @@
 		CEFED8D22CBCF6EB003938E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEFED8D42CBD0144003938E2 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		CEFED8D62CBD015C003938E2 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		FB9D007D2CBDF43B002874C1 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewCommon.swift; sourceTree = "<group>"; };
+		FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextFieldModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,7 @@
 		CE8C79512CBD0A2700992D4C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				FB9D007C2CBDF424002874C1 /* LoginView */,
 				CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */,
 			);
 			path = View;
@@ -108,12 +115,38 @@
 				CE8C79542CBD0DFF00992D4C /* ViewModel */,
 				CEFED88F2CBCF0E5003938E2 /* ContentView.swift */,
 				CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */,
+				FB9D00812CBDF4AD002874C1 /* Modifier */,
 				CE8C794F2CBD059200992D4C /* GoogleService-Info.plist */,
 				CEFED8CF2CBCF43D003938E2 /* Info.plist */,
 				CEFED8CE2CBCF2E3003938E2 /* FriendsMap.entitlements */,
 				CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */,
 			);
 			path = FriendsMap;
+			sourceTree = "<group>";
+		};
+		FB9D007C2CBDF424002874C1 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				FB9D007D2CBDF43B002874C1 /* SignUpView.swift */,
+				FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		FB9D00812CBDF4AD002874C1 /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				FB9D00822CBDF4B7002874C1 /* LoginView */,
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		FB9D00822CBDF4B7002874C1 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				FB9D00832CBDF4E1002874C1 /* LoginTextFieldModifier.swift */,
+			);
+			path = LoginView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,11 +234,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */,
+				FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */,
 				CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */,
 				CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */,
 				CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */,
+				FB9D007E2CBDF43B002874C1 /* SignUpView.swift in Sources */,
 				CEFED8D72CBD015F003938E2 /* Content.swift in Sources */,
 				CEFED8D32CBCF6F1003938E2 /* User.swift in Sources */,
+				FB9D00842CBDF4E5002874C1 /* LoginTextFieldModifier.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
