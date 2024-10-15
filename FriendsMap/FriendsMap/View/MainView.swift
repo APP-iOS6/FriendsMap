@@ -126,4 +126,3 @@ struct MainView: View {
         .environmentObject(UploadImageViewModel())
         .environmentObject(MainViewModel())
 }
-

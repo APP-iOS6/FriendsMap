@@ -48,12 +48,3 @@ class MainViewModel: ObservableObject {
         }
     }
 }
-
-
-
-
-
-
-
-
-
