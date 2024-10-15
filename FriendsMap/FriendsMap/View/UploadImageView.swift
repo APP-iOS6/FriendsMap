@@ -10,74 +10,77 @@ import MapKit
 import PhotosUI
 import ImageIO
 
-extension CLLocationCoordinate2D {
-    static let imageCoordinate = CLLocationCoordinate2D(latitude: 37.658301, longitude: 126.831972)
-}
-
 struct UploadImageView: View {
-    @State private var position: MapCameraPosition = .automatic // 카메라 위치
+    @EnvironmentObject private var ViewModels: UploadImageViewModel
+    
+    @Binding var selectedLatitude: Double?  // 메인 뷰로 보낼 위도 정보
+    @Binding var selectedLongitude: Double? // 메인 뷰로 보낼 경도 정보
+    
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
-    @State var metadata: [String: Any] = [:] // 메타데이터 저장
-    @State var imagelatitude: Double = 0.0
-    @State var imagelongitude: Double = 0.0
-    @State var imageDate: Date?
+    @State var selectedImageData: Data? = nil
+    @Environment(\.dismiss) var dismiss
+    
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
         GeometryReader { geometry in
-            NavigationStack {
-                VStack {
-                    // Text("Hello, World!")
+            VStack(alignment: .center) {
+                Spacer()
+                
+                if let uiImage = uiImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: screenHeight * 0.3)
+                        .padding()
+                }
+                
+                HStack(alignment: .center) {
+                    Spacer()
                     
-                    if (imagelatitude != 0.0) {
-                        Map(position: $position){
-                            Marker("내 위치", coordinate: CLLocationCoordinate2D(latitude: imagelatitude, longitude: imagelongitude))
-                        }
-                        .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
-                        .mapStyle(.standard(elevation: .realistic))
-                    }
-                    
-                    HStack {
-                        if((uiImage?.isSymbolImage) != nil) {
-                            Image(uiImage: uiImage ?? UIImage())
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.3)
-                        }
-                        
-                        VStack {
-                            Text("사진 이름")
-                                .frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.05)
-                                .background(.gray)
+                    PhotosPicker(
+                        selection: $imageSelection,
+                        matching: .images,
+                        photoLibrary: .shared()) {
+                            if imageSelection == nil {
+                                HStack{
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                    Text("갤러리에서 사진 가져오기")
+                                }
+                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
+                                .background(.blue)
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
-                            
-                            PhotosPicker(
-                                selection: $imageSelection,
-                                matching: .images,
-                                photoLibrary: .shared()) {
-                                    Text("사진 변경하기")
-                                        .frame(width: 200, height: 50)
-                                        .background(.blue)
-                                        .foregroundStyle(.white)
-                                        .cornerRadius(10)
+                            } else {
+                                HStack{
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                    Text("사진 교체")
                                 }
-                                .onChange(of: imageSelection) {
-                                    Task { @MainActor in
-                                        if let data = try? await imageSelection?.loadTransferable(type: Data.self) {
-                                            uiImage = UIImage(data: data)
-                                            
-                                            extractMetadata(from: data)
-                                            return
-                                        }
-                                    }
-                                }
-                            // .photosPickerStyle(.inline)
-                            // .photosPickerAccessoryVisibility(.hidden)
+                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
+                                .background(.green)
+                                .foregroundStyle(.white)
+                                .cornerRadius(10)
+                            }
                         }
-                    }
-                    .padding()
-                    
+                        .onChange(of: imageSelection) { _ , _  in
+                            Task {
+                                // imageSelection의 현재 값을 확인하여 데이터를 로드
+                                if let newSelection = imageSelection,
+                                   let data = try? await newSelection.loadTransferable(type: Data.self) {
+                                    uiImage = UIImage(data: data)
+                                    
+                                    // 메타데이터 추출
+                                    ViewModels.extractMetadata(from: data)
+                                    selectedImageData = data
+                                    
+                                    selectedLatitude = ViewModels.imagelatitude
+                                    selectedLongitude =
+                                    ViewModels.imagelongitude
+                                }
+                            }
+                        }
                     Spacer()
                     
                     if((uiImage?.isSymbolImage) != nil) {
@@ -126,27 +129,26 @@ struct UploadImageView: View {
                     print("위치 정보가 없습니다.")
                 }
                 
-                // Exif 데이터에서 날짜 정보 추출
-                if let exifData = metadata["{Exif}"] as? [String: Any],
-                   let dateString = exifData["DateTimeOriginal"] as? String {
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy:MM:dd HH:mm:ss" // Exif 날짜 형식
-                    if let date = formatter.date(from: dateString) {
-                        imageDate = date
-                        print("촬영 날짜: \(date)")
-                    } else {
-                        print("날짜 형식을 변환할 수 없습니다.")
+                if uiImage != nil {
+                    Button(action: {
+                        Task {
+                            await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
+                            dismiss()
+                        }
+                    }) {
+                        Text("등록하기")
+                            .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
+                            .background(.blue)
+                            .foregroundStyle(.white)
+                            .cornerRadius(10)
                     }
-                } else {
-                    print("날짜 정보가 없습니다.")
                 }
             }
-        } else {
-            print("메타데이터를 추출할 수 없습니다.")
         }
     }
 }
 
 #Preview {
-    UploadImageView()
+    UploadImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil))
+        .environmentObject(UploadImageViewModel())
 }
