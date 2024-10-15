@@ -12,6 +12,7 @@ import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
 import Observation
+import FirebaseFirestore
 
 // 인증 처리 상태
 enum AuthenticationState {
@@ -47,6 +48,7 @@ class AuthenticationStore: ObservableObject {
     @Published var firebaseUser: FirebaseAuth.User?
     @Published var displayName: String = ""
     
+    @Published var profile: Profile = Profile(nickname: "", image: "")
     
     init() {
         registerAuthStateHandler()
