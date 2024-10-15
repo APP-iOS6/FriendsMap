@@ -15,6 +15,9 @@ extension CLLocationCoordinate2D {
 }
 
 struct UploadImageView: View {
+    @Binding var selectedLatitude: Double?  // 메인 뷰로 보낼 위도 정보
+    @Binding var selectedLongitude: Double? // 메인 뷰로 보낼 경도 정보
+    
     @State private var position: MapCameraPosition = .automatic // 카메라 위치
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
@@ -27,19 +30,9 @@ struct UploadImageView: View {
         GeometryReader { geometry in
             NavigationStack {
                 VStack {
-                    // Text("Hello, World!")
-                    
-                    if (imagelatitude != 0.0) {
-                        Map(position: $position){
-                            Marker("내 위치", coordinate: CLLocationCoordinate2D(latitude: imagelatitude, longitude: imagelongitude))
-                        }
-                        .frame(width: geometry.size.width, height: geometry.size.height * 0.4)
-                        .mapStyle(.standard(elevation: .realistic))
-                    }
-                    
                     HStack {
-                        if((uiImage?.isSymbolImage) != nil) {
-                            Image(uiImage: uiImage ?? UIImage())
+                        if let uiImage = uiImage {
+                            Image(uiImage: uiImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.3)
@@ -62,32 +55,39 @@ struct UploadImageView: View {
                                         .foregroundStyle(.white)
                                         .cornerRadius(10)
                                 }
-                                .onChange(of: imageSelection) {
-                                    Task { @MainActor in
-                                        if let data = try? await imageSelection?.loadTransferable(type: Data.self) {
+                                .onChange(of: imageSelection) { _ , _  in 
+                                    Task {
+                                        // imageSelection의 현재 값을 확인하여 데이터를 로드
+                                        if let newSelection = imageSelection,
+                                           let data = try? await newSelection.loadTransferable(type: Data.self) {
                                             uiImage = UIImage(data: data)
                                             
+                                            // 메타데이터 추출
                                             extractMetadata(from: data)
-                                            return
                                         }
                                     }
                                 }
-                            // .photosPickerStyle(.inline)
-                            // .photosPickerAccessoryVisibility(.hidden)
+
+
                         }
                     }
                     .padding()
                     
                     Spacer()
                     
-                    if((uiImage?.isSymbolImage) != nil) {
+                    if uiImage != nil {
                         Button(action: {
-                            
+                            // 선택된 위치 정보를 메인 뷰로 전달
+                            selectedLatitude = imagelatitude
+                            selectedLongitude = imagelongitude
                         }) {
                             Text("등록하기")
+                                .frame(width: geometry.size.width * 0.8, height: 50)
+                                .background(.blue)
+                                .foregroundStyle(.white)
+                                .cornerRadius(10)
                         }
                     }
-                    
                 }
                 .navigationTitle("사진 등록하기")
             }
@@ -119,7 +119,11 @@ struct UploadImageView: View {
                     
                     imagelatitude = lat
                     imagelongitude = lon
+                    // 메인 뷰의 latitude, longitude 업데이트
+                    selectedLatitude = lat
+                    selectedLongitude = lon
                     position = .automatic
+<<<<<<< Updated upstream
                     
                 } else {
                     print("위치 정보가 없습니다.")
@@ -138,6 +142,8 @@ struct UploadImageView: View {
                     }
                 } else {
                     print("날짜 정보가 없습니다.")
+=======
+>>>>>>> Stashed changes
                 }
             }
         } else {
@@ -147,5 +153,5 @@ struct UploadImageView: View {
 }
 
 #Preview {
-    UploadImageView()
+    UploadImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil))
 }
