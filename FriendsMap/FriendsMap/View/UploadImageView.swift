@@ -121,6 +121,7 @@ struct UploadImageView: View {
                     imagelongitude = lon
                     position = .automatic
                     
+                    
                 } else {
                     print("위치 정보가 없습니다.")
                 }

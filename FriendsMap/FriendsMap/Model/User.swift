@@ -11,9 +11,9 @@ struct User {
     var profile: Profile
     var email: String
     var contents : [Content]
-    var friends: [User]
-    var requestList: [User]
-    var receiveList: [User]
+    var friends: [String]
+    var requestList: [String]
+    var receiveList: [String]
 }
 
 
