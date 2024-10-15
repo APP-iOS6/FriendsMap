@@ -10,23 +10,27 @@ import FirebaseCore
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-
-    return true
-  }
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        
+        return true
+    }
 }
 
 @main
 struct FriendsMapApp: App {
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
-  var body: some Scene {
-    WindowGroup {
-      NavigationView {
-        MainView()
-      }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject private var uploadViewModel = UploadImageViewModel()
+    @StateObject private var mainViewModel = MainViewModel()
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationView {
+                ContentView()
+                    .environmentObject(uploadViewModel)
+                    .environmentObject(mainViewModel)
+            }
+        }
     }
-  }
 }
