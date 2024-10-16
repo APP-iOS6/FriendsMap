@@ -34,6 +34,13 @@ struct ImageManagementView: View {
                                     .frame(width: 35, height: 35)
                             }
                             .padding(.horizontal, 10)
+                            .onTapGesture {
+                                Task {
+                                    try await viewModel.deleteContentImage(documentID: content.id, email: "j77777y@naver.com")
+                                    print("삭제: \(content.id)")
+                                    try await viewModel.fetchContents(from: "j77777y@naver.com")
+                                }
+                            }
                     }
                 }
             }
