@@ -57,6 +57,9 @@ extension AuthenticationStore {
 
             try await db.collection("User").document(firebaseUser.email ?? "").setData(userDocument)
             
+            self.flow = .main
+            self.authenticationState = .authenticated
+            
             self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
             
             return true
