@@ -13,7 +13,6 @@ import FirebaseFirestore
 
 @MainActor
 class ProfileStore: ObservableObject {
-    
     @Published var profile: Profile = Profile(nickname: "", image: "")
     @Published var isProfileCreated: Bool = false
     @Published var isLoadingProfile: Bool = false
@@ -69,18 +68,19 @@ class ProfileStore: ObservableObject {
     
     
     //이미지, 닉네임 수정 함수
-    func updateProfile(nickname: String, image: String, email: String) async {
+    func updateProfile(nickname: String, image: String, email: String) async -> Bool{
         do {
             let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
-            
             try await docRef.setData([
                 "nickname": nickname,
                 "image": image
             ]
             )
             profile = Profile(nickname: nickname, image: image)
+            return true
         } catch {
             print(error)
+            return false
         }
     }
     

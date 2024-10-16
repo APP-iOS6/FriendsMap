@@ -18,38 +18,32 @@ extension AuthenticationStore {
         authenticationState = .authenticating
         do {
             try await Auth.auth().signIn(withEmail: email, password: password)
-            print("로그인 성공")
             
             authenticationState = .authenticated
+            self.user = User(profile: Profile(nickname: "", image: "수민테스트"), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             let db = Firestore.firestore()
-            let userDoc = try await db.collection("User").document(email).getDocument()
+            //            let userDoc = try await db.collection("User").document(email).getDocument()
+            let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
             
             // 유저 문서가 존재하면
-            if userDoc.exists {
-                
-                let profileDoc = try await userDoc.reference.collection("Profile").document("profileDoc").getDocument()
-                
-                if profileDoc.exists {
-                    if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
-                        // 닉네임이 비어있지 않으면 MainView로 이동
-                        return true
-                    } else {
-                        // 닉네임이 비어있으면 ProfileSettingView로 이동
-                        self.authenticationState = .unauthenticated
-                        self.flow = .profileSetting
-                        return false
-                    }
+            if profileDoc.exists {
+                if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
+                    // 닉네임이 비어있지 않으면 MainView로 이동
+                    self.user!.profile.nickname = nickname
+                    print(nickname)
+                    
+                    return true
                 } else {
-                    // ProfileDoc 문서가 없으면 ProfileSettingView로 이동
-                    self.authenticationState = .unauthenticated
+                    // 닉네임이 비어있으면 ProfileSettingView로 이동
                     self.flow = .profileSetting
+                    print(1)
                     return false
                 }
             } else {
-                // 신규 사용자이면 회원가입뷰로 이동
-                self.authenticationState = .unauthenticated
-                self.flow = .signUp
+                // ProfileDoc 문서가 없으면 ProfileSettingView로 이동
+                self.flow = .profileSetting
+                print(2)
                 return false
             }
         } catch {
@@ -78,7 +72,6 @@ extension AuthenticationStore {
             self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             self.flow = .profileSetting // 프로필 설정 화면으로 이동
             return true
-            
             
         }
         catch {
