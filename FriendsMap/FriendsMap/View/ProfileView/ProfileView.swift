@@ -47,29 +47,7 @@ struct ProfileView: View {
         }
     }
 }
-struct ProfileCustomButton: View {
-    let buttonLabel: String
-    let buttonForegroundColor: Color
-    let buttonBackgroundColor: Color
-    let buttonWidth: CGFloat
-    let buttonAction: () -> ()
-    var body: some View {
-        VStack {
-            Button {
-                buttonAction()
-            } label: {
-                Text(buttonLabel)
-                    .foregroundStyle(buttonForegroundColor)
-                    .frame(maxWidth: buttonWidth)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(buttonBackgroundColor)
-                    )
-            }
-        }
-    }
-}
+
 struct ProfileButtonList: View {
     var body: some View {
         VStack (spacing: 35) {

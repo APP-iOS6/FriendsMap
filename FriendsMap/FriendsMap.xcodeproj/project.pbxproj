@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CF4D8FB2CBF98C0002824DC /* ProfileCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF4D8FA2CBF98C0002824DC /* ProfileCustomButton.swift */; };
 		2CF775342CBED99D00FE13C2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF775322CBED99D00FE13C2 /* ProfileView.swift */; };
 		2CF775362CBED99D00FE13C2 /* ProfileManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */; };
 		2CF775382CBED9B700FE13C2 /* ImageManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF775372CBED9B700FE13C2 /* ImageManagementView.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CF4D8FA2CBF98C0002824DC /* ProfileCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCustomButton.swift; sourceTree = "<group>"; };
 		2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagementView.swift; sourceTree = "<group>"; };
 		2CF775322CBED99D00FE13C2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		2CF775372CBED9B700FE13C2 /* ImageManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManagementView.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */,
 				2CF775372CBED9B700FE13C2 /* ImageManagementView.swift */,
 				2CF775322CBED99D00FE13C2 /* ProfileView.swift */,
+				2CF4D8FA2CBF98C0002824DC /* ProfileCustomButton.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */,
 				2CF775342CBED99D00FE13C2 /* ProfileView.swift in Sources */,
 				2CF775362CBED99D00FE13C2 /* ProfileManagementView.swift in Sources */,
+				2CF4D8FB2CBF98C0002824DC /* ProfileCustomButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
