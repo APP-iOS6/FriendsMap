@@ -77,8 +77,10 @@ struct SignUpView: View {
                     
                     Task {
                         let success = await authStore.signUpWithEmailPassword(email: email, password: password)
-                        
-                        if !success {
+                        // 회원가입 성공 시 로그인 뷰로 이동
+                        if success {
+                            
+                        } else {
                             warningText = "회원가입에 실패하였습니다"
                         }
                     }
@@ -97,7 +99,7 @@ struct SignUpView: View {
                         .foregroundStyle(.white.opacity(0.7))
                     
                     Button {
-                        authStore.switchFlow()
+                        authStore.switchFlow(to: .login)
                     } label : {
                         Text("로그인")
                             .foregroundStyle(.white.opacity(0.8))
