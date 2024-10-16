@@ -12,6 +12,7 @@ import ImageIO
 
 struct UploadImageView: View {
     @EnvironmentObject private var ViewModels: UploadImageViewModel
+    @EnvironmentObject var authStore: AuthenticationStore
     
     @Binding var selectedLatitude: Double?  // 메인 뷰로 보낼 위도 정보
     @Binding var selectedLongitude: Double? // 메인 뷰로 보낼 경도 정보
@@ -80,7 +81,7 @@ struct UploadImageView: View {
                     if uiImage != nil {
                         Button(action: {
                             Task {
-                                await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
+                                await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData, authStore.user!.email)
                                 dismiss()
                             }
                         }) {

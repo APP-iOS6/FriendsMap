@@ -14,11 +14,11 @@ import FirebaseStorage
 @MainActor
 class MainViewModel: ObservableObject {
     @Published private(set) var userPost: [Content] = []
-    
-    func loadPosts() async {
+
+    func loadPosts(_ email: String) async {
         do {
             let db = Firestore.firestore()
-            let userCollection = try await db.collection("User").document("j77777y@naver.com").collection("Contents").getDocuments()
+            let userCollection = try await db.collection("User").document(email).collection("Contents").getDocuments()
             
             // var savedPosts: [Content] = [] // 임시 저장 공간
             

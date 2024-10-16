@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileView: View {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
+    @EnvironmentObject var authStore: AuthenticationStore
     
     var body: some View {
         NavigationStack {
@@ -23,7 +24,7 @@ struct ProfileView: View {
                         .resizable()
                         .frame(width: screenWidth * 0.2, height: screenWidth * 0.2)
                     
-                    Text("Profile Name")
+                    Text("\(authStore.user!.profile.nickname)")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(.white)

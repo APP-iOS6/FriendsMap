@@ -11,7 +11,7 @@ struct FriendRequestsView: View {
     
     var body: some View {
         VStack {
-            Text("요청목록")
+            Text("받은 친구 요청")
                 .font(.system(size: 18))
                 .bold()
                 .foregroundStyle(Color.white)

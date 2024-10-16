@@ -21,6 +21,7 @@ struct MainView: View {
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var mainViewModel: MainViewModel
     @EnvironmentObject private var signOut: AuthenticationStore
+    @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -119,7 +120,7 @@ struct MainView: View {
         .onAppear {
 //            signOut.signOut()
             Task {
-               await mainViewModel.loadPosts()
+                await mainViewModel.loadPosts(authStore.user!.email)
             }
         }
     }

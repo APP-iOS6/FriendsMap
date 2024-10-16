@@ -30,7 +30,7 @@ class UploadImageViewModel: ObservableObject {
     @Published var imageDate: Date?
     
     // 게시글 생성
-    func addImage(_ content: Content, _ image: Data?) async {
+    func addImage(_ content: Content, _ image: Data?, _ email: String) async {
         let id = "\(UUID().uuidString)"
         let storageRef = Storage.storage().reference().child("\(id)")
         
@@ -60,7 +60,7 @@ class UploadImageViewModel: ObservableObject {
         do {
             let db = Firestore.firestore()
             
-            let userCollection = db.collection("User").document("j77777y@naver.com")
+            let userCollection = db.collection("User").document(email)
             
             let userContents = userCollection.collection("Contents").document()
             

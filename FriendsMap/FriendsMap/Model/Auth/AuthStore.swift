@@ -96,6 +96,7 @@ class AuthenticationStore: ObservableObject {
                 "image": image
             ]
             )
+            self.user?.profile.nickname = nickname
             return true
         } catch {
             print(error)

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ImageManagementView: View {
     @StateObject private var viewModel = ProfileViewModel()
+    @EnvironmentObject var authStore: AuthenticationStore
+    
     var body: some View {
         ZStack {
             Color.loginViewBG.ignoresSafeArea()
@@ -38,8 +40,8 @@ struct ImageManagementView: View {
                                 .padding(.horizontal, 10)
                                 .onTapGesture {
                                     Task {
-                                        try await viewModel.deleteContentImage(documentID: content.id, email: "j77777y@naver.com")
-                                        try await viewModel.fetchContents(from: "j77777y@naver.com")
+                                        try await viewModel.deleteContentImage(documentID: content.id, email: authStore.user!.email)
+                                        try await viewModel.fetchContents(from: authStore.user!.email)
                                     }
                                 }
                         }
@@ -48,7 +50,7 @@ struct ImageManagementView: View {
                 .frame(maxWidth: .infinity)
                 .onAppear {
                     Task {
-                        try await viewModel.fetchContents(from: "j77777y@naver.com")
+                        try await viewModel.fetchContents(from: authStore.user!.email)
                     }
                 }
             }
