@@ -25,8 +25,6 @@ enum AuthenticationState {
 enum AuthenticationFlow {
     case login  // 로그인 화면
     case signUp // 회원가입 화면
-    case profileSetting // 프로필 설정 화면
-    case main // 메인 화면
 }
 
 // 인증 오류를 처리를 위한 타입
@@ -52,8 +50,6 @@ class AuthenticationStore: ObservableObject {
     
     @Published var profile: Profile = Profile(nickname: "", image: "")
     
-    @Published var user: User?
-    
     init() {
         registerAuthStateHandler()
         
@@ -75,15 +71,12 @@ class AuthenticationStore: ObservableObject {
                 self.firebaseUser = user
                 self.authenticationState = user == nil ? .unauthenticated : .authenticated
                 self.displayName = user?.email ?? ""
-               //
             }
         }
-//        signOut()
     }
     
-    func switchFlow(to newFlow: AuthenticationFlow) {
-//        flow = flow == .login ? .signUp : .login
-        flow = newFlow
+    func switchFlow() {
+        flow = flow == .login ? .signUp : .login
         errorMessage = ""
     }
     
