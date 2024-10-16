@@ -8,13 +8,11 @@
 import SwiftUI
 import MapKit
 
-<<<<<<< Updated upstream
-// Identifiable을 준수하는 구조체 정의
-=======
->>>>>>> Stashed changes
+
 struct IdentifiableLocation: Identifiable {
-    let id = UUID() // 고유 ID
+    let id = UUID()
     var coordinate: CLLocationCoordinate2D
+    var image: String?
 }
 
 struct MainView: View {
@@ -29,25 +27,59 @@ struct MainView: View {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
+    @State private var annotations: [IdentifiableLocation] = []
+    
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
                 ZStack {
-                    // 사용자가 선택한 사진의 위치가 있으면 해당 위치로 지도 표시
                     if let latitude = selectedLatitude, let longitude = selectedLongitude {
                         let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
                         
                         Map(coordinateRegion: .constant(MKCoordinateRegion(
                             center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
                             span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                        )), showsUserLocation: true, annotationItems: [location]) { location in
-                            MapMarker(coordinate: location.coordinate, tint: .blue)
+                        )), showsUserLocation: true, annotationItems: annotations) { location in
+                            MapAnnotation(coordinate: location.coordinate) {
+                                VStack {
+                                    if let imageUrl = location.image, let url = URL(string: imageUrl) {
+                                        AsyncImage(url: url) { image in
+                                            image
+                                                .resizable()
+                                                .frame(width: 80, height: 80)
+                                                .clipShape(Circle())
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                    }
+                                    Image(systemName: "mappin.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.red)
+                                }
+                            }
                         }
                         .edgesIgnoringSafeArea(.all)
                     } else {
-                        // 사용자의 현재 위치로 지도 표시
-                        Map(coordinateRegion: $locationManager.region, showsUserLocation: true)
-                            .edgesIgnoringSafeArea(.all)
+                        Map(coordinateRegion: $locationManager.region, showsUserLocation: true, annotationItems: annotations) { location in
+                            MapAnnotation(coordinate: location.coordinate) {
+                                VStack {
+                                    if let imageUrl = location.image, let url = URL(string: imageUrl) {
+                                        AsyncImage(url: url) { image in
+                                            image
+                                                .resizable()
+                                                .frame(width: 80, height: 80)
+                                                .clipShape(Circle())
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                    }
+                                    Image(systemName: "mappin.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        }
+                        .edgesIgnoringSafeArea(.all)
                     }
                     
                     VStack {
@@ -79,11 +111,10 @@ struct MainView: View {
                         HStack {
                             Spacer()
                             
-                            // 현재 위치로 이동하는 버튼 추가
                             Button(action: {
-                                selectedLatitude = nil // 선택된 위치 해제
+                                selectedLatitude = nil
                                 selectedLongitude = nil
-                                locationManager.updateRegionToUserLocation() // 현재 위치로 업데이트
+                                locationManager.updateRegionToUserLocation()
                             }) {
                                 Image(systemName: "location.fill")
                                     .resizable()
@@ -94,9 +125,8 @@ struct MainView: View {
                                     .clipShape(Circle())
                             }
                             .padding(.trailing, geometry.size.width * 0.03)
-                            .padding(.top, geometry.size.width * 0.02) // 간격 조정
+                            .padding(.top, geometry.size.width * 0.02)
                             
-                            // + 버튼
                             Button(action: {
                                 isShowingSheet = true
                             }) {
@@ -124,15 +154,18 @@ struct MainView: View {
 //            signOut.signOut()
             Task {
                 await mainViewModel.loadPosts(authStore.user!.email)
+                
+                // 로드된 데이터를 기반으로 어노테이션 설정
+                annotations = mainViewModel.userPost.map { post in
+                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                }
             }
         }
     }
 }
-
 
 #Preview {
     MainView()
         .environmentObject(UploadImageViewModel())
         .environmentObject(MainViewModel())
 }
-

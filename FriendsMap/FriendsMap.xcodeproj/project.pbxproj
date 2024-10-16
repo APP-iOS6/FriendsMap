@@ -15,14 +15,14 @@
 		77A2CA6F2CBDFA8500C18CF4 /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA6E2CBDFA8500C18CF4 /* AuthStore.swift */; };
 		77A2CA712CBDFA9700C18CF4 /* AuthGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA702CBDFA9700C18CF4 /* AuthGoogle.swift */; };
 		77A2CA732CBDFAA700C18CF4 /* AuthEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA722CBDFAA700C18CF4 /* AuthEmail.swift */; };
-		B82E59702CBD10E300749657 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E596F2CBD10E300749657 /* MainView.swift */; };
-		B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E59712CBE01FF00749657 /* MainViewModel.swift */; };
 		B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F6D222CBE472A00D59FF1 /* LocationManager.swift */; };
 		CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */; };
-		CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */; };
 		CE95DF382CBE8820006F2732 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */; };
 		CE95DF3B2CBE8C8D006F2732 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */; };
 		CE95DF3D2CBE8C92006F2732 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CE95DF3C2CBE8C92006F2732 /* FirebaseStorage */; };
+		CEBDD8F32CC035FE0046A13C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBDD8F22CC035FE0046A13C /* MainViewModel.swift */; };
+		CEBDD8F52CC036100046A13C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBDD8F42CC036100046A13C /* MainView.swift */; };
+		CEBDD8F72CC036A90046A13C /* UploadImageViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBDD8F62CC036A90046A13C /* UploadImageViewModel 2.swift */; };
 		CEFED8932CBCF0E5003938E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */; };
 		CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED88F2CBCF0E5003938E2 /* ContentView.swift */; };
 		CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */; };
@@ -58,12 +58,12 @@
 		77A2CA6E2CBDFA8500C18CF4 /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		77A2CA702CBDFA9700C18CF4 /* AuthGoogle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthGoogle.swift; sourceTree = "<group>"; };
 		77A2CA722CBDFAA700C18CF4 /* AuthEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEmail.swift; sourceTree = "<group>"; };
-		B82E596F2CBD10E300749657 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		B82E59712CBE01FF00749657 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		B82F6D222CBE472A00D59FF1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageView.swift; sourceTree = "<group>"; };
-		CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageViewModel.swift; sourceTree = "<group>"; };
 		CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CEBDD8F22CC035FE0046A13C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		CEBDD8F42CC036100046A13C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		CEBDD8F62CC036A90046A13C /* UploadImageViewModel 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UploadImageViewModel 2.swift"; sourceTree = "<group>"; };
 		CEFED8792CBCF09D003938E2 /* FriendsMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendsMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEFED88F2CBCF0E5003938E2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -132,9 +132,9 @@
 		CE8C79512CBD0A2700992D4C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CEBDD8F42CC036100046A13C /* MainView.swift */,
 				2CF4D8F92CBF9491002824DC /* ProfileView */,
 				FB9D007C2CBDF424002874C1 /* LoginView */,
-				B82E596F2CBD10E300749657 /* MainView.swift */,
 				E0BCB8DD2CBF931300FF2391 /* FriendListView */,
 			);
 			path = View;
@@ -144,9 +144,9 @@
 			isa = PBXGroup;
 			children = (
 				2CF775392CBED9C400FE13C2 /* ProfileViewModel.swift */,
-				CE8C79552CBD0E3400992D4C /* UploadImageViewModel.swift */,
+				CEBDD8F62CC036A90046A13C /* UploadImageViewModel 2.swift */,
+				CEBDD8F22CC035FE0046A13C /* MainViewModel.swift */,
 				E0BCB8E92CBF93A900FF2391 /* FriendViewModel.swift */,
-				B82E59712CBE01FF00749657 /* MainViewModel.swift */,
 				B82F6D222CBE472A00D59FF1 /* LocationManager.swift */,
 			);
 			path = ViewModel;
@@ -337,14 +337,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				77A2CA732CBDFAA700C18CF4 /* AuthEmail.swift in Sources */,
+				CEBDD8F72CC036A90046A13C /* UploadImageViewModel 2.swift in Sources */,
 				FB9D008A2CBDFE93002874C1 /* ImagePicker.swift in Sources */,
 				CEFED8942CBCF0E5003938E2 /* ContentView.swift in Sources */,
 				77A2CA6F2CBDFA8500C18CF4 /* AuthStore.swift in Sources */,
 				FB9D00802CBDF45F002874C1 /* LoginViewCommon.swift in Sources */,
-				B82E59702CBD10E300749657 /* MainView.swift in Sources */,
 				B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */,
 				CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */,
-				CE8C79562CBD0E3400992D4C /* UploadImageViewModel.swift in Sources */,
+				CEBDD8F32CC035FE0046A13C /* MainViewModel.swift in Sources */,
 				CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */,
 				2CF7753A2CBED9C400FE13C2 /* ProfileViewModel.swift in Sources */,
 				2CF775382CBED9B700FE13C2 /* ImageManagementView.swift in Sources */,
@@ -360,8 +360,8 @@
 				FB9D00882CBDF80D002874C1 /* ProfileSettingView.swift in Sources */,
 				FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadImageView.swift in Sources */,
-				B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */,
 				2CF775342CBED99D00FE13C2 /* ProfileView.swift in Sources */,
+				CEBDD8F52CC036100046A13C /* MainView.swift in Sources */,
 				E0BCB8E62CBF938F00FF2391 /* AddFriendView.swift in Sources */,
 				2CF775362CBED99D00FE13C2 /* ProfileManagementView.swift in Sources */,
 				2CF4D8FB2CBF98C0002824DC /* ProfileCustomButton.swift in Sources */,
