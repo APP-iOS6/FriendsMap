@@ -52,6 +52,9 @@ final class ProfileViewModel: ObservableObject {
         do {
             let imagePath = try await db.collection("User").document(email).collection("Contents").document(documentID).getDocument().get("image")
             try await db.collection("User").document(email).collection("Contents").document(documentID).delete()
+            if let index = userContents.firstIndex(where: { $0.id == documentID } ) {
+                userContents.remove(at: index)
+            }
             
             if let imagePath = imagePath as? String {
                 try await storageRef.child("\(imagePath)").delete()
