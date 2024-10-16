@@ -13,6 +13,7 @@ import FirebaseFirestore
 
 @MainActor
 class ProfileStore: ObservableObject {
+    
     @Published var profile: Profile = Profile(nickname: "", image: "")
     @Published var isProfileCreated: Bool = false
     @Published var isLoadingProfile: Bool = false
@@ -28,24 +29,24 @@ class ProfileStore: ObservableObject {
     }
     
     
-//    //이미지, 닉네임 저장하기 함수 (회원가입할 때)
-//    func createProfile(email: String, nickname: String, image: String) async {
-//        do {
-//            let profile = Profile(nickname: nickname, image: image)
-//            try await db.collection("User").document(email).collection("Profile").document("profileDoc").setData([
-//                "nickname": profile.nickname,
-//                "image": profile.image,
-//            ])
-//        } catch {
-//            print(error)
-//        }
-//    }
-    
-    //이미지, 닉네임 불러오기 함수
-    func loadProfile(email: String) async {
-//        isLoadingProfile = true
+    //이미지, 닉네임 저장 함수 (회원가입할 때)
+    func createProfile(email: String, nickname: String, image: String) async {
         do {
-            let snapshots = try await db.collection("User").document(email).collection("Profile").getDocuments()
+            let profile = Profile(nickname: nickname, image: image)
+            try await db.collection("User").document(email).collection("Profile").document("profileDoc").setData([
+                "nickname": profile.nickname,
+                "image": profile.image,
+            ])
+        } catch {
+            print(error)
+        }
+    }
+    
+    //이미지, 닉네임 로드 함수
+    func loadProfile(email: String) async {
+        isLoadingProfile = true
+        do {
+            let snapshots = try await db.collection("User").document("수민테스트1").collection("Profile").getDocuments()
             
             for document in snapshots.documents {
                 let docData = document.data()
@@ -56,31 +57,30 @@ class ProfileStore: ObservableObject {
                     nickname: nickname!,
                     image: image!
                 )
-//                if nickname != "" && image != "" {
-//                    isProfileCreated = true
-//                }
+                if nickname != "" && image != "" {
+                    isProfileCreated = true
+                }
             }
         } catch{
             print("\(error)")
         }
-//        isLoadingProfile = false
+        isLoadingProfile = false
     }
     
     
     //이미지, 닉네임 수정 함수
-    func updateProfile(nickname: String, image: String, email: String) async -> Bool{
+    func updateProfile(nickname: String, image: String, email: String) async {
         do {
             let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+            
             try await docRef.setData([
                 "nickname": nickname,
                 "image": image
             ]
             )
             profile = Profile(nickname: nickname, image: image)
-            return true
         } catch {
             print(error)
-            return false
         }
     }
     
