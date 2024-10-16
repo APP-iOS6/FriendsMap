@@ -8,7 +8,10 @@
 import SwiftUI
 import MapKit
 
+<<<<<<< Updated upstream
 // Identifiable을 준수하는 구조체 정의
+=======
+>>>>>>> Stashed changes
 struct IdentifiableLocation: Identifiable {
     let id = UUID() // 고유 ID
     var coordinate: CLLocationCoordinate2D
