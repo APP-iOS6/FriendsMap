@@ -79,7 +79,7 @@ struct ProfileButtonList: View {
                     .padding(.horizontal, 27)
             }
             NavigationLink {
-                Text("친구목록 뷰 여기에")
+                FriendListView()
             } label: {
                 Text("친구 목록")
                     .frame(maxWidth: .infinity)
