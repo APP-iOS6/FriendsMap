@@ -66,13 +66,13 @@ class AuthenticationStore: ObservableObject {
     private var authStateHandler: AuthStateDidChangeListenerHandle?
     
     func registerAuthStateHandler() {
-        if authStateHandler == nil {
-            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
-                self.firebaseUser = user
-                self.authenticationState = user == nil ? .unauthenticated : .authenticated
-                self.displayName = user?.email ?? ""
-            }
-        }
+//        if authStateHandler == nil {
+//            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
+//                self.firebaseUser = user
+//                self.authenticationState = user == nil ? .unauthenticated : .authenticated
+//                self.displayName = user?.email ?? ""
+//            }
+//        }
     }
     
     func switchFlow() {

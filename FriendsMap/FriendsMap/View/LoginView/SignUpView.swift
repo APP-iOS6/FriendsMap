@@ -13,7 +13,9 @@ struct SignUpView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var passwordForCheck: String = ""
-    @State var warningText: String = ""
+    @State var emailWarningText: String = ""
+    @State var passwordWarningText: String = ""
+    @State var checkPasswordWarningText: String = ""
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -31,60 +33,29 @@ struct SignUpView: View {
                 .foregroundStyle(.white)
                 .font(.title)
                 .bold()
+                .padding(.bottom, screenHeight * 0.05)
             
-            createTextField(placeholder: "이메일", varName: $email, isSecure: false)
-                .keyboardType(.emailAddress)
-                .frame(width: screenWidth * 0.85)
-                .padding(.top, screenHeight * 0.02)
+            createTextFieldView(placeholder: "이메일(ex. friends.map.com)", varName: $email, isSecure: false, width: screenWidth * 0.85, height: screenHeight * 0.08, warningText: $emailWarningText)
             
-            createTextField(placeholder: "비밀번호", varName: $password, isSecure: true)
-                .frame(width: screenWidth * 0.85)
+            createTextFieldView(placeholder: "비밀번호(6글자 이상의 영문, 숫자)", varName: $password, isSecure: true, width: screenWidth * 0.85, height: screenHeight * 0.08, warningText: $passwordWarningText)
             
-            VStack(alignment : .leading) {
-                createTextField(placeholder: "비밀번호 확인", varName: $passwordForCheck, isSecure: true)
-                    .frame(width: screenWidth * 0.85)
-                if !warningText.isEmpty {
-                    Text(warningText)
-                        .font(.system(size: 20))
-                        .foregroundStyle(.red)
-                        .padding(.leading)
-                } else {
-                    Text("자리 채우기용")
-                        .font(.system(size: 20))
-                        .opacity(0)
-                }
-            }
-            .frame(height: screenHeight * 0.1)
+            createTextFieldView(placeholder: "비밀번호 확인", varName: $passwordForCheck, isSecure: true, width: screenWidth * 0.85, height: screenHeight * 0.08, warningText: $checkPasswordWarningText)
+            
             
             VStack(spacing:7) {
                 Button {
-                    warningText = ""
-                    
-                    if email.isEmpty {
-                        warningText = "이메일을 입력해주세요"
-                        return
-                    }
-                    
-                    if password.isEmpty || passwordForCheck.isEmpty {
-                        warningText = "비밀번호를 입력해주세요"
-                        return
-                    }
-                    
-                    if password != passwordForCheck {
-                        warningText = "비밀번호가 일치하지 않습니다"
-                        return
-                    }
-                    
-                    Task {
-                        let success = await authStore.signUpWithEmailPassword(email: email, password: password)
-                        
-                        if !success {
-                            warningText = "회원가입에 실패하였습니다"
+                    if checkValidInputs() {
+                        Task {
+                            let success = await authStore.signUpWithEmailPassword(email: email, password: password)
+                            
+                            if !success {
+                                checkPasswordWarningText = "회원가입에 실패하였습니다"
+                            }
                         }
                     }
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: 5)
                             .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                             .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                         Text("회원가입")
@@ -105,11 +76,45 @@ struct SignUpView: View {
                     }
                 }
             }
-            .padding(.top, screenHeight * 0.03)
-            .padding(.bottom, screenHeight * 0.2)
+            .padding(.top, screenHeight * 0.05)
+            .padding(.bottom, screenHeight * 0.1)
+//            .padding(.bottom, screenHeight * 0.2)
         }
         .frame(width:screenWidth, height: screenHeight)
         .background(.loginViewBG)
+    }
+}
+
+extension SignUpView {
+    private func resetWarningTexts() {
+        self.emailWarningText = ""
+        self.passwordWarningText = ""
+        self.checkPasswordWarningText = ""
+    }
+    
+    private func checkValidInputs() -> Bool {
+        resetWarningTexts()
+        var isOccurError: Bool = false
+        
+        if email.isEmpty {
+            emailWarningText = "이메일을 입력해주세요"
+            isOccurError = true
+        }
+        
+        if password.isEmpty {
+            passwordWarningText = "비밀번호를 입력해주세요"
+            isOccurError = true
+        }
+        
+        if password != passwordForCheck || passwordForCheck.isEmpty {
+            checkPasswordWarningText = "비밀번호가 일치하지 않습니다"
+            isOccurError = true
+        }
+        
+        if isOccurError {
+            return false
+        }
+        return true
     }
 }
 

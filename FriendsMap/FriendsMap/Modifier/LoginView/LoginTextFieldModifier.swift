@@ -14,9 +14,9 @@ struct LoginTextFieldModifier: TextFieldStyle {
             .foregroundStyle(.white)
             .padding()
             .textInputAutocapitalization(.never) // 처음 문자 자동으로 대문자로 바꿔주는 기능 막기
-            .autocorrectionDisabled(true)
+            .autocorrectionDisabled()
             .background {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 5)
                     .stroke(.white, lineWidth: 1)
             }
     }
