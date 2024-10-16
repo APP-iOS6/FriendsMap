@@ -43,25 +43,28 @@ extension AuthenticationStore {
             print("User \(firebaseUser.uid) signed in with email \(firebaseUser.email ?? "unknown")")
             
             let db = Firestore.firestore()
-            let userDocument: [String: Any] = [
-                "email": firebaseUser.email ?? "",
-                "profile": [
-                    "nickname": "",
-                    "image": ""
-                ],
+            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+            
+            try await docRef.setData([
+                "nickname": "",
+                "image": ""
+            ]
+            )
+            
+            let userDoc = db.collection("User").document(email)
+            
+            try await userDoc.setData([
+                "email": email,
                 "contents": [],
-                "friends": [],
-                "requestList": [],
+                "friends" : [],
+                "requestList" : [],
                 "receiveList": []
             ]
-
-            try await db.collection("User").document(firebaseUser.email ?? "").setData(userDocument)
+            )
             
-            self.flow = .main
-            self.authenticationState = .authenticated
+            self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
-            self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
-            
+            self.flow = .profileSetting // 프로필 설정 화면으로 이동
             return true
         }
         catch {

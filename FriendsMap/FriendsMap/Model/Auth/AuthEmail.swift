@@ -68,6 +68,17 @@ extension AuthenticationStore {
             ]
             )
             
+            let userDoc = db.collection("User").document(email)
+                        
+                        try await userDoc.setData([
+                            "email": email,
+                            "contents": [],
+                            "friends" : [],
+                            "requestList" : [],
+                            "receiveList": []
+                        ]
+                        )
+            
             self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             self.flow = .profileSetting // 프로필 설정 화면으로 이동
