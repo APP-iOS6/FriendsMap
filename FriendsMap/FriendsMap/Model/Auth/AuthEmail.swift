@@ -27,12 +27,21 @@ extension AuthenticationStore {
             
             // 유저 문서가 존재하면
             if userDoc.exists {
-                if let nickname = userDoc.get("profile.nickname") as? String, !nickname.isEmpty {
-                    // 닉네임이 비어있지 않으면 MainView로 이동
-                    self.authenticationState = .authenticated
-                    return true
+                
+                let profileDoc = try await userDoc.reference.collection("Profile").document("profileDoc").getDocument()
+                
+                if profileDoc.exists {
+                    if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
+                        // 닉네임이 비어있지 않으면 MainView로 이동
+                        return true
+                    } else {
+                        // 닉네임이 비어있으면 ProfileSettingView로 이동
+                        self.authenticationState = .unauthenticated
+                        self.flow = .profileSetting
+                        return false
+                    }
                 } else {
-                    // 닉네임이 비어있으면 ProfileSettingView로 이동
+                    // ProfileDoc 문서가 없으면 ProfileSettingView로 이동
                     self.authenticationState = .unauthenticated
                     self.flow = .profileSetting
                     return false
@@ -58,23 +67,19 @@ extension AuthenticationStore {
             
             // 회원가입 할 때 파베에 유저 등록(모든 필드는 처음에 빈 값으로 저장)
             let db = Firestore.firestore()
-            let userDocument = [
-                "email": email,
-                "profile": [
-                    "nickname": "",
-                    "image": ""
-                ],
-                "contents": [],
-                "friends": [],
-                "requestList": [],
-                "receiveList": []
-            ] as [String: Any]
+            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
             
-            try await db.collection("User").document(email).setData(userDocument)
+            try await docRef.setData([
+                "nickname": "",
+                "image": ""
+            ]
+            )
             
             self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
-            self.flow = .profileSetting
+            self.flow = .profileSetting // 프로필 설정 화면으로 이동
             return true
+            
+            
         }
         catch {
             print(error)
