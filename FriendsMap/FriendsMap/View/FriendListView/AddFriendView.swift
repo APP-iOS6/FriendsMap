@@ -19,7 +19,8 @@ struct AddFriendView: View {
             
             VStack {
                 Text("친구추가")
-                    .font(.title)
+                    .font(.system(size: 18))
+                    .bold()
                     .foregroundStyle(Color.white)
                     .padding()
                 

@@ -20,6 +20,7 @@ struct MainView: View {
     @State private var selectedLongitude: Double? = nil
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var mainViewModel: MainViewModel
+    @EnvironmentObject private var signOut: AuthenticationStore
     
     var body: some View {
         GeometryReader { geometry in
@@ -113,6 +114,7 @@ struct MainView: View {
             }
         }
         .onAppear {
+//            signOut.signOut()
             Task {
                await mainViewModel.loadPosts()
             }
