@@ -27,3 +27,21 @@ func createTextField(placeholder : String, varName : Binding<String>, isSecure: 
         }
     }
 }
+
+func createTextFieldView(placeholder : String, varName : Binding<String>, isSecure: Bool, width: CGFloat, height: CGFloat, warningText: Binding<String>) -> some View {
+    VStack(alignment : .leading) {
+        createTextField(placeholder: placeholder, varName: varName, isSecure: isSecure)
+            .frame(width: width)
+        if !warningText.wrappedValue.isEmpty {
+            Text(warningText.wrappedValue)
+                .font(.system(size: 16))
+                .foregroundStyle(.red)
+                .padding(.leading)
+        } else {
+            Text("자리 채우기용")
+                .font(.system(size: 16))
+                .opacity(0)
+        }
+    }
+    .frame(height: height)
+}
