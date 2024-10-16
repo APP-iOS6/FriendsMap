@@ -13,45 +13,29 @@ struct ContentView: View {
     @State var isLogin: Bool = false
     @State var isSignUp: Bool = false
     var body: some View {
-        if authStore.authenticationState == .authenticated {
-            MainView()
-        } else if authStore.authenticationState == .unauthenticated{
-            switch authStore.flow {
-            case .login :
-                SignInView()
-            case .signUp :
+        switch authStore.authenticationState {
+        case .unauthenticated:
+            // 등록되지 않은 사용자
+            if authStore.flow == .signUp {
                 SignUpView()
+            } else if authStore.flow == .login{
+                SignInView()
+            }
+        case .authenticating:
+            ProgressView()
+        case .authenticated:
+            // 등록된 사용자
+            if authStore.flow == .profileSetting {
+                // 닉네임이 비어있는 경우
+                ProfileSettingView() // 프로필 설정 뷰
+            } else if authStore.flow == .main {
+                // 닉네임이 비어있지 않은 경우
+                MainView() // 메인 뷰
             }
         }
     }
 }
 
-struct testView: View {
-    @EnvironmentObject var authStore: AuthenticationStore
-    @EnvironmentObject var profileStore: ProfileStore
-    
-    var body: some View {
-        VStack {
-            if profileStore.isLoadingProfile {
-                ProgressView()
-            } else {
-                if profileStore.isProfileCreated {
-                    Button("logout") {
-                        authStore.flow = .login
-                        authStore.signOut()
-                    }
-                } else {
-                    ProfileSettingView()
-                }
-            }
-        }
-        .onAppear {
-            Task {
-                await profileStore.loadProfile(email: authStore.email)
-            }
-        }
-    }
-}
 
 #Preview {
     ContentView()
