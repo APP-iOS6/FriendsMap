@@ -53,7 +53,7 @@ struct MainView: View {
                             Spacer()
                             
                             NavigationLink {
-                                ImageManagementView()
+                                ProfileView()
                             } label: {
                                 Image(systemName: "person.crop.circle")
                                     .resizable()
