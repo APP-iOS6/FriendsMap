@@ -503,6 +503,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FriendsMap/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "앱이 항상 사용자의 현재 위치를 사용해야 합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱이 사용자의 현재 위치를 사용해야 합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -539,6 +541,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FriendsMap/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "앱이 항상 사용자의 현재 위치를 사용해야 합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱이 사용자의 현재 위치를 사용해야 합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
