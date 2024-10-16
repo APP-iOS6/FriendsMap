@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    @EnvironmentObject var profileStore: ProfileStore
     @State var isLogin: Bool = false
     @State var isSignUp: Bool = false
     var body: some View {
@@ -40,5 +39,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(AuthenticationStore())
-        .environmentObject(ProfileStore())
 }

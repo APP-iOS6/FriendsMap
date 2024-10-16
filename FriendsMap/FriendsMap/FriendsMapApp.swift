@@ -24,7 +24,6 @@ struct FriendsMapApp: App {
     @StateObject private var uploadViewModel = UploadImageViewModel()
     @StateObject private var mainViewModel = MainViewModel()
     @StateObject private var authStore = AuthenticationStore()
-    @StateObject private var profileStore = ProfileStore()
     
     var body: some Scene {
         WindowGroup {
@@ -33,7 +32,6 @@ struct FriendsMapApp: App {
                     .environmentObject(uploadViewModel)
                     .environmentObject(mainViewModel)
                     .environmentObject(authStore)
-                    .environmentObject(profileStore)
             }
         }
     }

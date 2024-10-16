@@ -36,23 +36,22 @@ enum AuthenticationError: Error {
 
 @MainActor
 class AuthenticationStore: ObservableObject {
-    @Published var name: String = "unkown"
     
+    //--------------------------안 쓰지만 있는 놈들
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
-    
-    @Published var flow: AuthenticationFlow = .login
-    
-    @Published var isValid: Bool  = false
-    @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var errorMessage: String = ""
     @Published var firebaseUser: FirebaseAuth.User?
+    @Published var isValid: Bool  = false
     @Published var displayName: String = ""
+    //----------------------------
     
-    @Published var profile: Profile = Profile(nickname: "", image: "")
-    
+    @Published var flow: AuthenticationFlow = .login
+    @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var user: User?
+    private let db = Firestore.firestore()
+    private var authStateHandler: AuthStateDidChangeListenerHandle?
     
     init() {
         registerAuthStateHandler()
@@ -67,21 +66,64 @@ class AuthenticationStore: ObservableObject {
             .assign(to: &$isValid)
     }
     
-    private var authStateHandler: AuthStateDidChangeListenerHandle?
+    //이미지, 닉네임 불러오기 함수
+    func loadProfile(email: String) async {
+        do {
+            let snapshots = try await db.collection("User").document(email).collection("Profile").getDocuments()
+            
+            for document in snapshots.documents {
+                let docData = document.data()
+                let nickname = docData["nickname"] as? String
+                let image = docData["image"] as? String
+                
+                self.user?.profile = Profile(
+                    nickname: nickname!,
+                    image: image!
+                )
+            }
+        } catch{
+            print("\(error)")
+        }
+    }
+    
+    
+    //이미지, 닉네임 수정 함수
+    func updateProfile(nickname: String, image: String, email: String) async -> Bool{
+        do {
+            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+            try await docRef.setData([
+                "nickname": nickname,
+                "image": image
+            ]
+            )
+            return true
+        } catch {
+            print(error)
+            return false
+        }
+    }
     
     func registerAuthStateHandler() {
-//        if authStateHandler == nil { // 자동로그인 추가하면 안됨
-//            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
-//                self.firebaseUser = user
-//                self.authenticationState = user == nil ? .unauthenticated : .authenticated
-//                self.displayName = user?.email ?? ""
-//            }
-//        }
+        //        if authStateHandler == nil { // 자동로그인 추가하면 안됨
+        //            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
+        //                if let user = user {
+        //                    self.user?.email = user.email ?? ""
+        //                    self.authenticationState = user == nil ? .unauthenticated : .authenticated
+        //                    self.displayName = user.email ?? ""
+        //                    
+        //                    if self.authenticationState == .authenticated {
+        //                        Task {
+        //                            await self.loadProfile(email: user.email!)
+        //                        }
+        //                    }
+        //                    
+        //                }
+        //            }
+        //        }
         signOut()
     }
     
     func switchFlow(to newFlow: AuthenticationFlow) {
-//        flow = flow == .login ? .signUp : .login
         flow = newFlow
         errorMessage = ""
     }

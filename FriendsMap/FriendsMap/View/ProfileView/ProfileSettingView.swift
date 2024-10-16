@@ -13,7 +13,6 @@ struct ProfileSettingView: View {
     @State private var isPresented: Bool = false
     
     @EnvironmentObject var authStore: AuthenticationStore
-    @EnvironmentObject var profileStore: ProfileStore
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -90,7 +89,7 @@ struct ProfileSettingView: View {
             Button {
                 // 유저 정보 관리하는 vm에서 로그인 했다고 업데이트하기
                 Task {
-                    let result = await profileStore.updateProfile(nickname: nickname, image: "테스트수민", email: authStore.user!.email)
+                    let result = await authStore.updateProfile(nickname: nickname, image: "테스트수민", email: authStore.user!.email)
                     if result {
                         authStore.flow = .main
                     }

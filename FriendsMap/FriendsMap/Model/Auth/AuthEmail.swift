@@ -30,7 +30,7 @@ extension AuthenticationStore {
             if profileDoc.exists {
                 if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
                     // 닉네임이 비어있지 않으면 MainView로 이동
-                    self.user!.profile.nickname = nickname
+                    await self.loadProfile(email: email)
                     self.flow = .main
                     print(nickname)
                     
@@ -38,13 +38,11 @@ extension AuthenticationStore {
                 } else {
                     // 닉네임이 비어있으면 ProfileSettingView로 이동
                     self.flow = .profileSetting
-                    print(1)
                     return false
                 }
             } else {
                 // ProfileDoc 문서가 없으면 ProfileSettingView로 이동
                 self.flow = .profileSetting
-                print(2)
                 return false
             }
         } catch {
