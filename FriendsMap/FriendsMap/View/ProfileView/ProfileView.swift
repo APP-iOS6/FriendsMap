@@ -50,7 +50,7 @@ struct ProfileView: View {
 
 struct ProfileButtonList: View {
     var body: some View {
-        VStack (spacing: 35) {
+        VStack (spacing: 25) {
             NavigationLink {
                 ProfileManagementView()
             } label: {

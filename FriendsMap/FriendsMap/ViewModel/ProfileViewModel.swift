@@ -14,11 +14,10 @@ import FirebaseStorage
 final class ProfileViewModel: ObservableObject {
     @Published private(set) var profile: Profile? = nil
     @Published private(set) var userContents: [Content] = []
-    @Published private(set) var images: [UIImage] = []
     @Published private(set) var isLoading: Bool = false
     var user = User(profile: Profile(nickname: "", image: ""), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
-   
+    
     func fetchContents(from email: String) async throws {
         ref = Database.database().reference()
         let db = Firestore.firestore()
@@ -37,15 +36,28 @@ final class ProfileViewModel: ObservableObject {
                         print("Error getting download URL: \(error)")
                         return
                     }
-                    
                     if let url = url {
-                        print("Download URL: \(url.absoluteString)")
                         self.userContents.append(Content(id: document.documentID, image: url.absoluteString, text: text, contentDate: .now))
                     }
                 }
             }
         } catch {
             print(error.localizedDescription)
+        }
+    }
+    func deleteContentImage(documentID: String, email: String) async throws {
+        let db = Firestore.firestore()
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        do {
+            let imagePath = try await db.collection("User").document(email).collection("Contents").document(documentID).getDocument().get("image")
+            try await db.collection("User").document(email).collection("Contents").document(documentID).delete()
+            
+            if let imagePath = imagePath as? String {
+                try await storageRef.child("\(imagePath)").delete()
+            }
+        } catch {
+            print("Delete Error: \(error.localizedDescription)")
         }
     }
 }
