@@ -1,3 +1,4 @@
+
 //
 //  AuthGoogle.swift
 //  FriendsMap
@@ -11,7 +12,6 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
-import FirebaseFirestore
 
 extension AuthenticationStore {
     func signInWithGoogle() async -> Bool {
@@ -42,29 +42,13 @@ extension AuthenticationStore {
             let firebaseUser = result.user
             print("User \(firebaseUser.uid) signed in with email \(firebaseUser.email ?? "unknown")")
             
-            let db = Firestore.firestore()
-            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+            self.flow = .main
+            self.authenticationState = .authenticated
             
-            try await docRef.setData([
-                "nickname": "",
-                "image": ""
-            ]
-            )
+            if let username = firebaseUser.displayName {
+                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
+            }
             
-            let userDoc = db.collection("User").document(email)
-            
-            try await userDoc.setData([
-                "email": email,
-                "contents": [],
-                "friends" : [],
-                "requestList" : [],
-                "receiveList": []
-            ]
-            )
-            
-            self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
-            
-            self.flow = .profileSetting // 프로필 설정 화면으로 이동
             return true
         }
         catch {

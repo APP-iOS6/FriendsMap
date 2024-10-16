@@ -116,7 +116,7 @@ struct MainView: View {
                                 selectedLongitude = nil
                                 locationManager.updateRegionToUserLocation()
                             }) {
-                                Image(systemName: "location.fill")
+                                Image(systemName: "dot.scope")
                                     .resizable()
                                     .frame(width: geometry.size.width * 0.07, height: geometry.size.width * 0.07)
                                     .padding()
