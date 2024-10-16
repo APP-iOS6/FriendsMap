@@ -27,7 +27,7 @@ struct ProfileManagementView: View {
                     NavigationLink {
                         Text("\(index)")
                     }label: {
-                        Text("\(index)")
+                        Text("설정 내용")
                     }
                 }
                 .listStyle(.inset)

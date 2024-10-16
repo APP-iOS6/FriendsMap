@@ -15,7 +15,6 @@
 		77A2CA712CBDFA9700C18CF4 /* AuthGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA702CBDFA9700C18CF4 /* AuthGoogle.swift */; };
 		77A2CA732CBDFAA700C18CF4 /* AuthEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA722CBDFAA700C18CF4 /* AuthEmail.swift */; };
 		77A2CA772CBE480E00C18CF4 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA762CBE480E00C18CF4 /* ProfileStore.swift */; };
-		77A2CA7A2CBE484F00C18CF4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 77A2CA792CBE484F00C18CF4 /* FirebaseFirestore */; };
 		B82E59702CBD10E300749657 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E596F2CBD10E300749657 /* MainView.swift */; };
 		B82E59722CBE01FF00749657 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82E59712CBE01FF00749657 /* MainViewModel.swift */; };
 		B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F6D222CBE472A00D59FF1 /* LocationManager.swift */; };
@@ -97,6 +96,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2CF4D8F92CBF9491002824DC /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				FB9D00872CBDF80D002874C1 /* ProfileSettingView.swift */,
+				CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */,
+				2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */,
+				2CF775372CBED9B700FE13C2 /* ImageManagementView.swift */,
+				2CF775322CBED99D00FE13C2 /* ProfileView.swift */,
+			);
+			path = ProfileView;
+			sourceTree = "<group>";
+		};
 		77A2CA6D2CBDFA6700C18CF4 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,21 +118,11 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		77A2CA782CBE484F00C18CF4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		CE8C79512CBD0A2700992D4C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2CF4D8F92CBF9491002824DC /* ProfileView */,
 				FB9D007C2CBDF424002874C1 /* LoginView */,
-				CE8C79522CBD0ABA00992D4C /* UploadImageView.swift */,
-				2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */,
-				2CF775372CBED9B700FE13C2 /* ImageManagementView.swift */,
-				2CF775322CBED99D00FE13C2 /* ProfileView.swift */,
 				B82E596F2CBD10E300749657 /* MainView.swift */,
 			);
 			path = View;
@@ -195,9 +196,8 @@
 		FB9D007C2CBDF424002874C1 /* LoginView */ = {
 			isa = PBXGroup;
 			children = (
-				FB9D00852CBDF65E002874C1 /* SignInView.swift */,
 				FB9D007D2CBDF43B002874C1 /* SignUpView.swift */,
-				FB9D00872CBDF80D002874C1 /* ProfileSettingView.swift */,
+				FB9D00852CBDF65E002874C1 /* SignInView.swift */,
 				FB9D007F2CBDF455002874C1 /* LoginViewCommon.swift */,
 			);
 			path = LoginView;

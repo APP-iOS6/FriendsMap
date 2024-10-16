@@ -32,19 +32,41 @@ struct ProfileView: View {
                     
                     Spacer()
                     
+                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .white, buttonWidth: .infinity) {
+                        
+                    }
+                    .padding(.horizontal, 27)
+                    
+                    ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
+                        
+                    }
+                    .padding(.horizontal, 27)
                 }
                 Spacer()
             }
         }
     }
-    func logoutButton()-> some View {
-        Button {
-            print("logout")
-        } label: {
-            Text("로그아웃")
-                .foregroundStyle(.red)
-                .padding(.vertical,16)
-                .background(RoundedRectangle(cornerRadius: 16))
+}
+struct ProfileCustomButton: View {
+    let buttonLabel: String
+    let buttonForegroundColor: Color
+    let buttonBackgroundColor: Color
+    let buttonWidth: CGFloat
+    let buttonAction: () -> ()
+    var body: some View {
+        VStack {
+            Button {
+                buttonAction()
+            } label: {
+                Text(buttonLabel)
+                    .foregroundStyle(buttonForegroundColor)
+                    .frame(maxWidth: buttonWidth)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(buttonBackgroundColor)
+                    )
+            }
         }
     }
 }
@@ -69,6 +91,19 @@ struct ProfileButtonList: View {
                 ImageManagementView()
             } label: {
                 Text("업로드 이미지 관리")
+                    .frame(maxWidth: .infinity)
+                    .foregroundStyle(.black)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.white)
+                    )
+                    .padding(.horizontal, 27)
+            }
+            NavigationLink {
+                Text("친구목록 뷰 여기에")
+            } label: {
+                Text("친구 목록")
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(.black)
                     .padding(.vertical, 16)

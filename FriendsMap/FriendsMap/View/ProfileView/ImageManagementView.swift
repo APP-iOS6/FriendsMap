@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ImageManagementView: View {
-    @State private var contents: [Content] = Array(repeating: Content(id: "",image: "photo", text: "여기 진짜 지립니다 ㅋㅋ", likeCount: 3, contentDate: .now), count: 10)
     @StateObject private var viewModel = ProfileViewModel()
     var body: some View {
         ScrollView {
