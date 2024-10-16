@@ -12,7 +12,8 @@ struct FriendRequestsView: View {
     var body: some View {
         VStack {
             Text("요청목록")
-                .font(.title)
+                .font(.system(size: 18))
+                .bold()
                 .foregroundStyle(Color.white)
                 .padding()
             List(viewModel.receiveList, id: \.self) { requestEmail in
