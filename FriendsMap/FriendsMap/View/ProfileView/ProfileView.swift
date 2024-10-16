@@ -36,7 +36,7 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .white.opacity(0.6), buttonWidth: .infinity) {
+                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor:   Color(hex: "E5E5E5"), buttonWidth: .infinity) {
                         
                     }
                     .padding(.horizontal, 27)
@@ -62,12 +62,12 @@ struct ProfileButtonList: View {
                     Image(systemName: "person.fill")
                     Text("프로필")
                 }
-                .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(.white.opacity(0.6))
+                        .foregroundStyle(Color(hex: "E5E5E5"))
                 )
                 .padding(.horizontal, 27)
             }
@@ -84,7 +84,7 @@ struct ProfileButtonList: View {
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.white.opacity(0.6))
+                            .foregroundStyle(Color(hex: "E5E5E5"))
                     )
                     .padding(.horizontal, 27)
             }
@@ -100,7 +100,7 @@ struct ProfileButtonList: View {
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.white.opacity(0.6))
+                            .foregroundStyle(Color(hex: "E5E5E5"))
                     )
                     .padding(.horizontal, 27)
             }

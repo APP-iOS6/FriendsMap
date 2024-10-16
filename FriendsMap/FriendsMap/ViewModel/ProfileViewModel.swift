@@ -18,6 +18,7 @@ final class ProfileViewModel: ObservableObject {
     var user = User(profile: Profile(nickname: "", image: ""), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
     
+    @MainActor
     func fetchContents(from email: String) async throws {
         ref = Database.database().reference()
         let db = Firestore.firestore()
@@ -45,6 +46,8 @@ final class ProfileViewModel: ObservableObject {
             print(error.localizedDescription)
         }
     }
+    
+    @MainActor
     func deleteContentImage(documentID: String, email: String) async throws {
         let db = Firestore.firestore()
         let storage = Storage.storage()
