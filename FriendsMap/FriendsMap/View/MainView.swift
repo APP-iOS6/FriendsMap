@@ -21,6 +21,9 @@ struct MainView: View {
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var mainViewModel: MainViewModel
     
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -104,7 +107,7 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             .sheet(isPresented: $isShowingSheet) {
                                 UploadImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude)
-                                    .presentationDetents(selectedLatitude == nil ? [.fraction(0.2)] : [.medium])
+                                    .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
                             }
                         }
                     }

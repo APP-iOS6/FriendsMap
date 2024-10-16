@@ -27,19 +27,19 @@ struct UploadImageView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center) {
-                Spacer()
+                Text("게시글 생성")
+                    .fontWeight(.bold)
+                    .font(.system(size: screenWidth * 0.07))
+                    .padding()
                 
                 if let uiImage = uiImage {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: screenHeight * 0.3)
-                        .padding()
+                        .frame(height: screenHeight * 0.2)
                 }
                 
                 HStack(alignment: .center) {
-                    Spacer()
-                    
                     PhotosPicker(
                         selection: $imageSelection,
                         matching: .images,
@@ -47,7 +47,7 @@ struct UploadImageView: View {
                             if imageSelection == nil {
                                 HStack{
                                     Image(systemName: "photo.on.rectangle.angled")
-                                    Text("갤러리에서 사진 가져오기")
+                                    Text("사진앱에서 가져오기")
                                 }
                                 .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                                 .background(.blue)
@@ -58,7 +58,7 @@ struct UploadImageView: View {
                                     Image(systemName: "photo.on.rectangle.angled")
                                     Text("사진 교체")
                                 }
-                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
+                                .frame(width: screenWidth * 0.4, height: screenHeight * 0.06)
                                 .background(.green)
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
@@ -66,39 +66,36 @@ struct UploadImageView: View {
                         }
                         .onChange(of: imageSelection) { _ , _  in
                             Task {
-                                // imageSelection의 현재 값을 확인하여 데이터를 로드
                                 if let newSelection = imageSelection,
                                    let data = try? await newSelection.loadTransferable(type: Data.self) {
                                     uiImage = UIImage(data: data)
-                                    
-                                    // 메타데이터 추출
                                     ViewModels.extractMetadata(from: data)
                                     selectedImageData = data
-                                    
                                     selectedLatitude = ViewModels.imagelatitude
-                                    selectedLongitude =
-                                    ViewModels.imagelongitude
+                                    selectedLongitude = ViewModels.imagelongitude
                                 }
                             }
                         }
-                    Spacer()
-                }
-                
-                if uiImage != nil {
-                    Button(action: {
-                        Task {
-                            await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
-                            dismiss()
+                    
+                    if uiImage != nil {
+                        Button(action: {
+                            Task {
+                                await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData)
+                                dismiss()
+                            }
+                        }) {
+                            Text("등록하기")
+                                .frame(width: screenWidth * 0.4, height: screenHeight * 0.06)
+                                .background(.blue)
+                                .foregroundStyle(.white)
+                                .cornerRadius(10)
                         }
-                    }) {
-                        Text("등록하기")
-                            .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
-                            .background(.blue)
-                            .foregroundStyle(.white)
-                            .cornerRadius(10)
                     }
                 }
+                Spacer() // 하단 여백
             }
+            .frame(width: screenWidth, height: screenHeight)
+            .background(Color.white) // 배경색 설정 (필요시)
         }
     }
 }

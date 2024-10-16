@@ -8,22 +8,26 @@
 import SwiftUI
 
 struct ProfileView: View {
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.gray.opacity(0.7).ignoresSafeArea()
+                Color.loginViewBG.ignoresSafeArea()
                 VStack {
                     Spacer()
                         .frame(height: 20)
                     
                     Image(systemName: "person.circle")
                         .resizable()
-                        .frame(width: 150,height: 150)
-                    Spacer()
-                        .frame(height: 30)
+                        .frame(width: screenWidth * 0.2, height: screenWidth * 0.2)
                     
                     Text("Profile Name")
                         .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(.white)
+                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
                     
                     Spacer()
                         .frame(height: 100)
@@ -32,7 +36,7 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .white, buttonWidth: .infinity) {
+                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .white.opacity(0.6), buttonWidth: .infinity) {
                         
                     }
                     .padding(.horizontal, 27)
@@ -54,40 +58,49 @@ struct ProfileButtonList: View {
             NavigationLink {
                 ProfileManagementView()
             } label: {
-                Text("프로필 관리")
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.white)
-                    )
-                    .padding(.horizontal, 27)
+                HStack {
+                    Image(systemName: "person.fill")
+                    Text("프로필")
+                }
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.white.opacity(0.6))
+                )
+                .padding(.horizontal, 27)
             }
             
             NavigationLink {
                 ImageManagementView()
             } label: {
-                Text("업로드 이미지 관리")
+                HStack {
+                    Image(systemName: "doc.text")
+                    Text("게시물")
+                }
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(.black)
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.white)
+                            .fill(.white.opacity(0.6))
                     )
                     .padding(.horizontal, 27)
             }
             NavigationLink {
                 FriendListView()
             } label: {
-                Text("친구 목록")
+                HStack {
+                    Image(systemName: "person.3.sequence.fill")
+                    Text("친구")
+                }
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(.black)
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.white)
+                            .fill(.white.opacity(0.6))
                     )
                     .padding(.horizontal, 27)
             }
