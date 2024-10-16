@@ -68,7 +68,7 @@ struct SignUpView: View {
                         .foregroundStyle(.white.opacity(0.7))
                     
                     Button {
-                        authStore.switchFlow()
+                        authStore.switchFlow(to: .login)
                     } label : {
                         Text("로그인")
                             .foregroundStyle(.white.opacity(0.8))
