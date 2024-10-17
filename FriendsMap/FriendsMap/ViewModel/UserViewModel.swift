@@ -37,14 +37,9 @@ class UserViewModel: ObservableObject {
                 let imageData = docData["image"] as? String
                 let storageRef = storage.reference(withPath: "\(email)/\(imageData!)")
                 let text = docData["text"] as? String
-                storageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("Error getting download URL: \(error)")
-                        return
-                    }
-                    if let url = url {
-                        self.userContents.append(Content(id: document.documentID, image: url.absoluteString ,text: text, contentDate: .now))
-                    }
+                let url = try await storageRef.downloadURL()
+                if !userContents.contains(where: { $0.id == document.documentID }) {
+                    self.userContents.append( Content(id: document.documentID, image: url.absoluteString ,text: text, contentDate: .now, latitude: 0.0, longitude: 0.0))
                 }
             }
         } catch {
