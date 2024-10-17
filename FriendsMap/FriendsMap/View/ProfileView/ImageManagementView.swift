@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageManagementView: View {
-    @StateObject private var viewModel = ProfileViewModel()
+    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     var body: some View {
@@ -16,7 +16,7 @@ struct ImageManagementView: View {
             Color.loginViewBG.ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 70) {
-                    ForEach(viewModel.userContents, id: \.id) { content in
+                    ForEach(userViewModel.userContents, id: \.id) { content in
                         HStack (spacing: 50){
                             AsyncImage(url: URL(string: content.image!)) { image in
                                 if let image = image.image {
@@ -40,8 +40,8 @@ struct ImageManagementView: View {
                                 .padding(.horizontal, 10)
                                 .onTapGesture {
                                     Task {
-                                        try await viewModel.deleteContentImage(documentID: content.id, email: authStore.user!.email)
-                                        try await viewModel.fetchContents(from: authStore.user!.email)
+                                        try await userViewModel.deleteContentImage(documentID: content.id, email: authStore.user!.email)
+                                        try await userViewModel.fetchContents(from: authStore.user!.email)
                                     }
                                 }
                         }
@@ -50,7 +50,7 @@ struct ImageManagementView: View {
                 .frame(maxWidth: .infinity)
                 .onAppear {
                     Task {
-                        try await viewModel.fetchContents(from: authStore.user!.email)
+                        try await userViewModel.fetchContents(from: authStore.user!.email)
                     }
                 }
             }

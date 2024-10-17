@@ -19,15 +19,14 @@ struct MainView: View {
     @State private var isShowingSheet = false
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
+    @State private var annotations: [IdentifiableLocation] = []
+  
     @StateObject private var locationManager = LocationManager()
-    @EnvironmentObject private var mainViewModel: MainViewModel
-    @EnvironmentObject private var signOut: AuthenticationStore
+    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    
-    @State private var annotations: [IdentifiableLocation] = []
     
     var body: some View {
         GeometryReader { geometry in
@@ -141,7 +140,7 @@ struct MainView: View {
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
                             .sheet(isPresented: $isShowingSheet) {
-                                UploadImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude)
+                                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
                                     .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
                             }
                         }
@@ -153,10 +152,9 @@ struct MainView: View {
         .onAppear {
 //            signOut.signOut()
             Task {
-                await mainViewModel.loadPosts(authStore.user!.email)
-                
+                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                 // 로드된 데이터를 기반으로 어노테이션 설정
-                annotations = mainViewModel.userPost.map { post in
+                annotations = userViewModel.userContents.map { post in
                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                 }
             }
@@ -165,7 +163,9 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
-        .environmentObject(UploadImageViewModel())
-        .environmentObject(MainViewModel())
+    NavigationStack{
+        MainView()
+    }
+    .environmentObject(UserViewModel())
+    .environmentObject(AuthenticationStore())
 }

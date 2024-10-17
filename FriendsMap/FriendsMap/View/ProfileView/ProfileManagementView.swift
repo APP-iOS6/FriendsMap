@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileManagementView: View {
-    @StateObject private var viewModel = ProfileViewModel()
+    @EnvironmentObject private var userViewModel: UserViewModel
     var body: some View {
         NavigationStack {
             ZStack {

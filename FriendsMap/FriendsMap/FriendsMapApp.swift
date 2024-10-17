@@ -21,16 +21,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct FriendsMapApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var uploadViewModel = UploadImageViewModel()
-    @StateObject private var mainViewModel = MainViewModel()
+    @StateObject private var userViewModel:  UserViewModel = UserViewModel()
     @StateObject private var authStore = AuthenticationStore()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 ContentView()
-                    .environmentObject(uploadViewModel)
-                    .environmentObject(mainViewModel)
+                    .environmentObject(userViewModel)
                     .environmentObject(authStore)
             }
         }

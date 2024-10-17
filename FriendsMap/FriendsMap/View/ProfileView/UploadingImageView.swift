@@ -10,12 +10,13 @@ import MapKit
 import PhotosUI
 import ImageIO
 
-struct UploadImageView: View {
-    @EnvironmentObject private var ViewModels: UploadImageViewModel
-    @EnvironmentObject var authStore: AuthenticationStore
+struct UploadingImageView: View {
+    @EnvironmentObject private var authStore: AuthenticationStore
+    @EnvironmentObject private var userViewModel: UserViewModel
     
     @Binding var selectedLatitude: Double?  // 메인 뷰로 보낼 위도 정보
     @Binding var selectedLongitude: Double? // 메인 뷰로 보낼 경도 정보
+    @Binding var annotations: [IdentifiableLocation]
     
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
@@ -70,21 +71,26 @@ struct UploadImageView: View {
                                 if let newSelection = imageSelection,
                                    let data = try? await newSelection.loadTransferable(type: Data.self) {
                                     uiImage = UIImage(data: data)
-                                    ViewModels.extractMetadata(from: data)
+                                    userViewModel.extractMetadata(from: data)
                                     selectedImageData = data
-                                    selectedLatitude = ViewModels.imagelatitude
-                                    selectedLongitude = ViewModels.imagelongitude
+                                    selectedLatitude = userViewModel.imagelatitude
+                                    selectedLongitude = userViewModel.imagelongitude
                                 }
                             }
                         }
                     
                     if uiImage != nil {
-                        Button(action: {
+                        Button {
                             Task {
-                                await ViewModels.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: ViewModels.imageDate ?? Date(), latitude: ViewModels.imagelatitude, longitude: ViewModels.imagelongitude), selectedImageData, authStore.user!.email)
+                                await userViewModel.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user!.email)
                                 dismiss()
+                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                annotations = userViewModel.userContents.map { post in
+                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                                }
+//                                print("\(userViewModel.userContents.count)")
                             }
-                        }) {
+                        } label: {
                             Text("등록하기")
                                 .frame(width: screenWidth * 0.4, height: screenHeight * 0.06)
                                 .background(.blue)
@@ -102,7 +108,7 @@ struct UploadImageView: View {
 }
 
 #Preview {
-    UploadImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil))
-        .environmentObject(UploadImageViewModel())
+    UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]))
+        .environmentObject(UserViewModel())
 }
 
