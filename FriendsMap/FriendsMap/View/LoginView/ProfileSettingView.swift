@@ -26,7 +26,7 @@ struct ProfileSettingView: View {
                     .scaledToFit()
             }
             .frame(width: screenWidth * 0.5)
-            .padding(.top, screenHeight * 0.05)
+            .padding(.top, screenHeight * 0.14)
             
             Text("프로필 설정")
                 .foregroundStyle(.white)
@@ -103,7 +103,7 @@ struct ProfileSettingView: View {
                         .font(.system(size: 24))
                         .foregroundStyle(.white)
                 }
-                .padding(.bottom, screenHeight * 0.06)
+                .padding(.bottom, screenHeight * 0.15)
             }
             
         }
