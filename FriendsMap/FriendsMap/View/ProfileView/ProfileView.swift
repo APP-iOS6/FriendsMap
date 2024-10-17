@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfileView: View {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    @EnvironmentObject var authStore: AuthenticationStore
+    @EnvironmentObject private var authStore: AuthenticationStore
     
     var body: some View {
         NavigationStack {
@@ -38,7 +38,7 @@ struct ProfileView: View {
                     Spacer()
                     
                     ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor:   Color(hex: "E5E5E5"), buttonWidth: .infinity) {
-                        
+                        authStore.signOut()
                     }
                     .padding(.horizontal, 27)
                     

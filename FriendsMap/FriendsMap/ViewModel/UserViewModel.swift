@@ -23,42 +23,48 @@ class UserViewModel: ObservableObject {
     var user = User(profile: Profile(nickname: "", image: ""), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
     
-    @MainActor
     func fetchContents(from email: String) async throws {
         ref = Database.database().reference()
         let db = Firestore.firestore()
         let storage = Storage.storage()
+        print("dfasfdasfa")
         do {
             let contents = try await db.collection("User").document(email).collection("Contents").getDocuments().documents
-            
+            print(contents)
             for document in contents {
                 let docData = document.data()
                 let contentDate = docData["contentDate"] as? Date
                 let imageData = docData["image"] as? String
                 let storageRef = storage.reference(withPath: "\(email)/\(imageData!)")
                 let text = docData["text"] as? String
+                let lati = docData["latitude"] as? Double
+                let longti = docData["longitude"] as? Double
                 let url = try await storageRef.downloadURL()
                 if !userContents.contains(where: { $0.id == document.documentID }) {
-                    self.userContents.append( Content(id: document.documentID, image: url.absoluteString ,text: text, contentDate: .now, latitude: 0.0, longitude: 0.0))
+                    DispatchQueue.main.async {
+                        self.userContents.append( Content(id: document.documentID, image: url.absoluteString ,text: text, contentDate: .now, latitude: lati ?? 0.0, longitude: longti ?? 0.0))
+                    }
                 }
             }
         } catch {
-            print(error.localizedDescription)
+            print("fetch date error: \(error.localizedDescription)")
         }
     }
     
-    @MainActor
     func deleteContentImage(documentID: String, email: String) async throws {
         let db = Firestore.firestore()
         let storage = Storage.storage()
         let storageRef = storage.reference()
         do {
             let imagePath = try await db.collection("User").document(email).collection("Contents").document(documentID).getDocument().get("image")
+                
+           
             try await db.collection("User").document(email).collection("Contents").document(documentID).delete()
             if let index = userContents.firstIndex(where: { $0.id == documentID } ) {
-                userContents.remove(at: index)
+                DispatchQueue.main.async {
+                    self.userContents.remove(at: index)
+                }
             }
-            
             if let imagePath = imagePath as? String {
                 try await storageRef.child("\(email)/\(imagePath)").delete()
             }

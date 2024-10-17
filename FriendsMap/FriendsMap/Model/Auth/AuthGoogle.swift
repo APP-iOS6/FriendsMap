@@ -48,7 +48,7 @@ extension AuthenticationStore {
             self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email!, contents: [], friends: [], requestList: [], receiveList: [])
             
             let db = Firestore.firestore()
-            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document("profileDoc").getDocument()
+            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document().getDocument()
             
             // 유저 문서가 존재하면
             if profileDoc.exists {

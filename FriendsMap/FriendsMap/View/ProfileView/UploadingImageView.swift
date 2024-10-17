@@ -82,13 +82,12 @@ struct UploadingImageView: View {
                     if uiImage != nil {
                         Button {
                             Task {
-                                await userViewModel.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user!.email)
-                                dismiss()
+                                await userViewModel.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
                                 try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                                 annotations = userViewModel.userContents.map { post in
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
-//                                print("\(userViewModel.userContents.count)")
+                                dismiss()
                             }
                         } label: {
                             Text("등록하기")
