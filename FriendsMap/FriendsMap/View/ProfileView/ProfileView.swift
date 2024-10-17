@@ -96,14 +96,14 @@ struct ProfileButtonList: View {
                     Image(systemName: "person.3.sequence.fill")
                     Text("친구")
                 }
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .foregroundStyle(Color(hex: "E5E5E5"))
-                    )
-                    .padding(.horizontal, 27)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .foregroundStyle(Color(hex: "E5E5E5"))
+                )
+                .padding(.horizontal, 27)
             }
         }
     }
