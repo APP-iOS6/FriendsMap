@@ -36,42 +36,32 @@ class FriendViewModel: ObservableObject {
         }
     }
     
+    // 친구 요청 보내기
     func sendFriendRequest(to friendEmail: String) async -> Bool {
-        guard let email = userEmail else {
-            print("User not logged in")
-            return false
-        }
-        
-        do {
-            let db = Firestore.firestore()
-            let friendDoc = try await db.collection("User").document(friendEmail).getDocument()
-            
-            guard friendDoc.exists else {
-                return false // 친구 문서가 없으면 실패
-            }
-            
-            // 친구 요청 받는 사람의 receiveList에 추가
-            try await db.collection("User").document(friendEmail).updateData([
-                "receiveList": FieldValue.arrayUnion([email])
-            ])
-            
-            // 요청 보낸 사람의 requestList에 친구 추가
-            try await db.collection("User").document(email).updateData([
-                "requestList": FieldValue.arrayUnion([friendEmail])
-            ])
-            
-            // 로컬 requestList 업데이트 (UI 업데이트용)
-            self.requestList.append(friendEmail)
-            
-            print("Friend request sent to \(friendEmail)")
-            return true
-            
-        } catch {
-            print("Error sending friend request: \(error)")
-            return false
-        }
-    }
+          do {
+              let db = Firestore.firestore()
+              let friendDoc = try await db.collection("User").document(friendEmail).getDocument()
+              
+              // 친구 문서가 있는지 확인
+              guard friendDoc.exists else {
+                  return false // 친구 문서가 없으면 실패
+              }
+              
+              // 친구 요청 보내기
+              try await db.collection("User").document(friendEmail).updateData([
+                  "receiveList": FieldValue.arrayUnion([userEmail])
+              ])
+              
+              print("Friend request sent to \(friendEmail)")
+              return true // 성공
+              
+          } catch {
+              print("Error sending friend request: \(error)")
+              return false // 실패
+          }
+      }
 
+    // 친구 요청 수락하기
     func acceptFriendRequest(from friendEmail: String) async {
         guard let email = userEmail else {
             print("User not logged in")
@@ -83,11 +73,13 @@ class FriendViewModel: ObservableObject {
             let userRef = db.collection("User").document(email)
             let friendRef = db.collection("User").document(friendEmail)
             
+            // 내 friends에 친구 추가하고, receiveList에서 제거
             try await userRef.updateData([
                 "friends": FieldValue.arrayUnion([friendEmail]),
                 "receiveList": FieldValue.arrayRemove([friendEmail])
             ])
             
+            // 친구의 friends에도 내 이메일 추가
             try await friendRef.updateData([
                 "friends": FieldValue.arrayUnion([email])
             ])
