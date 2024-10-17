@@ -87,14 +87,13 @@ struct ProfileSettingView: View {
             Spacer()
             
             Button {
-                // 유저 정보 관리하는 vm에서 로그인 했다고 업데이트하기
                 Task {
-                    let result = await authStore.updateProfile(nickname: nickname, image: "테스트수민", email: authStore.user!.email)
+                    let imageData = profileImage.jpegData(compressionQuality: 0.8)
+                    let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
                     if result {
                         authStore.flow = .main
                     }
                 }
-                //이미지 url 변환 필요함! 나중에 추가
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
