@@ -93,6 +93,9 @@ struct ProfileSettingView: View {
                     if result {
                         authStore.flow = .main
                     }
+                    else {
+                        print("updateProfile 함수 문제있음")
+                    }
                 }
             } label: {
                 ZStack {

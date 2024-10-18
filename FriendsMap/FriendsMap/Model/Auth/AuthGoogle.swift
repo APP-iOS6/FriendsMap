@@ -41,14 +41,17 @@ extension AuthenticationStore {
             
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
+            
             print("User \(firebaseUser.uid) signed in with email \(firebaseUser.email ?? "unknown")")
             
             authenticationState = .authenticated
             
             self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email!, contents: [], friends: [], requestList: [], receiveList: [])
             
+            print("이메일!!! : \(String(describing: firebaseUser.email))")
+            
             let db = Firestore.firestore()
-            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document().getDocument()
+            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document("profileDoc").getDocument()
             
             // 유저 문서가 존재하면
             if profileDoc.exists {
@@ -69,12 +72,12 @@ extension AuthenticationStore {
                 self.flow = .profileSetting
                 return false
             }
-//            self.flow = .main
-//            self.authenticationState = .authenticated
-//            
-//            if let username = firebaseUser.displayName {
-//                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
-//            }
+            //            self.flow = .main
+            //            self.authenticationState = .authenticated
+            //
+            //            if let username = firebaseUser.displayName {
+            //                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
+            //            }
         }
         catch {
             print(error.localizedDescription)
