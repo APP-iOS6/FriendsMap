@@ -14,8 +14,8 @@ struct UploadingImageView: View {
     @EnvironmentObject private var authStore: AuthenticationStore
     @EnvironmentObject private var userViewModel: UserViewModel
     
-    @Binding var selectedLatitude: Double?  // 메인 뷰로 보낼 위도 정보
-    @Binding var selectedLongitude: Double? // 메인 뷰로 보낼 경도 정보
+    @Binding var selectedLatitude: Double?
+    @Binding var selectedLongitude: Double? 
     @Binding var annotations: [IdentifiableLocation]
     
     @State var imageSelection: PhotosPickerItem? = nil
@@ -83,10 +83,20 @@ struct UploadingImageView: View {
                         Button {
                             Task {
                                 await userViewModel.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
+                                
+                                // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
                                 try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                
+                                // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
                                 annotations = userViewModel.userContents.map { post in
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
+                                
+                                // 새로운 게시물을 등록한 후, 지도에서 선택된 위치를 업데이트
+                                selectedLatitude = userViewModel.imagelatitude
+                                selectedLongitude = userViewModel.imagelongitude
+                                
+                                
                                 dismiss()
                             }
                         } label: {
@@ -96,12 +106,13 @@ struct UploadingImageView: View {
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
                         }
+
                     }
                 }
-                Spacer() // 하단 여백
+                Spacer()
             }
             .frame(width: screenWidth, height: screenHeight)
-            .background(Color.white) // 배경색 설정 (필요시)
+            .background(Color.white)
         }
     }
 }

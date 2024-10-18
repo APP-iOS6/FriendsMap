@@ -149,7 +149,7 @@ struct MainView: View {
                         Task {
                             try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                             // 로드된 데이터를 기반으로 어노테이션 설정
-                            annotations = $userViewModel.userContents.map { post in
+                            annotations = userViewModel.userContents.map { post in
                                 IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                             }
                         }
