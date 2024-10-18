@@ -91,10 +91,9 @@ struct ProfileSettingView: View {
                         let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
                         if result {
                             authStore.flow = .main
+                        } else {
+                            print("updateProfile 함수 문제있음")
                         }
-                    }
-                    else {
-                        print("updateProfile 함수 문제있음")
                     }
                 }
             } label: {
