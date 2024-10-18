@@ -43,7 +43,9 @@ struct ProfileView: View {
                     .padding(.horizontal, 27)
                     
                     ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
-                        
+                        Task {
+                            await authStore.deleteAccount()
+                        }
                     }
                     .padding(.horizontal, 27)
                 }

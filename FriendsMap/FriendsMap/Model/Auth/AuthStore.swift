@@ -118,7 +118,7 @@ class AuthenticationStore: ObservableObject {
             
             do {
                 storageRef.putData(resizedImageData, metadata: metadata)
-
+                
                 let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
                 try await docRef.setData([
                     "nickname": nickname,
@@ -195,6 +195,10 @@ extension AuthenticationStore {
     func signOut() {
         do {
             try Auth.auth().signOut()
+            
+            self.authenticationState = .unauthenticated
+            self.flow = .login
+            self.user = nil
         }
         catch {
             print(error)
@@ -204,6 +208,9 @@ extension AuthenticationStore {
     
     func deleteAccount() async -> Bool {
         do {
+            let db = Firestore.firestore()
+            try await db.collection("User").document(email).delete()
+            
             try await firebaseUser?.delete()
             return true
         }
