@@ -12,6 +12,7 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
+import FirebaseFirestore
 
 extension AuthenticationStore {
     func signInWithGoogle() async -> Bool {
@@ -40,20 +41,49 @@ extension AuthenticationStore {
             
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
+            
             print("User \(firebaseUser.uid) signed in with email \(firebaseUser.email ?? "unknown")")
             
-            self.flow = .main
-            self.authenticationState = .authenticated
+            authenticationState = .authenticated
             
-            if let username = firebaseUser.displayName {
-                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
+            self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email!, contents: [], friends: [], requestList: [], receiveList: [])
+            
+            print("이메일!!! : \(String(describing: firebaseUser.email))")
+            
+            let db = Firestore.firestore()
+            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document("profileDoc").getDocument()
+            
+            // 유저 문서가 존재하면
+            if profileDoc.exists {
+                if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
+                    // 닉네임이 비어있지 않으면 MainView로 이동
+                    await self.loadProfile(email: firebaseUser.email!)
+                    self.flow = .main
+                    print(nickname)
+                    
+                    return true
+                } else {
+                    // 닉네임이 비어있으면 ProfileSettingView로 이동
+                    self.flow = .profileSetting
+                    return false
+                }
+            } else {
+                // ProfileDoc 문서가 없으면 ProfileSettingView로 이동
+                self.flow = .profileSetting
+                return false
             }
-            
-            return true
+            //            self.flow = .main
+            //            self.authenticationState = .authenticated
+            //
+            //            if let username = firebaseUser.displayName {
+            //                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
+            //            }
         }
         catch {
             print(error.localizedDescription)
             self.errorMessage = error.localizedDescription
+            authenticationState = .unauthenticated
+            
             return false
         }
     }

@@ -13,6 +13,7 @@ import GoogleSignIn
 import GoogleSignInSwift
 import Observation
 import FirebaseFirestore
+import FirebaseStorage
 
 // 인증 처리 상태
 enum AuthenticationState {
@@ -68,6 +69,7 @@ class AuthenticationStore: ObservableObject {
     
     //이미지, 닉네임 불러오기 함수
     func loadProfile(email: String) async {
+        let storage = Storage.storage()
         do {
             let snapshots = try await db.collection("User").document(email).collection("Profile").getDocuments()
             
@@ -75,11 +77,20 @@ class AuthenticationStore: ObservableObject {
                 let docData = document.data()
                 let nickname = docData["nickname"] as? String
                 let image = docData["image"] as? String
+                let storageRef = storage.reference(withPath: "\(email)/\(image!)")
                 
-                self.user?.profile = Profile(
-                    nickname: nickname!,
-                    image: image!
-                )
+                storageRef.downloadURL { url, error in
+                    if let error = error {
+                        print("Error getting download URL: \(error)")
+                        return
+                    }
+                    if let url = url {
+                        self.user?.profile = Profile(
+                            nickname: nickname!,
+                            image: url.absoluteString
+                        )
+                    }
+                }
             }
         } catch{
             print("\(error)")
@@ -87,20 +98,54 @@ class AuthenticationStore: ObservableObject {
     }
     
     
-    //이미지, 닉네임 수정 함수
-    func updateProfile(nickname: String, image: String, email: String) async -> Bool{
-        do {
-            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
-            try await docRef.setData([
-                "nickname": nickname,
-                "image": image
-            ]
-            )
-            self.user?.profile.nickname = nickname
-            return true
-        } catch {
-            print(error)
-            return false
+    //이미지, 닉네임 업데이트 함수
+    func updateProfile(nickname: String, image: Data?, email: String) async -> Bool{
+        
+        //UserViewModel 코드 참고
+        let id = "\(UUID().uuidString)"
+        let storageRef = Storage.storage().reference().child("\(email)/\(id)")
+        
+        // 원하는 이미지 크기 (예: 300x300으로 크기 조정)
+        let targetSize = CGSize(width: 720, height: 1080)
+        
+        if let image = image,
+           let originalImage = UIImage(data: image),
+           let resizedImage = originalImage.resize(to: targetSize),
+           let resizedImageData = resizedImage.jpegData(compressionQuality: 0.8) {
+            
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            
+            do {
+                storageRef.putData(resizedImageData, metadata: metadata)
+
+                let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+                try await docRef.setData([
+                    "nickname": nickname,
+                    "image": id
+                ])
+                self.user?.profile.nickname = nickname
+                self.user?.profile.image = id
+                return true
+                
+            } catch {
+                print(error)
+                return false
+            }
+        }
+        // 이미지 등록 안한 경우
+        else {
+            do {
+                let docRef = db.collection("User").document(email).collection("Profile").document()
+                try await docRef.setData([
+                    "nickname": nickname
+                ], merge: true)
+                self.user?.profile.nickname = nickname
+                return true
+            } catch {
+                print(error)
+                return false
+            }
         }
     }
     
@@ -111,13 +156,13 @@ class AuthenticationStore: ObservableObject {
         //                    self.user?.email = user.email ?? ""
         //                    self.authenticationState = user == nil ? .unauthenticated : .authenticated
         //                    self.displayName = user.email ?? ""
-        //                    
+        //
         //                    if self.authenticationState == .authenticated {
         //                        Task {
         //                            await self.loadProfile(email: user.email!)
         //                        }
         //                    }
-        //                    
+        //
         //                }
         //            }
         //        }

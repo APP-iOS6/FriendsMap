@@ -20,17 +20,18 @@ struct MainView: View {
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @State private var annotations: [IdentifiableLocation] = []
-  
+    
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject var authStore: AuthenticationStore
+        @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-        GeometryReader { geometry in
-            NavigationStack {
+        
+        NavigationStack {
+            GeometryReader { geometry in
                 ZStack {
                     if let latitude = selectedLatitude, let longitude = selectedLongitude {
                         let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
@@ -145,27 +146,25 @@ struct MainView: View {
                             }
                         }
                     }
+                    .onAppear {
+                        Task {
+                            try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                            // 로드된 데이터를 기반으로 어노테이션 설정
+                            annotations = userViewModel.userContents.map { post in
+                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                            }
+                        }
+                    }
                 }
                 .navigationBarHidden(true)
             }
         }
-        .onAppear {
-//            signOut.signOut()
-            Task {
-                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
-                // 로드된 데이터를 기반으로 어노테이션 설정
-                annotations = userViewModel.userContents.map { post in
-                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
-                }
-            }
-        }
+        
     }
 }
 
 #Preview {
-    NavigationStack{
-        MainView()
-    }
-    .environmentObject(UserViewModel())
-    .environmentObject(AuthenticationStore())
+    MainView()
+        .environmentObject(UserViewModel())
+    //        .environmentObject(AuthenticationStore())
 }
