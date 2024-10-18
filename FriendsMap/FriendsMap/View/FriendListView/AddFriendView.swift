@@ -69,7 +69,7 @@ struct AddFriendView: View {
                 Text("보낸 친구 요청")
                     .font(.headline)
                     .foregroundColor(.white)
-                    .padding(.top, 20)
+                    .padding(.top, 21)
 
                 List(viewModel.requestList, id: \.self) { friend in
                     Text(friend)
