@@ -59,7 +59,6 @@ struct AddFriendView: View {
                         .foregroundColor(.green)
                         .padding(.top, 10)
                 }
-                
                 // 에러 메시지 표시 (빨간색)
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
@@ -67,14 +66,50 @@ struct AddFriendView: View {
                         .padding(.top, 10)
                 }
                 
-                Spacer()
+                // 친구 요청 리스트 표시 (requestList)
+                Text("보낸 친구 요청")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.top, 21)
                 
+                List(viewModel.requestList, id: \.self) { friend in
+                    Text(friend)
+                        .foregroundColor(.black)
+                }
+                .background(Color(hex: "#404040").ignoresSafeArea())
+                .scrollContentBackground(.hidden)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer() // 리스트 아래 공간 확보
+                
+                // 친구 요청 리스트 표시 (requestList)
+                Text("보낸 친구 요청")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.top, 21)
+                
+                List(viewModel.requestList, id: \.self) { friend in
+                    Text(friend)
+                        .foregroundColor(.black)
+                    
+                    
+                    // 에러 메시지 표시 (빨간색)
+                    if let errorMessage = errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .padding(.top, 10)
+                    }
+                    
+                    Spacer()
+                    
+                }
+                .background(Color(hex: "#404040").ignoresSafeArea())
             }
-            .background(Color(hex: "#404040").ignoresSafeArea())
-        }
-        .onAppear {
-            Task {
-                await viewModel.loadFriendData() // 뷰가 나타날 때 친구 목록 로드
+            .onAppear {
+                Task {
+                    await viewModel.loadFriendData() // 뷰가 나타날 때 친구 목록 로드
+                }
             }
         }
     }

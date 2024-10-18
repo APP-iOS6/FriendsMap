@@ -29,7 +29,6 @@ struct MainView: View {
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-        
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
