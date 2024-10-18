@@ -51,16 +51,38 @@ extension AuthenticationStore {
             print("이메일!!! : \(String(describing: firebaseUser.email))")
             
             let db = Firestore.firestore()
-            let profileDoc = try await db.collection("User").document(firebaseUser.email!).collection("Profile").document("profileDoc").getDocument()
             
-            // 유저 문서가 존재하면
+            let userDocRef = db.collection("User").document(firebaseUser.email!)
+            let userDoc = try await userDocRef.getDocument()
+            
+            // 최초로 로그인한 사용자
+            if !userDoc.exists {
+                // 필드 값 넣어주기
+                try await userDocRef.setData([
+                    "email": firebaseUser.email!,
+                    "contents": [],
+                    "friends": [],
+                    "requestList": [],
+                    "receiveList": []
+                ])
+                
+                // 프로필 문서 넣어주기
+                let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
+                try await profileDocRef.setData([
+                    "nickname": "",
+                    "image": ""
+                ])
+            }
+            
+            let profileDoc = try await userDocRef.collection("Profile").document("profileDoc").getDocument()
+            
+            // 로그인한 기록이 있는 사용자
             if profileDoc.exists {
                 if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
                     // 닉네임이 비어있지 않으면 MainView로 이동
                     await self.loadProfile(email: firebaseUser.email!)
                     self.flow = .main
                     print(nickname)
-                    
                     return true
                 } else {
                     // 닉네임이 비어있으면 ProfileSettingView로 이동
