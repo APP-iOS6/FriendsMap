@@ -23,13 +23,12 @@ struct MainView: View {
     
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var userViewModel: UserViewModel
-        @EnvironmentObject var authStore: AuthenticationStore
+    @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-        
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
