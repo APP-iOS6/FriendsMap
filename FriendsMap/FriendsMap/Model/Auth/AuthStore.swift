@@ -119,14 +119,13 @@ class AuthenticationStore: ObservableObject {
             do {
                 storageRef.putData(resizedImageData, metadata: metadata)
 
-                let downloadURL = try await storageRef.downloadURL()
-                let docRef = db.collection("User").document(email).collection("Profile").document()
+                let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
                 try await docRef.setData([
                     "nickname": nickname,
-                    "image": downloadURL.absoluteString
+                    "image": id
                 ])
                 self.user?.profile.nickname = nickname
-                self.user?.profile.image = downloadURL.absoluteString
+                self.user?.profile.image = id
                 return true
                 
             } catch {
@@ -140,7 +139,7 @@ class AuthenticationStore: ObservableObject {
                 let docRef = db.collection("User").document(email).collection("Profile").document()
                 try await docRef.setData([
                     "nickname": nickname
-                ])
+                ], merge: true)
                 self.user?.profile.nickname = nickname
                 return true
             } catch {
