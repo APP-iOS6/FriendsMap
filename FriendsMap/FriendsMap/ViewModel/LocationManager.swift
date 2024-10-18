@@ -28,15 +28,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        
-        // 사용자의 현재 위치와 region.center가 다를 경우에만 업데이트
-        let newCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        if region.center.latitude != newCoordinate.latitude || region.center.longitude != newCoordinate.longitude {
-            region.center = newCoordinate
-        }
-    }
     
     // 사용자의 현재 위치로 지도를 이동하는 메서드
     func updateRegionToUserLocation() {
