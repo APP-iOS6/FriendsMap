@@ -25,7 +25,7 @@ struct ProfileView: View {
                         .resizable()
                         .frame(width: screenWidth * 0.2, height: screenWidth * 0.2)
                     
-                    Text("\(authStore.user!.profile.nickname)")
+                    Text("\(authStore.user?.profile.nickname ?? "")")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(.white)
@@ -44,9 +44,6 @@ struct ProfileView: View {
                     .padding(.horizontal, 27)
                     
                     ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
-                        Task {
-                            await authStore.deleteAccount()
-                        }
                         isDeleteAccountAlertPresented.toggle()
                     }
                     .padding(.horizontal, 27)
@@ -72,7 +69,7 @@ struct ProfileView: View {
     }
     func deleteAccount() {
         Task {
-            let isDeleted = await authStore.deleteAccount()
+            let isDeleted = await authStore.deleteAccount(authStore.user?.email ?? "")
             print(isDeleted)
         }
     }

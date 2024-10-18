@@ -86,7 +86,7 @@ class AuthenticationStore: ObservableObject {
                     }
                     if let url = url {
                         self.user?.profile = Profile(
-                            nickname: nickname!,
+                            nickname: nickname ?? "",
                             image: url.absoluteString
                         )
                     }
@@ -198,7 +198,6 @@ extension AuthenticationStore {
             
             self.authenticationState = .unauthenticated
             self.flow = .login
-            self.user = nil
         }
         catch {
             print(error)
@@ -206,12 +205,34 @@ extension AuthenticationStore {
         }
     }
     
-    func deleteAccount() async -> Bool {
+    func deleteAccount( _ email: String) async -> Bool {
+        let db = Firestore.firestore()
+        let storageRef = Storage.storage().reference()
         do {
-            let db = Firestore.firestore()
+           // 컬렉션 먼지 지우고
+            let db = db.collection("User").document(email)
+            try await db.collection("Profile").document("profileDoc").delete()
+            // 도큐먼트 지우고
             try await db.collection("User").document(email).delete()
             
+           let contentsDoc =  try await db.collection("Contents").getDocuments().documents
+            for doc in contentsDoc {
+                try await db.collection(
+                    "Contents").document(doc.documentID).delete()
+            }
+
+            try await db.collection("Contents").document().delete()
+            
+            try await db.collection("Profile").document().delete()
+            
+            try await db.delete()
+            
             try await firebaseUser?.delete()
+            
+            self.authenticationState = .unauthenticated
+            
+            self.flow = .login
+            
             return true
         }
         catch {
