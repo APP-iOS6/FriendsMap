@@ -67,11 +67,14 @@ extension AuthenticationStore {
                 ])
                 
                 // 프로필 문서 넣어주기
+                
                 let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
                 try await profileDocRef.setData([
                     "nickname": "",
                     "image": ""
                 ])
+                
+                try await userDocRef.collection("Contents").document().delete()
             }
             
             let profileDoc = try await userDocRef.collection("Profile").document("profileDoc").getDocument()
