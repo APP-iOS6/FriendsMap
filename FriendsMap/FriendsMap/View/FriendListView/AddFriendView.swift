@@ -59,6 +59,18 @@ struct AddFriendView: View {
                         .foregroundColor(.green)
                         .padding(.top, 10)
                 }
+
+
+                // 친구 요청 리스트 표시 (requestList)
+                Text("보낸 친구 요청")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.top, 21)
+
+                List(viewModel.requestList, id: \.self) { friend in
+                    Text(friend)
+                        .foregroundColor(.black)
+
                 
                 // 에러 메시지 표시 (빨간색)
                 if let errorMessage = errorMessage {
