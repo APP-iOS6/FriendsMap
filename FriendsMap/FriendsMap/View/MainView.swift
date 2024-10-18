@@ -91,7 +91,7 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            if let profileImage = userViewModel.profile?.image, let nickname = userViewModel.profile?.nickname {
+                            if let profileImage = userViewModel.profile?.image {
                                 NavigationLink {
                                     ProfileView()
                                 } label: {
@@ -104,8 +104,6 @@ struct MainView: View {
                                                 .foregroundColor(.black)
                                                 .clipShape(Circle())
                                         }
-                                        Text(nickname)
-                                            .font(.caption)
                                     }
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
@@ -157,6 +155,7 @@ struct MainView: View {
                         Task {
                             try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                             // 로드된 데이터를 기반으로 어노테이션 설정
+                            await userViewModel.fetchProfile(authStore.user?.email ?? "")
                             annotations = userViewModel.userContents.map { post in
                                 IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                             }

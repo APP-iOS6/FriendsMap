@@ -39,7 +39,7 @@ class UserViewModel: ObservableObject {
                 let lati = docData["latitude"] as? Double
                 let longti = docData["longitude"] as? Double
                 
-                if let imagePath { let imageUrlString = try await makeUrltoImage(email: email, imagePath: imagePath)
+                if let imagePath { let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
                     if !userContents.contains(where: { $0.id == document.documentID }) {
                         DispatchQueue.main.async {
                             self.userContents.append( Content(id: document.documentID, image: imageUrlString, text: text, contentDate: .now, latitude: lati ?? 0.0, longitude: longti ?? 0.0))
@@ -63,6 +63,7 @@ class UserViewModel: ObservableObject {
             let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
             DispatchQueue.main.async {
                 self.profile = Profile(nickname: nickname , image: imageUrlString)
+                
             }
         } catch {
             print("Profile Fetch Error: \(error.localizedDescription)")
@@ -168,6 +169,7 @@ class UserViewModel: ObservableObject {
         do {
             let storageRef = storage.reference(withPath: "\(email)/\(imagePath)")
             let url = try await storageRef.downloadURL()
+            
             return url.absoluteString
         } catch let makeUrlError {
             print("make url error:\(makeUrlError)")
