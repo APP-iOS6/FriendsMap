@@ -60,24 +60,33 @@ extension AuthenticationStore {
             self.authenticationState = .authenticated
             // 회원가입 할 때 파베에 유저 등록(모든 필드는 처음에 빈 값으로 저장)
             let db = Firestore.firestore()
-            let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
+            let docRef = db.collection("User").document(email)
             
             try await docRef.setData([
+                "email": email,
+                "contents": [],
+                "friends": [],
+                "requestList": [],
+                "receiveList": []
+            ])
+            
+            // 프로필 문서 넣어주기
+            let profileDocRef = docRef.collection("Profile").document("profileDoc")
+            try await profileDocRef.setData([
                 "nickname": "",
                 "image": ""
-            ]
-            )
+            ])
             
-            let userDoc = db.collection("User").document(email)
-                        
-                        try await userDoc.setData([
-                            "email": email,
-                            "contents": [],
-                            "friends" : [],
-                            "requestList" : [],
-                            "receiveList": []
-                        ]
-                        )
+            // 콘텐츠 문서 넣어주기
+            let contentDocRef = docRef.collection("Contents").document()
+            try await contentDocRef.setData([
+                "contentDate" : Date(),
+                "image" : "",
+                "latitude" : 0,
+                "likeCount" : 0,
+                "longitude" : 0,
+                "text" : ""
+            ])
             
             self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
