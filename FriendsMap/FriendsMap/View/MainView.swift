@@ -91,17 +91,23 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            NavigationLink {
-                                ProfileView()
-                            } label: {
-                                Image(systemName: "person.crop.circle")
-                                    .resizable()
-                                    .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                    .background(Color.white)
-                                    .foregroundColor(.black)
-                                    .clipShape(Circle())
+                            if let profileImage = userViewModel.profile?.image {
+                                NavigationLink {
+                                    ProfileView()
+                                } label: {
+                                    VStack {
+                                        AsyncImage(url: URL(string: profileImage)) { image in
+                                            image.image?
+                                                .resizable()
+                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                                .background(Color.white)
+                                                .foregroundColor(.black)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                                }
+                                .padding(.trailing, geometry.size.width * 0.05)
                             }
-                            .padding(.trailing, geometry.size.width * 0.05)
                         }
                         .padding(.top, geometry.size.width * 0.02)
                         
@@ -149,6 +155,7 @@ struct MainView: View {
                         Task {
                             try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                             // 로드된 데이터를 기반으로 어노테이션 설정
+                            await userViewModel.fetchProfile(authStore.user?.email ?? "")
                             annotations = userViewModel.userContents.map { post in
                                 IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                             }

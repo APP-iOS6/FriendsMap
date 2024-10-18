@@ -23,26 +23,27 @@ class UserViewModel: ObservableObject {
     var user = User(profile: Profile(nickname: "", image: ""), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
     
+    // 파이어 베이스 데이터베이스 (회원 정보 및 친구 정보 저장)
+    let db = Firestore.firestore()
+    // 파이어베이스 스토리지 (Image Upload)
+    let storage = Storage.storage()
+    
     func fetchContents(from email: String) async throws {
-        ref = Database.database().reference()
-        let db = Firestore.firestore()
-        let storage = Storage.storage()
-        print("dfasfdasfa")
         do {
             let contents = try await db.collection("User").document(email).collection("Contents").getDocuments().documents
-            print(contents)
             for document in contents {
                 let docData = document.data()
                 let contentDate = docData["contentDate"] as? Date
-                let imageData = docData["image"] as? String
-                let storageRef = storage.reference(withPath: "\(email)/\(imageData!)")
+                let imagePath = docData["image"] as? String
                 let text = docData["text"] as? String
                 let lati = docData["latitude"] as? Double
                 let longti = docData["longitude"] as? Double
-                let url = try await storageRef.downloadURL()
-                if !userContents.contains(where: { $0.id == document.documentID }) {
-                    DispatchQueue.main.async {
-                        self.userContents.append( Content(id: document.documentID, image: url.absoluteString ,text: text, contentDate: .now, latitude: lati ?? 0.0, longitude: longti ?? 0.0))
+                
+                if let imagePath { let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
+                    if !userContents.contains(where: { $0.id == document.documentID }) {
+                        DispatchQueue.main.async {
+                            self.userContents.append( Content(id: document.documentID, image: imageUrlString, text: text, contentDate: .now, latitude: lati ?? 0.0, longitude: longti ?? 0.0))
+                        }
                     }
                 }
             }
@@ -51,15 +52,30 @@ class UserViewModel: ObservableObject {
         }
     }
     
+    func fetchProfile( _ email: String) async {
+        do {
+            let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument().data()
+            guard let profileDoc, let nickname = profileDoc["nickname"] as? String, let imagePath = profileDoc["image"] as? String else {
+                print("profileDoc: 값이 존재하지 않음")
+                profile = nil
+                return
+            }
+            let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
+            DispatchQueue.main.async {
+                self.profile = Profile(nickname: nickname , image: imageUrlString)
+                
+            }
+        } catch {
+            print("Profile Fetch Error: \(error.localizedDescription)")
+        }
+    }
+    
     func deleteContentImage(documentID: String, email: String) async throws {
-        let db = Firestore.firestore()
-        let storage = Storage.storage()
         let storageRef = storage.reference()
         do {
             let imagePath = try await db.collection("User").document(email).collection("Contents").document(documentID).getDocument().get("image")
-                
-           
             try await db.collection("User").document(email).collection("Contents").document(documentID).delete()
+            
             if let index = userContents.firstIndex(where: { $0.id == documentID } ) {
                 DispatchQueue.main.async {
                     self.userContents.remove(at: index)
@@ -77,7 +93,7 @@ class UserViewModel: ObservableObject {
     // 게시글 생성
     func addImage(_ content: Content, _ image: Data?, _ email: String) async {
         let id = "\(UUID().uuidString)"
-        let storageRef = Storage.storage().reference().child("\(email)/\(id)")
+        let storageRef = storage.reference().child("\(email)/\(id)")
         
         // 원하는 이미지 크기 (예: 300x300으로 크기 조정)
         let targetSize = CGSize(width: 720, height: 1080)
@@ -147,6 +163,17 @@ class UserViewModel: ObservableObject {
                 formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
                 imageDate = formatter.date(from: dateString)
             }
+        }
+    }
+    func makeUrltoImage(email: String, imagePath: String) async -> String {
+        do {
+            let storageRef = storage.reference(withPath: "\(email)/\(imagePath)")
+            let url = try await storageRef.downloadURL()
+            
+            return url.absoluteString
+        } catch let makeUrlError {
+            print("make url error:\(makeUrlError)")
+            return "make url error"
         }
     }
 }
