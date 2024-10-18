@@ -91,17 +91,25 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            NavigationLink {
-                                ProfileView()
-                            } label: {
-                                Image(systemName: "person.crop.circle")
-                                    .resizable()
-                                    .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                    .background(Color.white)
-                                    .foregroundColor(.black)
-                                    .clipShape(Circle())
+                            if let profileImage = userViewModel.profile?.image, let nickname = userViewModel.profile?.nickname {
+                                NavigationLink {
+                                    ProfileView()
+                                } label: {
+                                    VStack {
+                                        AsyncImage(url: URL(string: profileImage)) { image in
+                                            image.image?
+                                                .resizable()
+                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                                .background(Color.white)
+                                                .foregroundColor(.black)
+                                                .clipShape(Circle())
+                                        }
+                                        Text(nickname)
+                                            .font(.caption)
+                                    }
+                                }
+                                .padding(.trailing, geometry.size.width * 0.05)
                             }
-                            .padding(.trailing, geometry.size.width * 0.05)
                         }
                         .padding(.top, geometry.size.width * 0.02)
                         

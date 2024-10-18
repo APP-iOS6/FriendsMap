@@ -11,6 +11,7 @@ struct ProfileView: View {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     @State private var isDeleteAccountAlertPresented: Bool = false
+    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var authStore: AuthenticationStore
     
     var body: some View {
@@ -20,16 +21,31 @@ struct ProfileView: View {
                 VStack {
                     Spacer()
                         .frame(height: 20)
-                    
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: screenWidth * 0.2, height: screenWidth * 0.2)
-                    
-                    Text("\(authStore.user!.profile.nickname)")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
+                    if let photos = userViewModel.profile?.image, let nickname = userViewModel.profile?.nickname {
+                        AsyncImage(url: URL(string: photos)!) { image in
+                            image.image?
+                                .resizable()
+                                .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
+                                .clipShape(Circle())
+                                .aspectRatio(contentMode: .fit)
+                        }
+        
+                        Text(nickname)
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
+                    } else {
+                        Image("defaultProfile")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: screenWidth * 0.4)
+                            .clipShape(.circle)
+                        Text("닉네임이 존재하지 않습니다.")
+                            .font(.largeTitle)
+                            .bold()
+                            .foregroundStyle(.white)
+                            .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
+                    }
                     
                     Spacer()
                         .frame(height: 100)
@@ -65,12 +81,15 @@ struct ProfileView: View {
                 }
                 Spacer()
             }
+            .task {
+                await userViewModel.fetchProfile(authStore.user?.email ?? "")
+            }
         }
     }
     func deleteAccount() {
         Task {
             let isDeleted = await authStore.deleteAccount()
-            print(isDeleted)
+            print("계정 삭제 결과: \(isDeleted)")
         }
     }
 }
@@ -102,14 +121,14 @@ struct ProfileButtonList: View {
                     Image(systemName: "doc.text")
                     Text("게시물")
                 }
-                    .frame(maxWidth: .infinity)
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .foregroundStyle(Color(hex: "E5E5E5"))
-                    )
-                    .padding(.horizontal, 27)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .foregroundStyle(Color(hex: "E5E5E5"))
+                )
+                .padding(.horizontal, 27)
             }
             NavigationLink {
                 FriendListView()
@@ -133,4 +152,5 @@ struct ProfileButtonList: View {
 
 #Preview {
     ProfileView()
+        .environmentObject(UserViewModel())
 }
