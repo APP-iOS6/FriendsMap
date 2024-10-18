@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileSettingView: View {
     @State var nickname: String = ""
+    @State var nicknameWarning: String = ""
     @State private var profileImage: UIImage = UIImage()
     @State private var isPresented: Bool = false
     
@@ -52,7 +53,7 @@ struct ProfileSettingView: View {
                             .scaledToFit()
                             .frame(width: screenWidth * 0.4)
                             .clipShape(.circle)
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                             .font(.system(size: 40, weight: .bold))
                             .foregroundStyle(.gray)
                             .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
@@ -63,41 +64,40 @@ struct ProfileSettingView: View {
                 .frame(width: screenWidth * 0.7, height: screenHeight * 0.18)
             }
             
-            HStack {
+            VStack(alignment : .leading) {
                 createTextField(placeholder: "닉네임", varName: $nickname, isSecure: false)
-                    .frame(width: screenWidth * 0.55)
+                    .frame(width: screenWidth * 0.7)
                 
-                
-                Button {
-                    // 닉네임 중복 확인 로직
-                } label : {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: screenWidth * 0.21, height: screenHeight * 0.065)
-                            .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
-                        Text("중복확인")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 20))
-                    }
-                    .padding(.vertical)
+                if nicknameWarning.isEmpty {
+                    Text(" ")
+                } else {
+                    Text(nicknameWarning)
+                        .foregroundStyle(.red)
+                        .padding(.leading, 13)
                 }
             }
             .padding(.top, screenHeight * 0.02)
             
             Spacer()
             
+            
             Button {
-                Task {
-                    let imageData = profileImage.jpegData(compressionQuality: 0.8)
-                    let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
-                    if result {
-                        authStore.flow = .main
+                
+                if nickname.isEmpty {
+                    nicknameWarning = "닉네임을 입력해주세요"
+                } else {
+                    Task {
+                        let imageData = profileImage.jpegData(compressionQuality: 0.8)
+                        let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
+                        if result {
+                            authStore.flow = .main
+                        }
                     }
                 }
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .frame(width: screenWidth * 0.5, height: screenHeight * 0.05)
+                        .frame(width: screenWidth * 0.5, height: screenHeight * 0.06)
                         .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                     Text("시작하기")
                         .font(.system(size: 24))
