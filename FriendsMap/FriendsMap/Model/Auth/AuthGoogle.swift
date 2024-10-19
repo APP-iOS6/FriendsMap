@@ -46,7 +46,7 @@ extension AuthenticationStore {
             
             authenticationState = .authenticated
             
-            self.user = User(profile: Profile(nickname: "", image: ""), email: firebaseUser.email!, contents: [], friends: [], requestList: [], receiveList: [])
+            self.user = User(profile: Profile(nickname: "", uiimage: nil), email: firebaseUser.email!, contents: [], friends: [], requestList: [], receiveList: [])
             
             print("이메일!!! : \(String(describing: firebaseUser.email))")
             

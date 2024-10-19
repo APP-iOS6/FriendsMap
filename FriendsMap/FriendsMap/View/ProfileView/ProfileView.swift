@@ -21,31 +21,15 @@ struct ProfileView: View {
                 VStack {
                     Spacer()
                         .frame(height: 20)
-                    if let photos = userViewModel.profile?.image, let nickname = userViewModel.profile?.nickname {
-                        AsyncImage(url: URL(string: photos)!) { image in
-                            image.image?
-                                .resizable()
-                                .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
-                                .clipShape(Circle())
-                                .aspectRatio(contentMode: .fit)
-                        }
-        
-                        Text(nickname)
-                            .font(.title3)
-                            .foregroundStyle(.white)
-                            .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
-                    } else {
-                        Image("defaultProfile")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: screenWidth * 0.4)
-                            .clipShape(.circle)
-                        Text("닉네임이 존재하지 않습니다.")
-                            .font(.largeTitle)
-                            .bold()
-                            .foregroundStyle(.white)
-                            .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
-                    }
+                    userViewModel.user.profile.image
+                        .resizable()
+                        .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
+                        .clipShape(Circle())
+                        .aspectRatio(contentMode: .fit)
+                    Text(userViewModel.user.profile.nickname)
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
                     Spacer()
                         .frame(height: 100)
                     

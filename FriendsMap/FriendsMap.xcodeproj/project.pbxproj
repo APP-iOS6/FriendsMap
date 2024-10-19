@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C58EF9B2CC0CE2700C4CFA7 /* UploadImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C58EF9A2CC0CE2700C4CFA7 /* UploadImageViewModel.swift */; };
+		2C58EF9B2CC0CE2700C4CFA7 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C58EF9A2CC0CE2700C4CFA7 /* UIImage+.swift */; };
 		2C58EF9D2CC0D62600C4CFA7 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C58EF9C2CC0D62600C4CFA7 /* UserViewModel.swift */; };
 		2CF4D8FB2CBF98C0002824DC /* ProfileCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF4D8FA2CBF98C0002824DC /* ProfileCustomButton.swift */; };
 		2CF775342CBED99D00FE13C2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF775322CBED99D00FE13C2 /* ProfileView.swift */; };
@@ -49,7 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C58EF9A2CC0CE2700C4CFA7 /* UploadImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageViewModel.swift; sourceTree = "<group>"; };
+		2C58EF9A2CC0CE2700C4CFA7 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		2C58EF9C2CC0D62600C4CFA7 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		2CF4D8FA2CBF98C0002824DC /* ProfileCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCustomButton.swift; sourceTree = "<group>"; };
 		2CF775312CBED99D00FE13C2 /* ProfileManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagementView.swift; sourceTree = "<group>"; };
@@ -129,6 +129,7 @@
 		CE8C79512CBD0A2700992D4C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CEFED88F2CBCF0E5003938E2 /* ContentView.swift */,
 				CEBDD8F42CC036100046A13C /* MainView.swift */,
 				2CF4D8F92CBF9491002824DC /* ProfileView */,
 				FB9D007C2CBDF424002874C1 /* LoginView */,
@@ -141,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				2C58EF9C2CC0D62600C4CFA7 /* UserViewModel.swift */,
-				2C58EF9A2CC0CE2700C4CFA7 /* UploadImageViewModel.swift */,
 				E0BCB8E92CBF93A900FF2391 /* FriendViewModel.swift */,
 				B82F6D222CBE472A00D59FF1 /* LocationManager.swift */,
 			);
@@ -175,6 +175,7 @@
 		CEFED88B2CBCF0E5003938E2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2C58EF9A2CC0CE2700C4CFA7 /* UIImage+.swift */,
 				77A2CA6D2CBDFA6700C18CF4 /* Auth */,
 				CEFED8D22CBCF6EB003938E2 /* User.swift */,
 				CEFED8D62CBD015C003938E2 /* Content.swift */,
@@ -186,12 +187,11 @@
 		CEFED8912CBCF0E5003938E2 /* FriendsMap */ = {
 			isa = PBXGroup;
 			children = (
+				CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */,
 				E0BCB8EB2CBF94BB00FF2391 /* Color */,
 				CEFED88B2CBCF0E5003938E2 /* Model */,
 				CE8C79512CBD0A2700992D4C /* View */,
 				CE8C79542CBD0DFF00992D4C /* ViewModel */,
-				CEFED88F2CBCF0E5003938E2 /* ContentView.swift */,
-				CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */,
 				CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */,
 				FB9D00812CBDF4AD002874C1 /* Modifier */,
 				FB9D00892CBDFE8D002874C1 /* ImagePicker.swift */,
@@ -356,7 +356,7 @@
 				FB9D00862CBDF65E002874C1 /* SignInView.swift in Sources */,
 				CE8C79532CBD0ABA00992D4C /* UploadingImageView.swift in Sources */,
 				2CF775342CBED99D00FE13C2 /* ProfileView.swift in Sources */,
-				2C58EF9B2CC0CE2700C4CFA7 /* UploadImageViewModel.swift in Sources */,
+				2C58EF9B2CC0CE2700C4CFA7 /* UIImage+.swift in Sources */,
 				CEBDD8F52CC036100046A13C /* MainView.swift in Sources */,
 				E0BCB8E62CBF938F00FF2391 /* AddFriendView.swift in Sources */,
 				2CF775362CBED99D00FE13C2 /* ProfileManagementView.swift in Sources */,

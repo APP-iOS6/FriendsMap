@@ -10,7 +10,7 @@ import SwiftUI
 struct User {
     var profile: Profile
     var email: String
-    var contents : [Content]
+    var contents : [TestContent]
     var friends: [String]
     var requestList: [String]
     var receiveList: [String]

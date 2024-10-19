@@ -11,16 +11,32 @@ import FirebaseDatabase
 import FirebaseFirestore
 import FirebaseStorage
 
-class UserViewModel: ObservableObject {
-    @Published private(set) var profile: Profile? = nil
-    @Published private(set) var userContents: [Content] = []
-    @Published private(set) var isLoading: Bool = false
+struct TestContent {
+    var id: String // 게시물 구별용
+    var uiImage: UIImage?
+    var text: String // 게시글 내용
+    var likeCount: Int = 0  // 좋아요 수
+    var contentDate: Date // 업로드 날짜
+    var latitude: Double = 0.0 // 경도
+    var longitude: Double = 0.0 // 위도
     
-    @Published var uiImage: UIImage? = nil
+    var image: Image {
+        if let uiImage {
+            Image(uiImage: uiImage)
+        } else {
+            Image(systemName: "person.crop.circle")
+        }
+    }
+}
+
+final class UserViewModel: ObservableObject {
+    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var image: UIImage? = nil
+    
     @Published var imagelatitude: Double = 0.0
     @Published var imagelongitude: Double = 0.0
     @Published var imageDate: Date?
-    var user = User(profile: Profile(nickname: "", image: ""), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
+    @Published private(set) var user = User(profile: Profile(nickname: "", uiimage: nil), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
     
     // 파이어 베이스 데이터베이스 (회원 정보 및 친구 정보 저장)
@@ -39,10 +55,15 @@ class UserViewModel: ObservableObject {
                 let lati = docData["latitude"] as? Double
                 let longti = docData["longitude"] as? Double
                 
-                if let imagePath { let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
-                    if !userContents.contains(where: { $0.id == document.documentID }) {
-                        DispatchQueue.main.async {
-                            self.userContents.append( Content(id: document.documentID, image: imageUrlString, text: text, contentDate: .now, latitude: lati ?? 0.0, longitude: longti ?? 0.0))
+                if let imagePath, let text, let lati, let longti {
+                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
+                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
+                        if !self.user.contents.contains(where: { $0.id == document.documentID }) {
+                            DispatchQueue.main.async {
+                                self.user.contents.append(
+                                    TestContent(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                                )
+                            }
                         }
                     }
                 }
@@ -57,13 +78,14 @@ class UserViewModel: ObservableObject {
             let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument().data()
             guard let profileDoc, let nickname = profileDoc["nickname"] as? String, let imagePath = profileDoc["image"] as? String else {
                 print("profileDoc: 값이 존재하지 않음")
-                profile = nil
                 return
             }
             let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
+            
             DispatchQueue.main.async {
-                self.profile = Profile(nickname: nickname , image: imageUrlString)
-                
+                self.loadImageFromUrl(imageUrlString: imageUrlString) { uiImage in
+                    self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
+                }
             }
         } catch {
             print("Profile Fetch Error: \(error.localizedDescription)")
@@ -72,13 +94,15 @@ class UserViewModel: ObservableObject {
     
     func deleteContentImage(documentID: String, email: String) async throws {
         let storageRef = storage.reference()
+        let fbDB = db.collection("User").document(email).collection("Contents")
         do {
-            let imagePath = try await db.collection("User").document(email).collection("Contents").document(documentID).getDocument().get("image")
-            try await db.collection("User").document(email).collection("Contents").document(documentID).delete()
+            let imagePath = try await fbDB.document(documentID).getDocument().get("image")
+            try await fbDB.document(documentID).delete()
             
-            if let index = userContents.firstIndex(where: { $0.id == documentID } ) {
+            
+            if let index = user.contents.firstIndex(where: { $0.id == documentID }) {
                 DispatchQueue.main.async {
-                    self.userContents.remove(at: index)
+                    self.user.contents.remove(at: index)
                 }
             }
             if let imagePath = imagePath as? String {
@@ -172,8 +196,29 @@ class UserViewModel: ObservableObject {
             
             return url.absoluteString
         } catch let makeUrlError {
-            print("make url error:\(makeUrlError)")
-            return "make url error"
+            return "make url error: \(makeUrlError)"
         }
+    }
+    
+    func loadImageFromUrl(imageUrlString: String, completaion: @escaping (UIImage)-> ()) {
+        
+        guard let url = URL(string: imageUrlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error downloading image: \(error)")
+                return
+            }
+            
+            if let data = data, let uiImage = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completaion(uiImage)
+                }
+            }
+        }
+        .resume()
     }
 }

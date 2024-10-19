@@ -12,7 +12,7 @@ import MapKit
 struct IdentifiableLocation: Identifiable {
     let id = UUID()
     var coordinate: CLLocationCoordinate2D
-    var image: String?
+    var image: Image
 }
 
 struct MainView: View {
@@ -33,7 +33,7 @@ struct MainView: View {
             GeometryReader { geometry in
                 ZStack {
                     if let latitude = selectedLatitude, let longitude = selectedLongitude {
-                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), image: Image(systemName: "person.crop.circle"))
                         
                         Map(coordinateRegion: .constant(MKCoordinateRegion(
                             center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
@@ -41,16 +41,10 @@ struct MainView: View {
                         )), showsUserLocation: true, annotationItems: annotations) { location in
                             MapAnnotation(coordinate: location.coordinate) {
                                 VStack {
-                                    if let imageUrl = location.image, let url = URL(string: imageUrl) {
-                                        AsyncImage(url: url) { image in
-                                            image
-                                                .resizable()
-                                                .frame(width: 80, height: 80)
-                                                .clipShape(Circle())
-                                        } placeholder: {
-                                            ProgressView()
-                                        }
-                                    }
+                                    location.image
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -62,16 +56,10 @@ struct MainView: View {
                         Map(coordinateRegion: $locationManager.region, showsUserLocation: true, annotationItems: annotations) { location in
                             MapAnnotation(coordinate: location.coordinate) {
                                 VStack {
-                                    if let imageUrl = location.image, let url = URL(string: imageUrl) {
-                                        AsyncImage(url: url) { image in
-                                            image
-                                                .resizable()
-                                                .frame(width: 80, height: 80)
-                                                .clipShape(Circle())
-                                        } placeholder: {
-                                            ProgressView()
-                                        }
-                                    }
+                                    location.image
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -91,20 +79,16 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            if let profileImage = userViewModel.profile?.image {
-                                NavigationLink {
-                                    ProfileView()
-                                } label: {
-                                    VStack {
-                                        AsyncImage(url: URL(string: profileImage)) { image in
-                                            image.image?
-                                                .resizable()
-                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                                .background(Color.white)
-                                                .foregroundColor(.black)
-                                                .clipShape(Circle())
-                                        }
-                                    }
+                            NavigationLink {
+                                ProfileView()
+                            } label: {
+                                VStack {
+                                    userViewModel.user.profile.image
+                                        .resizable()
+                                        .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                        .background(Color.white)
+                                        .foregroundColor(.black)
+                                        .clipShape(Circle())
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
                             }
@@ -156,7 +140,7 @@ struct MainView: View {
                             try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                             // 로드된 데이터를 기반으로 어노테이션 설정
                             await userViewModel.fetchProfile(authStore.user?.email ?? "")
-                            annotations = userViewModel.userContents.map { post in
+                            annotations = userViewModel.user.contents.map { post in
                                 IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                             }
                         }
@@ -165,7 +149,6 @@ struct MainView: View {
                 .navigationBarHidden(true)
             }
         }
-        
     }
 }
 

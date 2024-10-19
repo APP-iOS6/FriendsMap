@@ -16,17 +16,14 @@ struct ImageManagementView: View {
             Color.loginViewBG.ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 70) {
-                    ForEach(userViewModel.userContents, id: \.id) { content in
+                    ForEach(userViewModel.user.contents, id: \.id) { content in
                         HStack (spacing: 50){
-                            AsyncImage(url: URL(string: content.image!)) { image in
-                                if let image = image.image {
-                                    image.resizable()
-                                        .frame(width: 100,height: 200)
-                                        .scaledToFit()
-                                }
-                            }
+                            content.image
+                                .resizable()
+                                .frame(width: 100,height: 200)
+                                .scaledToFit()
                             
-                            Text("\(content.text!)")
+                            Text("\(content.text)")
                                 .font(.title3)
                             
                             Image(systemName: "minus")
@@ -47,11 +44,11 @@ struct ImageManagementView: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .onAppear {
-                    Task {
-                        try await userViewModel.fetchContents(from: authStore.user!.email)
-                    }
+            }
+            .frame(maxWidth: .infinity)
+            .onAppear {
+                Task {
+                    try await userViewModel.fetchContents(from: authStore.user!.email)
                 }
             }
         }
