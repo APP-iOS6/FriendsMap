@@ -71,25 +71,21 @@ class AuthenticationStore: ObservableObject {
     func loadProfile(email: String) async {
         let storage = Storage.storage()
         do {
-            let snapshots = try await db.collection("User").document(email).collection("Profile").getDocuments()
+            let docData = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
+            let nickname = docData["nickname"] as? String
+            let image = docData["image"] as? String
+            let storageRef = storage.reference(withPath: "\(email)/\(image!)")
             
-            for document in snapshots.documents {
-                let docData = document.data()
-                let nickname = docData["nickname"] as? String
-                let image = docData["image"] as? String
-                let storageRef = storage.reference(withPath: "\(email)/\(image!)")
-                
-                storageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("Error getting download URL: \(error)")
-                        return
-                    }
-                    if let url = url {
-                        self.user?.profile = Profile(
-                            nickname: nickname ?? "",
-                            image: url.absoluteString
-                        )
-                    }
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error getting download URL: \(error)")
+                    return
+                }
+                if let url = url {
+                    self.user?.profile = Profile(
+                        nickname: nickname!,
+                        image: url.absoluteString
+                    )
                 }
             }
         } catch{

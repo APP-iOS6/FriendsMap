@@ -18,7 +18,7 @@ struct SignInView: View {
     let screenHeight = UIScreen.main.bounds.height
     
     var body: some View {
-        ZStack {
+        ScrollView {
             VStack(spacing: 20) {
                 HStack { // 로고 크기 조절용
                     Image("logo_white")
@@ -38,7 +38,8 @@ struct SignInView: View {
                 
                 createTextFieldView(placeholder: "비밀번호", varName: $password, isSecure: true, width: screenWidth * 0.85, height: screenHeight * 0.08, warningText: $passwordWarningText)
                 
-                VStack(spacing: 7) {
+                
+                VStack(spacing: 11) {
                     Button {
                         if checkValidInputs() {
                             Task {
@@ -72,8 +73,6 @@ struct SignInView: View {
                         }
                     }
                 }
-//                .padding(.top, screenHeight * 0.1)
-//                .padding(.bottom, screenHeight * 0.03)
                 .padding(.bottom, screenHeight * 0.08)
                 
                 
@@ -114,20 +113,14 @@ struct SignInView: View {
                     }
                     .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                     .padding(.bottom, screenHeight * 0.085)
-//                    .padding(.bottom, screenHeight * 0.041)
                 }
             }
             .frame(width: screenWidth, height: screenHeight)
-            .background(.loginViewBG)
-            
-            if authStore.authenticationState == .authenticating {
-                VStack {
-                    ProgressView()
-                    Text("loading...")
-                }
-                .foregroundStyle(.gray.opacity(0.5))
-                .frame(height: screenHeight * 0.5)
-            }
+        }
+        .background(.loginViewBG)
+        .ignoresSafeArea(.keyboard)
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }

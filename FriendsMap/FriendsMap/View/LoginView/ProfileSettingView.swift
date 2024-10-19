@@ -95,6 +95,7 @@ struct ProfileSettingView: View {
                             print("updateProfile 함수 문제있음")
                         }
                     }
+
                 }
             } label: {
                 ZStack {
