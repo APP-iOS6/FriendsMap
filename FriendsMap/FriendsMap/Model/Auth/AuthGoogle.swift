@@ -94,7 +94,7 @@ extension AuthenticationStore {
                     // 닉네임이 비어있지 않으면 MainView로 이동
                     await self.loadProfile(email: firebaseUser.email!)
                     self.flow = .main
-                    print(nickname)
+                    print("사용자 닉네임: \(nickname)")
                     return true
                 } else {
                     // 닉네임이 비어있으면 ProfileSettingView로 이동

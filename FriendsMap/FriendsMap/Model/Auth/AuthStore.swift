@@ -204,27 +204,27 @@ extension AuthenticationStore {
     func deleteAccount( _ email: String) async -> Bool {
         let db = Firestore.firestore().collection("User").document(email)
         let imageStoragePath = Storage.storage().reference().child("\(email)/")
+        
         do {
-           // 컬렉션 먼저 지우고
             try await db.collection("Profile").document("profileDoc").delete()
-            // 도큐먼트 지우고
-            try await db.collection("User").document(email).delete()
             
             let contentsDoc =  try await db.collection("Contents").getDocuments().documents
+            
             for doc in contentsDoc {
-                try await db.collection(
-                    "Contents").document(doc.documentID).delete()
+                try await db.collection("Contents").document(doc.documentID).delete()
             }
+            
             let imageList = try await imageStoragePath.listAll()
             
             for item in imageList.items {
-                print("item name: \(item.name)")
                 try await item.delete()
             }
             
             try await db.collection("Contents").document().delete()
             
             try await db.collection("Profile").document().delete()
+            
+            try await db.collection("User").document(email).delete()
             
             try await db.delete()
             
