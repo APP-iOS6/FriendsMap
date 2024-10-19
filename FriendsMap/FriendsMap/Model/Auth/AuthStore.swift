@@ -132,7 +132,7 @@ class AuthenticationStore: ObservableObject {
         // 이미지 등록 안한 경우
         else {
             do {
-                let docRef = db.collection("User").document(email).collection("Profile").document()
+                let docRef =  db.collection("User").document(email).collection("Profile").document("profileDoc")
                 try await docRef.setData([
                     "nickname": nickname
                 ], merge: true)
@@ -202,21 +202,26 @@ extension AuthenticationStore {
     }
     
     func deleteAccount( _ email: String) async -> Bool {
-        let db = Firestore.firestore()
-        let storageRef = Storage.storage().reference()
+        let db = Firestore.firestore().collection("User").document(email)
+        let imageStoragePath = Storage.storage().reference().child("\(email)/")
         do {
-           // 컬렉션 먼지 지우고
-            let db = db.collection("User").document(email)
+           // 컬렉션 먼저 지우고
             try await db.collection("Profile").document("profileDoc").delete()
             // 도큐먼트 지우고
             try await db.collection("User").document(email).delete()
             
-           let contentsDoc =  try await db.collection("Contents").getDocuments().documents
+            let contentsDoc =  try await db.collection("Contents").getDocuments().documents
             for doc in contentsDoc {
                 try await db.collection(
                     "Contents").document(doc.documentID).delete()
             }
-
+            let imageList = try await imageStoragePath.listAll()
+            
+            for item in imageList.items {
+                print("item name: \(item.name)")
+                try await item.delete()
+            }
+            
             try await db.collection("Contents").document().delete()
             
             try await db.collection("Profile").document().delete()
