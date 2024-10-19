@@ -67,10 +67,22 @@ extension AuthenticationStore {
                 ])
                 
                 // 프로필 문서 넣어주기
+                
                 let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
                 try await profileDocRef.setData([
                     "nickname": "",
                     "image": ""
+                ])
+            
+                // 콘텐츠 문서 넣어주기
+                let contentDocRef = userDocRef.collection("Contents").document()
+                try await contentDocRef.setData([
+                    "contentDate" : Date(),
+                    "image" : "",
+                    "latitude" : 0,
+                    "likeCount" : 0,
+                    "longitude" : 0,
+                    "text" : ""
                 ])
             }
             
@@ -94,12 +106,6 @@ extension AuthenticationStore {
                 self.flow = .profileSetting
                 return false
             }
-            //            self.flow = .main
-            //            self.authenticationState = .authenticated
-            //
-            //            if let username = firebaseUser.displayName {
-            //                self.user = User(profile: Profile(nickname: username, image: ""), email: firebaseUser.email ?? "", contents: [], friends: [], requestList: [], receiveList: [])
-            //            }
         }
         catch {
             print(error.localizedDescription)

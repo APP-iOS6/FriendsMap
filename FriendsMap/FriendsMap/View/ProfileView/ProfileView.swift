@@ -46,7 +46,6 @@ struct ProfileView: View {
                             .foregroundStyle(.white)
                             .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
                     }
-                    
                     Spacer()
                         .frame(height: 100)
                     
@@ -88,8 +87,8 @@ struct ProfileView: View {
     }
     func deleteAccount() {
         Task {
-            let isDeleted = await authStore.deleteAccount()
-            print("계정 삭제 결과: \(isDeleted)")
+            let isDeleted = await authStore.deleteAccount(authStore.user?.email ?? "")
+            print(isDeleted)
         }
     }
 }
