@@ -176,4 +176,14 @@ class UserViewModel: ObservableObject {
             return "make url error"
         }
     }
+    
+    func updateLikeCount(for contentId: String, newLikeCount: Int, email: String) async {
+        do {
+            let contentRef = db.collection("User").document(email).collection("Contents").document(contentId)
+            try await contentRef.updateData(["likeCount": newLikeCount])
+        } catch {
+            print("Failed to update like count: \(error.localizedDescription)")
+        }
+    }
+
 }

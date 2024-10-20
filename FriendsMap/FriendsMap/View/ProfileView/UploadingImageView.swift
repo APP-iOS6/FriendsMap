@@ -15,7 +15,7 @@ struct UploadingImageView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     
     @Binding var selectedLatitude: Double?
-    @Binding var selectedLongitude: Double? 
+    @Binding var selectedLongitude: Double?
     @Binding var annotations: [IdentifiableLocation]
     
     @State var imageSelection: PhotosPickerItem? = nil
@@ -66,13 +66,15 @@ struct UploadingImageView: View {
                                 .cornerRadius(10)
                             }
                         }
-                        .onChange(of: imageSelection) { _ , _  in
+                        .onChange(of: imageSelection) { newValue in
                             Task {
-                                if let newSelection = imageSelection,
+                                if let newSelection = newValue,
                                    let data = try? await newSelection.loadTransferable(type: Data.self) {
                                     uiImage = UIImage(data: data)
                                     userViewModel.extractMetadata(from: data)
                                     selectedImageData = data
+                                    
+                                    // 새로 선택한 이미지의 메타데이터로 좌표 업데이트
                                     selectedLatitude = userViewModel.imagelatitude
                                     selectedLongitude = userViewModel.imagelongitude
                                 }
@@ -92,11 +94,10 @@ struct UploadingImageView: View {
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
                                 
-                                // 새로운 게시물을 등록한 후, 지도에서 선택된 위치를 업데이트
+                                // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
                                 selectedLatitude = userViewModel.imagelatitude
                                 selectedLongitude = userViewModel.imagelongitude
-                                
-                                
+
                                 dismiss()
                             }
                         } label: {
@@ -106,7 +107,6 @@ struct UploadingImageView: View {
                                 .foregroundStyle(.white)
                                 .cornerRadius(10)
                         }
-
                     }
                 }
                 Spacer()
@@ -121,4 +121,3 @@ struct UploadingImageView: View {
     UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]))
         .environmentObject(UserViewModel())
 }
-
