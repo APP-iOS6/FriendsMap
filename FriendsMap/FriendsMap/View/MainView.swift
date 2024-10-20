@@ -147,7 +147,8 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             .sheet(isPresented: $isShowingSheet) {
                                 UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
-                                    .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
+//                                    .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
+                                    .presentationDetents([.height(screenHeight * 0.5)])
                             }
                         }
                     }
