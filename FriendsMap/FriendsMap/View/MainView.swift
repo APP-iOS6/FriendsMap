@@ -154,11 +154,6 @@ struct MainView: View {
                             }
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
-                            .sheet(isPresented: $isShowingSheet) {
-                                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
-//                                    .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
-                                    .presentationDetents([.height(screenHeight * 0.5)])
-                            }
                         }
                     }
                     .onAppear {
@@ -178,7 +173,7 @@ struct MainView: View {
         // 업로드 이미지 시트
         .sheet(isPresented: $isShowingUploadSheet) {
             UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
-                .presentationDetents(selectedLatitude == nil ? [.fraction(0.2)] : [.fraction(0.5)]) // 수정된 부분
+                .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
         }
         // 이미지 디테일 시트
         .sheet(isPresented: $isShowingDetailSheet) {
