@@ -52,13 +52,13 @@ extension AuthenticationStore {
             
             let db = Firestore.firestore()
             
-            let userDocRef = db.collection("User").document(firebaseUser.email!)
-            let userDoc = try await userDocRef.getDocument()
+            let docRef = db.collection("User").document(firebaseUser.email!)
+            let userDoc = try await docRef.getDocument()
             
 //             최초로 로그인한 사용자
             if !userDoc.exists {
                 // 필드 값 넣어주기
-                try await userDocRef.setData([
+                try await docRef.setData([
                     "email": firebaseUser.email!,
                     "friends": [],
                     "requestList": [],
@@ -67,14 +67,14 @@ extension AuthenticationStore {
 
 //                 프로필 문서 넣어주기
 
-                let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
+                let profileDocRef = docRef.collection("Profile").document("profileDoc")
                 try await profileDocRef.setData([
                     "nickname": "",
                     "image": ""
                 ])
             }
             
-            let profileDoc = try await userDocRef.collection("Profile").document("profileDoc").getDocument()
+            let profileDoc = try await docRef.collection("Profile").document("profileDoc").getDocument()
             
             // 로그인한 기록이 있는 사용자
             if profileDoc.exists {
