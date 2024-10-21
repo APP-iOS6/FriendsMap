@@ -31,7 +31,7 @@ struct ProfileManagementView: View {
                             Image(uiImage: newProfileImage)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: screenWidth * 0.6)
+                                .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                                 .clipShape(.circle)
                             Image(systemName: "pencil.circle.fill")
                                 .font(.system(size: 40, weight: .bold))
@@ -42,7 +42,7 @@ struct ProfileManagementView: View {
                             userViewModel.user.profile.image
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: screenWidth * 0.6)
+                                .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                                 .clipShape(.circle)
                             Image(systemName: "pencil.circle.fill")
                                 .font(.system(size: 40, weight: .bold))
@@ -56,9 +56,11 @@ struct ProfileManagementView: View {
                     .padding(.bottom, 20)
                 }
                 
-                VStack(alignment : .leading) {
+                HStack(spacing: 20) {
+//                    Text("닉네임")
+//                        .foregroundStyle(.white)
                     createTextField(placeholder: userViewModel.user.profile.nickname, varName: $newNickname, isSecure: false)
-                        .frame(width: screenWidth * 0.7)
+                        .frame(width: screenWidth * 0.5)
                 }
             }
             
@@ -98,6 +100,8 @@ struct ProfileManagementView: View {
         .sheet(isPresented: $isPresented) {
             ImagePicker(sourceType: .photoLibrary, selectedImage: self.$newProfileImage)
         }
+        .navigationTitle("프로필 수정")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 #Preview {
