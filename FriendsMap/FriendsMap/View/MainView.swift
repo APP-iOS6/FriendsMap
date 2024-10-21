@@ -19,7 +19,7 @@ struct MainView: View {
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
     
     @StateObject private var locationManager = LocationManager()
-    @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
@@ -82,7 +82,7 @@ struct MainView: View {
                                 ProfileView()
                             } label: {
                                 VStack {
-                                    userViewModel.user.profile.image
+                                    authStore.user.profile.image
                                         .resizable()
                                         .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
                                         .background(Color.white)
@@ -131,10 +131,10 @@ struct MainView: View {
                         }
                         .onAppear {
                             Task {
-                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                try await authStore.fetchContents(from: authStore.user.email)
                                 // 로드된 데이터를 기반으로 어노테이션 설정
-                                await userViewModel.fetchProfile(authStore.user?.email ?? "")
-                                annotations = userViewModel.user.contents.map { post in
+                                await authStore.fetchProfile(authStore.user.email)
+                                annotations = authStore.user.contents.map { post in
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
                             }

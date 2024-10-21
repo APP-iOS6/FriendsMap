@@ -14,6 +14,8 @@ import GoogleSignInSwift
 import Observation
 import FirebaseFirestore
 import FirebaseStorage
+import PhotosUI
+import FirebaseDatabase
 
 // 인증 처리 상태
 enum AuthenticationState {
@@ -50,9 +52,18 @@ class AuthenticationStore: ObservableObject {
     
     @Published var flow: AuthenticationFlow = .login
     @Published var authenticationState: AuthenticationState = .unauthenticated
-    @Published var user: User?
-    private let db = Firestore.firestore()
+    @Published var user: User = User(profile: Profile(nickname: ""), email: "default", contents: [], friends: [], requestList: [], receiveList: [])
+    let db = Firestore.firestore()
     private var authStateHandler: AuthStateDidChangeListenerHandle?
+    
+    @Published var imagelatitude: Double = 0.0
+    @Published var imagelongitude: Double = 0.0
+    @Published var imageDate: Date?
+    var ref: DatabaseReference!
+    
+    // 파이어베이스 스토리지 (Image Upload)
+    let storage = Storage.storage()
+    
     
     init() {
         registerAuthStateHandler()
@@ -82,7 +93,7 @@ class AuthenticationStore: ObservableObject {
                     return
                 }
                 if let url = url {
-                    self.user?.profile = Profile(
+                    self.user.profile = Profile(
                         nickname: nickname!,
                         uiimage: nil
                     )
@@ -120,7 +131,7 @@ class AuthenticationStore: ObservableObject {
                     "nickname": nickname,
                     "image": id
                 ])
-                self.user?.profile.nickname = nickname
+                self.user.profile.nickname = nickname
 //                self.user?.profile.image = id
                 return true
                 
@@ -136,7 +147,7 @@ class AuthenticationStore: ObservableObject {
                 try await docRef.setData([
                     "nickname": nickname
                 ], merge: true)
-                self.user?.profile.nickname = nickname
+                self.user.profile.nickname = nickname
                 return true
             } catch {
                 print(error)

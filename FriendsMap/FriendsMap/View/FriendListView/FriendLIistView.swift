@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct FriendListView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @StateObject var viewModel = FriendViewModel()
 
     init() {
@@ -31,7 +32,7 @@ struct FriendListView: View {
 
                 VStack {
                     // 친구 목록 리스트
-                    List(viewModel.friends, id: \.self) { friend in
+                    List(authStore.user.friends, id: \.self) { friend in
                         HStack {
                             Text(friend)
                                 .foregroundColor(.black)
@@ -55,7 +56,7 @@ struct FriendListView: View {
                 }
                 .onAppear {
                     Task {
-                        await viewModel.loadFriendData()
+                        await authStore.loadFriendData()
                     }
                 }
             }

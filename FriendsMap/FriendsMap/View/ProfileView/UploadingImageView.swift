@@ -12,7 +12,7 @@ import ImageIO
 
 struct UploadingImageView: View {
     @EnvironmentObject private var authStore: AuthenticationStore
-    @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var userViewModel: UserViewModel
     
     @Binding var selectedLatitude: Double?
     @Binding var selectedLongitude: Double?
@@ -51,19 +51,19 @@ struct UploadingImageView: View {
                     Button {
                         if uiImage != nil {
                             Task {
-                                await userViewModel.addContent(Content(id: UUID().uuidString, text: text, contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
+                                await authStore.addContent(Content(id: UUID().uuidString, text: text, contentDate: authStore.imageDate ?? Date(), latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), selectedImageData, authStore.user.email)
                                 
                                 // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
-                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                try await authStore.fetchContents(from: authStore.user.email)
                                 
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
-                                annotations = userViewModel.user.contents.map { post in
+                                annotations = authStore.user.contents.map { post in
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
                                 
                                 // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
-                                selectedLatitude = userViewModel.imagelatitude
-                                selectedLongitude = userViewModel.imagelongitude
+                                selectedLatitude = authStore.imagelatitude
+                                selectedLongitude = authStore.imagelongitude
 
                                 dismiss()
                             }
@@ -118,10 +118,10 @@ struct UploadingImageView: View {
                             if let newSelection = imageSelection,
                                let data = try? await newSelection.loadTransferable(type: Data.self) {
                                 uiImage = UIImage(data: data)
-                                userViewModel.extractMetadata(from: data)
+                                authStore.extractMetadata(from: data)
                                 selectedImageData = data
-                                selectedLatitude = userViewModel.imagelatitude
-                                selectedLongitude = userViewModel.imagelongitude
+                                selectedLatitude = authStore.imagelatitude
+                                selectedLongitude = authStore.imagelongitude
                             }
                         }
                     }

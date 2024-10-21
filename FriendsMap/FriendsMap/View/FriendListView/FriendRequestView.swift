@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct FriendRequestsView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @StateObject var viewModel: FriendViewModel
     @State private var currentFriendEmail: String?
 
@@ -26,7 +27,7 @@ struct FriendRequestsView: View {
                     .padding()
 
                 List {
-                    ForEach(viewModel.receiveList, id: \.self) { friendEmail in
+                    ForEach(authStore.user.receiveList, id: \.self) { friendEmail in
                         HStack {
                             Text(friendEmail)
                                 .foregroundColor(.white)
@@ -36,8 +37,8 @@ struct FriendRequestsView: View {
                             // 수락 버튼
                             Button(action: {
                                 Task {
-                                    await viewModel.acceptFriendRequest(from: friendEmail)
-                                    viewModel.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
+                                    await authStore.acceptFriendRequest(from: friendEmail)
+                                    authStore.user.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
                                 }
                             }) {
                                 Image(systemName: "checkmark.circle.fill")
@@ -49,8 +50,8 @@ struct FriendRequestsView: View {
                             // 거절 버튼
                             Button(action: {
                                 Task {
-                                    await viewModel.rejectFriendRequest(from: friendEmail)
-                                    viewModel.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
+                                    await authStore.rejectFriendRequest(from: friendEmail)
+                                    authStore.user.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
                                 }
                             }) {
                                 Image(systemName: "xmark.circle.fill")
@@ -71,7 +72,7 @@ struct FriendRequestsView: View {
             }
             .onAppear {
                 Task {
-                    await viewModel.loadFriendData() // 받은 요청 목록 로드
+                    await authStore.loadFriendData() // 받은 요청 목록 로드
                 }
             }
         }

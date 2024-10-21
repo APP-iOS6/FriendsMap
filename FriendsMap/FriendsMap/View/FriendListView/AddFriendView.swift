@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddFriendView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @StateObject var viewModel: FriendViewModel
     @State private var friendEmail = ""
     @State private var errorMessage: String? = nil
@@ -39,7 +40,7 @@ struct AddFriendView: View {
                         successMessage = nil
 
                         // 친구 요청 보내기
-                        let resultMessage = await viewModel.sendFriendRequest(to: friendEmail)
+                        let resultMessage = await authStore.sendFriendRequest(to: friendEmail)
 
                         // 결과에 따른 메시지 처리
                         if resultMessage.contains("성공") {
@@ -76,7 +77,7 @@ struct AddFriendView: View {
                     .foregroundColor(.white)
                     .padding(.top, 21)
 
-                List(viewModel.requestList, id: \.self) { friend in
+                List(authStore.user.requestList, id: \.self) { friend in
                     Text(friend)
                         .foregroundColor(.black)
                 }
@@ -87,7 +88,7 @@ struct AddFriendView: View {
             }
             .onAppear {
                 Task {
-                    await viewModel.loadFriendData() // 뷰가 나타날 때 친구 목록 로드
+                    await authStore.loadFriendData() // 뷰가 나타날 때 친구 목록 로드
                 }
             }
         }

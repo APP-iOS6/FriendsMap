@@ -88,7 +88,7 @@ struct ProfileSettingView: View {
                 } else {
                     Task {
                         let imageData = profileImage.jpegData(compressionQuality: 0.8)
-                        let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
+                        let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user.email)
                         if result {
                             authStore.flow = .main
                         } else {

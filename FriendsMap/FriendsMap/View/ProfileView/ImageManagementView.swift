@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageManagementView: View {
-    @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     @State private var showAlert = false
@@ -22,7 +22,7 @@ struct ImageManagementView: View {
                     Spacer(minLength: 20)
                     
                     VStack(spacing: 60) {
-                        ForEach(userViewModel.user.contents, id: \.id) { content in
+                        ForEach(authStore.user.contents, id: \.id) { content in
                             HStack (spacing: 30){
                                 content.image
                                     .resizable()
@@ -67,7 +67,7 @@ struct ImageManagementView: View {
                 .frame(maxWidth: .infinity)
                 .onAppear {
                     Task {
-                        try await userViewModel.fetchContents(from: authStore.user!.email)
+                        try await authStore.fetchContents(from: authStore.user.email)
                     }
                 }
                 .alert(isPresented: $showAlert) {
@@ -80,8 +80,8 @@ struct ImageManagementView: View {
                         secondaryButton: .destructive(Text("삭제"), action: {
                             if let contentToDelete = selectedContent {
                                 Task {
-                                    try await userViewModel.deleteContentImage(documentID: contentToDelete.id, email: authStore.user!.email)
-                                    try await userViewModel.fetchContents(from: authStore.user!.email)
+                                    try await authStore.deleteContentImage(documentID: contentToDelete.id, email: authStore.user.email)
+                                    try await authStore.fetchContents(from: authStore.user.email)
                                 }
                             }
                         })
