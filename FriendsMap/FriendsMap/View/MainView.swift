@@ -99,23 +99,18 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            if let profileImage = userViewModel.profile?.image, let url = URL(string: profileImage) {
                                 NavigationLink {
                                     ProfileView()
                                 } label: {
-                                    VStack {
-                                        AsyncImage(url: url) { image in
-                                            image.image?
-                                                .resizable()
-                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                                .background(Color.white)
-                                                .foregroundColor(.black)
-                                                .clipShape(Circle())
-                                        }
-                                    }
+                                    Image(systemName: "person.crop.circle")
+                                        .resizable()
+                                        .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                        .background(Color.white)
+                                        .foregroundColor(.black)
+                                        .clipShape(Circle())
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
-                            }
+                            
                         }
                         .padding(.top, geometry.size.width * 0.02)
                         

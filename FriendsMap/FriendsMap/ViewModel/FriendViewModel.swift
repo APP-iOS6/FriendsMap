@@ -7,12 +7,12 @@ class FriendViewModel: ObservableObject {
     @Published var friends: [String] = []
     @Published var receiveList: [String] = []
     @Published var requestList: [String] = []
-
+    
     private var userEmail: String? {
         return Auth.auth().currentUser?.email
     }
     
-
+    
     func loadFriendData() async {
         guard let email = userEmail else {
             print("User not logged in")
@@ -37,30 +37,44 @@ class FriendViewModel: ObservableObject {
     }
     
     // 친구 요청 보내기
-    func sendFriendRequest(to friendEmail: String) async -> Bool {
-          do {
-              let db = Firestore.firestore()
-              let friendDoc = try await db.collection("User").document(friendEmail).getDocument()
-              
-              // 친구 문서가 있는지 확인
-              guard friendDoc.exists else {
-                  return false // 친구 문서가 없으면 실패
-              }
-              
-              // 친구 요청 보내기
-              try await db.collection("User").document(friendEmail).updateData([
-                  "receiveList": FieldValue.arrayUnion([userEmail])
-              ])
-              
-              print("Friend request sent to \(friendEmail)")
-              return true // 성공
-              
-          } catch {
-              print("Error sending friend request: \(error)")
-              return false // 실패
-          }
-      }
+    func sendFriendRequest(to friendEmail: String) async -> String {
+           guard let email = userEmail else {
+               return "사용자 로그인이 필요합니다."
+           }
+           
+           // 이미 친구 요청을 보낸 경우
+           if requestList.contains(friendEmail) {
+               return "이미 친구 요청을 보냈습니다." // 중복 요청 메시지
+           }
 
+           do {
+               let db = Firestore.firestore()
+               let friendDoc = try await db.collection("User").document(friendEmail).getDocument()
+               
+               // 친구 문서가 있는지 확인
+               guard friendDoc.exists else {
+                   return "해당 이메일의 사용자를 찾을 수 없습니다." // 문서가 없을 경우
+               }
+               
+               // 친구 요청 보내기
+               try await db.collection("User").document(friendEmail).updateData([
+                   "receiveList": FieldValue.arrayUnion([email])
+               ])
+               
+               // 요청 목록에 친구 추가
+               self.requestList.append(friendEmail)
+               try await db.collection("User").document(email).updateData([
+                   "requestList": FieldValue.arrayUnion([friendEmail])
+               ])
+               
+               print("Friend request sent to \(friendEmail)")
+               return "성공적으로 친구 요청을 보냈습니다." // 성공 메시지
+               
+           } catch {
+               print("Error sending friend request: \(error)")
+               return "친구 요청을 보내는 중 오류가 발생했습니다."
+           }
+       }
     // 친구 요청 수락하기
     func acceptFriendRequest(from friendEmail: String) async {
         guard let email = userEmail else {
@@ -84,9 +98,41 @@ class FriendViewModel: ObservableObject {
                 "friends": FieldValue.arrayUnion([email])
             ])
             
+            // 뷰모델의 receiveList 업데이트
+            if let index = receiveList.firstIndex(of: friendEmail) {
+                receiveList.remove(at: index)
+            }
+            
             print("Accepted friend request from \(friendEmail)")
         } catch {
             print("Error accepting friend request: \(error)")
+        }
+    }
+    
+    // 친구 요청 거절하기
+    func rejectFriendRequest(from friendEmail: String) async {
+        guard let email = userEmail else {
+            print("User not logged in")
+            return
+        }
+        
+        do {
+            let db = Firestore.firestore()
+            let userRef = db.collection("User").document(email)
+            
+            // receiveList에서 친구 요청 제거
+            try await userRef.updateData([
+                "receiveList": FieldValue.arrayRemove([friendEmail])
+            ])
+            
+            // 뷰모델의 receiveList 업데이트
+            if let index = receiveList.firstIndex(of: friendEmail) {
+                receiveList.remove(at: index)
+            }
+            
+            print("Rejected friend request from \(friendEmail)")
+        } catch {
+            print("Error rejecting friend request: \(error)")
         }
     }
 }
