@@ -35,7 +35,7 @@ struct UploadingImageView: View {
                         dismiss()
                     } label : {
                         Text("취소")
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.blue)
                     }
                     
                     Spacer()
@@ -70,7 +70,7 @@ struct UploadingImageView: View {
                         }
                     } label : {
                         Text("추가")
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.blue)
                     }
                 }
                 .padding(.horizontal)
@@ -99,7 +99,7 @@ struct UploadingImageView: View {
                                 Text("사진앱에서 가져오기")
                             }
                             .frame(width: screenWidth * 0.9, height: screenHeight * 0.06)
-                            .background(Color(red: 147/255, green: 147/255, blue: 147/255))
+                            .background(Color(hex: "52A690"))
                             .foregroundStyle(.white)
                             .cornerRadius(10)
                         } else {
@@ -108,7 +108,7 @@ struct UploadingImageView: View {
                                 Text("사진 교체")
                             }
                             .frame(width: screenWidth * 0.9, height: screenHeight * 0.06)
-                            .background(Color(red: 147/255, green: 147/255, blue: 147/255))
+                            .background(Color(hex: "52A690"))
                             .foregroundStyle(.white)
                             .cornerRadius(10)
                         }

@@ -19,6 +19,7 @@ struct ProfileView: View {
             ZStack {
                 Color.loginViewBG.ignoresSafeArea()
                 VStack {
+                    Spacer(minLength: 20)
                     userViewModel.user.profile.image
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
@@ -50,12 +51,14 @@ struct ProfileView: View {
                         )
                     )
                 }
-                Spacer()
+                Spacer(minLength: 40)
             }
             .task {
                 await userViewModel.fetchProfile(authStore.user?.email ?? "")
             }
         }
+        .navigationTitle("설정")
+        .navigationBarTitleDisplayMode(.inline)
     }
     func deleteAccount() {
         Task {
@@ -70,7 +73,7 @@ struct ProfileButtonList: View {
     @Binding var isDeleteAccountAlertPresented: Bool
     
     var body: some View {
-        VStack (spacing: 25) {
+        VStack (spacing: 30) {
             NavigationLink {
                 ProfileManagementView()
             } label: {
@@ -78,12 +81,12 @@ struct ProfileButtonList: View {
                     Image(systemName: "person.fill")
                     Text("프로필 수정")
                 }
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
@@ -96,11 +99,12 @@ struct ProfileButtonList: View {
                     Text("게시물 관리")
                 }
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
@@ -112,24 +116,23 @@ struct ProfileButtonList: View {
                     Text("친구 관리")
                 }
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
+            .padding(.bottom, 40)
             
-            ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor:   Color(hex: "E5E5E5"), buttonWidth: .infinity) {
+            ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 authStore.signOut()
             }
-            .padding(.horizontal, 27)
-            
             ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 isDeleteAccountAlertPresented.toggle()
             }
-            .padding(.horizontal, 27)
         }
     }
 }
