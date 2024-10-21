@@ -5,11 +5,6 @@
 //  Created by 박준영 on 10/14/24.
 //
 
-import Foundation
-import Observation
-import FirebaseCore
-import FirebaseFirestore
-import FirebaseStorage
 import UIKit
 
 extension UIImage {

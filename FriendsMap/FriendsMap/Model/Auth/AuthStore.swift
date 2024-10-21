@@ -84,7 +84,7 @@ class AuthenticationStore: ObservableObject {
                 if let url = url {
                     self.user?.profile = Profile(
                         nickname: nickname!,
-                        image: url.absoluteString
+                        uiimage: nil
                     )
                 }
             }
@@ -121,7 +121,7 @@ class AuthenticationStore: ObservableObject {
                     "image": id
                 ])
                 self.user?.profile.nickname = nickname
-                self.user?.profile.image = id
+//                self.user?.profile.image = id
                 return true
                 
             } catch {

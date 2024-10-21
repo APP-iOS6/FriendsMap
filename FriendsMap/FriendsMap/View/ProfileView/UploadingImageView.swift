@@ -56,7 +56,7 @@ struct UploadingImageView: View {
                                 try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
                                 
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
-                                annotations = userViewModel.userContents.map { post in
+                                annotations = userViewModel.user.contents.map { post in
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
                                 
