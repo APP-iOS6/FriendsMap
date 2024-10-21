@@ -37,9 +37,6 @@ struct MainView: View {
                                     .frame(width: 100,height: 100)
                                     .aspectRatio(contentMode: .fit)
                                     .clipShape(Circle())
-                                    .onAppear {
-                                        print(annotation.image)
-                                    }
                             }
                         }
                     }

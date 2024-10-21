@@ -110,14 +110,10 @@ final class UserViewModel: ObservableObject {
             
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            
-            storageRef.putData(resizedImageData, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("사진 error: \(error)")
-                }
-                if let metadata = metadata {
-//                    print("메타데이터: \(metadata)")
-                }
+            do {
+                let _ = try await storageRef.putDataAsync(resizedImageData, metadata: metadata)
+            } catch {
+                print("addImage Error\(error.localizedDescription)")
             }
         } else {
             print("이미지 리사이징에 실패했습니다.")
