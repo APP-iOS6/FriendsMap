@@ -116,6 +116,22 @@ struct MainView: View {
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
                             }
+                            else {
+                                NavigationLink {
+                                    ProfileView()
+                                } label: {
+                                    VStack {
+                                        Image("defaultProfile")
+                                            .resizable()
+                                            .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                            .background(Color.white)
+                                            .foregroundColor(.black)
+                                            .clipShape(Circle())
+                                        
+                                    }
+                                }
+                                .padding(.trailing, geometry.size.width * 0.05)
+                            }
                         }
                         .padding(.top, geometry.size.width * 0.02)
                         

@@ -55,24 +55,24 @@ extension AuthenticationStore {
             let userDocRef = db.collection("User").document(firebaseUser.email!)
             let userDoc = try await userDocRef.getDocument()
             
-            // 최초로 로그인한 사용자
-//            if !userDoc.exists {
-//                // 필드 값 넣어주기
-//                try await userDocRef.setData([
-//                    "email": firebaseUser.email!,
-//                    "contents": [],
-//                    "friends": [],
-//                    "requestList": [],
-//                    "receiveList": []
-//                ])
+//             최초로 로그인한 사용자
+            if !userDoc.exists {
+                // 필드 값 넣어주기
+                try await userDocRef.setData([
+                    "email": firebaseUser.email!,
+                    "contents": [],
+                    "friends": [],
+                    "requestList": [],
+                    "receiveList": []
+                ])
 
-//                // 프로필 문서 넣어주기
-//
-//                let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
-//                try await profileDocRef.setData([
-//                    "nickname": "",
-//                    "image": ""
-//                ])
+//                 프로필 문서 넣어주기
+
+                let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
+                try await profileDocRef.setData([
+                    "nickname": "",
+                    "image": ""
+                ])
 //
 //                // 콘텐츠 문서 넣어주기
 //                let contentDocRef = userDocRef.collection("Contents").document()
@@ -84,7 +84,7 @@ extension AuthenticationStore {
 //                    "longitude" : 0,
 //                    "text" : ""
 //                ])
-//            }
+            }
             
             let profileDoc = try await userDocRef.collection("Profile").document("profileDoc").getDocument()
             
