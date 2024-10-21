@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AddFriendView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    @StateObject var viewModel: FriendViewModel
     @State private var friendEmail = ""
     @State private var errorMessage: String? = nil
     @State private var successMessage: String? = nil

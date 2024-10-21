@@ -12,8 +12,7 @@ import ImageIO
 
 struct UploadingImageView: View {
     @EnvironmentObject private var authStore: AuthenticationStore
-//    @EnvironmentObject private var userViewModel: UserViewModel
-    
+    @Environment(\.dismiss) var dismiss
     @Binding var selectedLatitude: Double?
     @Binding var selectedLongitude: Double?
     @Binding var annotations: [IdentifiableLocation]
@@ -22,7 +21,6 @@ struct UploadingImageView: View {
     @State var uiImage: UIImage? = nil
     @State var selectedImageData: Data? = nil
     @State var text: String = ""
-    @Environment(\.dismiss) var dismiss
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -164,5 +162,5 @@ struct UploadingImageView: View {
 
 #Preview {
     UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]))
-        .environmentObject(UserViewModel())
+        .environmentObject(AuthenticationStore())
 }

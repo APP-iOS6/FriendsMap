@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-struct ImageManagementView: View {
-//    @EnvironmentObject private var userViewModel: UserViewModel
+struct ContentManagementView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    
     @State private var showAlert = false
     @State private var selectedContent: Content?
     
@@ -95,5 +93,5 @@ struct ImageManagementView: View {
 }
 
 #Preview {
-    ImageManagementView()
+    ContentManagementView()
 }

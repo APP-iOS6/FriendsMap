@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
+    @State private var isDeleteAccountAlertPresented: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    @State private var isDeleteAccountAlertPresented: Bool = false
-//    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject var authStore: AuthenticationStore
     
     var body: some View {
         NavigationStack {
@@ -91,7 +90,7 @@ struct ProfileButtonList: View {
             }
             
             NavigationLink {
-                ImageManagementView()
+                ContentManagementView()
             } label: {
                 HStack {
                     Image(systemName: "doc.text")
@@ -148,6 +147,5 @@ struct ProfileButtonList: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(UserViewModel())
         .environmentObject(AuthenticationStore())
 }

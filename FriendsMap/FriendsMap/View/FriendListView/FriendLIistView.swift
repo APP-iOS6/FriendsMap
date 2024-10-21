@@ -10,7 +10,6 @@ import SwiftUI
 
 struct FriendListView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    @StateObject var viewModel = FriendViewModel()
 
     init() {
         let appearance = UINavigationBarAppearance()
@@ -63,12 +62,12 @@ struct FriendListView: View {
             .toolbar {
                 // 종 모양과 플러스 버튼을 같은 선상에 배치
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: FriendRequestsView(viewModel: viewModel)) {
+                    NavigationLink(destination: FriendRequestsView()) {
                         Image(systemName: "bell")
                             .foregroundColor(.white)
                             .font(.system(size: 17))
                     }
-                    NavigationLink(destination: AddFriendView(viewModel: viewModel)) {
+                    NavigationLink(destination: AddFriendView()) {
                         Image(systemName: "plus")
                             .foregroundColor(.white)
                             .font(.system(size: 17))

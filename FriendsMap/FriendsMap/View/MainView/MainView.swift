@@ -34,7 +34,7 @@ struct MainView: View {
                         
                         Map(coordinateRegion: .constant(MKCoordinateRegion(
                             center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
-                            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                            span: MKCoordinateSpan(latitudeDelta: 0.15, longitudeDelta: 0.15)
                         )), showsUserLocation: true, annotationItems: annotations) { location in
                             MapAnnotation(coordinate: location.coordinate) {
                                 VStack {
@@ -159,7 +159,7 @@ struct MainView: View {
             // 이미지 디테일 시트
             .sheet(isPresented: $isShowingDetailSheet) {
                 if let selectedImageUrl = selectedImageUrl {
-                    ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+                    ContentDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
                 }
             }
         }
@@ -168,5 +168,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .environmentObject(UserViewModel())
+        .environmentObject(AuthenticationStore())
 }

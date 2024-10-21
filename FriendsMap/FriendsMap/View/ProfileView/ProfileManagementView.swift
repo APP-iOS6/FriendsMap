@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ProfileManagementView: View {
-//    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var authStore: AuthenticationStore
-    
     @State private var newProfileImage: UIImage = UIImage()
     @State private var newNickname: String = ""
-    
     @State private var isPresented: Bool = false
     @State private var changeCheck: String = ""
     

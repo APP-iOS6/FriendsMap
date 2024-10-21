@@ -11,7 +11,6 @@ import SwiftUI
 
 struct FriendRequestsView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    @StateObject var viewModel: FriendViewModel
     @State private var currentFriendEmail: String?
 
     var body: some View {

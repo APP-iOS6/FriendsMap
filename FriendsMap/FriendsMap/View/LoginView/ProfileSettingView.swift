@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct ProfileSettingView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @State var nickname: String = ""
     @State var nicknameWarning: String = ""
     @State private var profileImage: UIImage = UIImage()
     @State private var isPresented: Bool = false
     
-    @EnvironmentObject var authStore: AuthenticationStore
-    
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    
     
     var body: some View {
         VStack(spacing: 20) {
