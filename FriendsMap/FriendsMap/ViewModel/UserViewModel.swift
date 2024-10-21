@@ -16,12 +16,12 @@ import FirebaseStorage
 final class UserViewModel: ObservableObject {
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var user = User(profile: Profile(nickname: "", uiimage: nil), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
-
+    
     @Published var imagelatitude: Double = 0.0
     @Published var imagelongitude: Double = 0.0
     @Published var imageDate: Date?
-    var ref: DatabaseReference!
     
+    var ref: DatabaseReference!
     // 파이어 베이스 데이터베이스 (회원 정보 및 친구 정보 저장)
     let db = Firestore.firestore()
     // 파이어베이스 스토리지 (Image Upload)
@@ -39,14 +39,13 @@ final class UserViewModel: ObservableObject {
                 let longti = docData["longitude"] as? Double
                 
                 if let imagePath, let text, let lati, let longti {
-                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
-                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
-                        if !self.user.contents.contains(where: { $0.id == document.documentID }) {
-                            DispatchQueue.main.async {
-                                self.user.contents.append(
-                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
-                                )
-                            }
+                    let imageUrl = try await makeUrltoImage(email: email, imagePath: imagePath)
+                    let uiImage = await loadImageFromUrl(imageUrl: imageUrl)
+                    if !self.user.contents.contains(where: { $0.id == document.documentID }) {
+                        DispatchQueue.main.async {
+                            self.user.contents.append(
+                                Content(id: document.documentID, uiImage: uiImage, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                            )
                         }
                     }
                 }
@@ -63,12 +62,11 @@ final class UserViewModel: ObservableObject {
                 print("profileDoc: 값이 존재하지 않음")
                 return
             }
-            let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
+            let imageUrl = try await makeUrltoImage(email: email, imagePath: imagePath )
             
+            let uiImage =  await loadImageFromUrl(imageUrl: imageUrl)
             DispatchQueue.main.async {
-                self.loadImageFromUrl(imageUrlString: imageUrlString) { uiImage in
-                    self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
-                }
+                self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
             }
         } catch {
             print("Profile Fetch Error: \(error.localizedDescription)")
@@ -118,7 +116,7 @@ final class UserViewModel: ObservableObject {
                     print("사진 error: \(error)")
                 }
                 if let metadata = metadata {
-                    print("메타데이터: \(metadata)")
+//                    print("메타데이터: \(metadata)")
                 }
             }
         } else {
@@ -172,37 +170,26 @@ final class UserViewModel: ObservableObject {
             }
         }
     }
-    func makeUrltoImage(email: String, imagePath: String) async -> String {
+    func makeUrltoImage(email: String, imagePath: String) async throws -> URL {
         do {
             let storageRef = storage.reference(withPath: "\(email)/\(imagePath)")
             let url = try await storageRef.downloadURL()
             
-            return url.absoluteString
+            return url
         } catch let makeUrlError {
-            return "make url error: \(makeUrlError)"
+            print("Make Url Error!!: \(makeUrlError.localizedDescription)")
         }
+        return URL.applicationDirectory
     }
     
-    func loadImageFromUrl(imageUrlString: String, completaion: @escaping (UIImage)-> ()) {
-        
-        guard let url = URL(string: imageUrlString) else {
-            print("Invalid URL")
-            return
+    func loadImageFromUrl(imageUrl: URL) async -> UIImage {
+        do {
+            let (data, _ ) = try await URLSession.shared.data(from: imageUrl)
+            return UIImage(data: data)!
+        } catch {
+            print("\(error.localizedDescription)")
+            return UIImage(systemName: "xmark.circle.fill")!
         }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error downloading image: \(error)")
-                return
-            }
-            
-            if let data = data, let uiImage = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    completaion(uiImage)
-                }
-            }
-        }
-        .resume()
     }
     
     func updateLikeCount(for contentId: String, newLikeCount: Int, email: String) async {
@@ -213,5 +200,4 @@ final class UserViewModel: ObservableObject {
             print("Failed to update like count: \(error.localizedDescription)")
         }
     }
-
 }

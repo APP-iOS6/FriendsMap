@@ -29,44 +29,33 @@ struct MainView: View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
-                    if let latitude = selectedLatitude, let longitude = selectedLongitude {
-                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), image: Image(systemName: "person.crop.circle"))
-                        
-                        Map(coordinateRegion: .constant(MKCoordinateRegion(
-                            center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
-                            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                        )), showsUserLocation: true, annotationItems: annotations) { location in
-                            MapAnnotation(coordinate: location.coordinate) {
-                                VStack {
-                                    location.image
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                    
-                                    Image(systemName: "mappin.circle.fill")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                }
+                    Map {
+                        ForEach(annotations) { annotation in
+                            Annotation("", coordinate: annotation.coordinate) {
+                                annotation.image
+                                    .resizable()
+                                    .frame(width: 100,height: 100)
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(Circle())
+                                    .onAppear {
+                                        print(annotation.image)
+                                    }
                             }
                         }
-                        .edgesIgnoringSafeArea(.all)
-                    } else {
-                        Map(coordinateRegion: $locationManager.region, showsUserLocation: true, annotationItems: annotations) { location in
-                            MapAnnotation(coordinate: location.coordinate) {
-                                VStack {
-                                    location.image
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                    
-                                    Image(systemName: "mappin.circle.fill")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                }
-                            }
-                        }
-                        .edgesIgnoringSafeArea(.all)
                     }
+                    .task {
+                        do {
+                            try await userViewModel.fetchContents(from: authStore.user!.email)
+                            await userViewModel.fetchProfile(authStore.user!.email)
+                            
+                            annotations = userViewModel.user.contents.map { post in
+                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                            }
+                        } catch {
+                            print("error: \(error.localizedDescription)")
+                        }
+                    }
+                    .edgesIgnoringSafeArea(.all)
                     
                     VStack {
                         HStack {
@@ -128,16 +117,6 @@ struct MainView: View {
                             }
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
-                        }
-                        .onAppear {
-                            Task {
-                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
-                                // 로드된 데이터를 기반으로 어노테이션 설정
-                                await userViewModel.fetchProfile(authStore.user?.email ?? "")
-                                annotations = userViewModel.user.contents.map { post in
-                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
-                                }
-                            }
                         }
                     }
                     .navigationBarHidden(true)

@@ -50,10 +50,10 @@ struct UploadingImageView: View {
                     Button {
                         if uiImage != nil {
                             Task {
-                                await userViewModel.addContent(Content(id: UUID().uuidString, text: text, contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
+                                await userViewModel.addContent(Content(id: UUID().uuidString, text: text, contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user!.email)
                                 
                                 // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
-                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                try await userViewModel.fetchContents(from: authStore.user!.email)
                                 
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
                                 annotations = userViewModel.user.contents.map { post in
