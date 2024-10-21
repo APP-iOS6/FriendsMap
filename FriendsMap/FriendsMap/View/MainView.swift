@@ -16,10 +16,13 @@ struct IdentifiableLocation: Identifiable {
 }
 
 struct MainView: View {
-    @State private var isShowingSheet = false
+    @State private var isShowingUploadSheet = false // 업로드 이미지 시트 표시
+    @State private var isShowingDetailSheet = false // 이미지 디테일 시트 표시
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @State private var annotations: [IdentifiableLocation] = []
+    
+    @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
     
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var userViewModel: UserViewModel
@@ -45,6 +48,7 @@ struct MainView: View {
                                         .resizable()
                                         .frame(width: 80, height: 80)
                                         .clipShape(Circle())
+                                  
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -60,6 +64,7 @@ struct MainView: View {
                                         .resizable()
                                         .frame(width: 80, height: 80)
                                         .clipShape(Circle())
+                                  
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -92,6 +97,22 @@ struct MainView: View {
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
                             }
+                            else {
+                                NavigationLink {
+                                    ProfileView()
+                                } label: {
+                                    VStack {
+                                        Image("defaultProfile")
+                                            .resizable()
+                                            .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                            .background(Color.white)
+                                            .foregroundColor(.black)
+                                            .clipShape(Circle())
+                                        
+                                    }
+                                }
+                                .padding(.trailing, geometry.size.width * 0.05)
+                            }
                         }
                         .padding(.top, geometry.size.width * 0.02)
                         
@@ -117,7 +138,8 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             
                             Button(action: {
-                                isShowingSheet = true
+                                selectedImageUrl = nil // 이미지 선택 초기화
+                                isShowingUploadSheet = true // 업로드 이미지 시트 표시
                             }) {
                                 Image(systemName: "plus")
                                     .resizable()
@@ -129,10 +151,6 @@ struct MainView: View {
                             }
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
-                            .sheet(isPresented: $isShowingSheet) {
-                                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
-                                    .presentationDetents(selectedLatitude == nil ? [.fraction(screenHeight * 0.0002)] : [.fraction(screenHeight * 0.0005)])
-                            }
                         }
                     }
                     .onAppear {
@@ -149,11 +167,21 @@ struct MainView: View {
                 .navigationBarHidden(true)
             }
         }
+        // 업로드 이미지 시트
+        .sheet(isPresented: $isShowingUploadSheet) {
+            UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
+                .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
+        }
+        // 이미지 디테일 시트
+        .sheet(isPresented: $isShowingDetailSheet) {
+            if let selectedImageUrl = selectedImageUrl {
+                ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+            }
+        }
     }
 }
 
 #Preview {
     MainView()
         .environmentObject(UserViewModel())
-    //        .environmentObject(AuthenticationStore())
 }
