@@ -30,7 +30,7 @@ struct MainView: View {
             GeometryReader { geometry in
                 ZStack {
                     if let latitude = selectedLatitude, let longitude = selectedLongitude {
-                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), image: Image(systemName: "person.crop.circle"))
+                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), image: Image(systemName: "person.crop.circle"), email: authStore.user.email)
                         
                         Map(coordinateRegion: .constant(MKCoordinateRegion(
                             center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
@@ -134,8 +134,16 @@ struct MainView: View {
                                 try await authStore.fetchContents(from: authStore.user.email)
                                 // 로드된 데이터를 기반으로 어노테이션 설정
                                 await authStore.fetchProfile(authStore.user.email)
+                                await authStore.loadFriendData()
                                 annotations = authStore.user.contents.map { post in
-                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                                }
+                                
+                                for friend in authStore.user.friends {
+                                    try await authStore.fetchFriendContents(from: friend)
+                                    for content in authStore.friendContents {
+                                        annotations.append(IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend))
+                                    }
                                 }
                             }
                         }

@@ -14,6 +14,7 @@ public struct IdentifiableLocation: Identifiable {
     public let id = UUID()
     public var coordinate: CLLocationCoordinate2D
     public var image: Image
+    public var email: String // 작성자 구분용
 
   
 //    public init(coordinate: CLLocationCoordinate2D, image: String? = nil) {

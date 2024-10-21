@@ -247,6 +247,36 @@ extension AuthenticationStore {
         }
     }
     
+    func fetchFriendContents(from email: String) async throws {
+        friendContents = []
+        do {
+            let contents = try await db.collection("User").document(email).collection("Contents").getDocuments().documents
+            for document in contents {
+                let docData = document.data()
+                let contentDate = docData["contentDate"] as? Date
+                let imagePath = docData["image"] as? String
+                let text = docData["text"] as? String
+                let lati = docData["latitude"] as? Double
+                let longti = docData["longitude"] as? Double
+                
+                if let imagePath, let text, let lati, let longti {
+                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
+                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
+                        if !self.friendContents.contains(where: { $0.id == document.documentID }) {
+                            DispatchQueue.main.async {
+                                self.friendContents.append(
+                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch {
+            print("fetch date error: \(error.localizedDescription)")
+        }
+    }
+    
     func fetchProfile( _ email: String) async {
         do {
             let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument().data()

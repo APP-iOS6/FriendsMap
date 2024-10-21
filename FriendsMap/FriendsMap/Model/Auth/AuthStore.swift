@@ -56,6 +56,7 @@ class AuthenticationStore: ObservableObject {
     let db = Firestore.firestore()
     private var authStateHandler: AuthStateDidChangeListenerHandle?
     
+    @Published var friendContents: [Content] = []
     @Published var imagelatitude: Double = 0.0
     @Published var imagelongitude: Double = 0.0
     @Published var imageDate: Date?
@@ -95,7 +96,7 @@ class AuthenticationStore: ObservableObject {
                 if let url = url {
                     self.user.profile = Profile(
                         nickname: nickname!,
-                        uiimage: nil
+                        uiimage: nil // ?? 왜 nil?
                     )
                 }
             }
