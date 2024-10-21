@@ -20,7 +20,7 @@ extension AuthenticationStore {
             try await Auth.auth().signIn(withEmail: email, password: password)
             
             authenticationState = .authenticated
-//            self.user = User(profile: Profile(nickname: "", image: "수민테스트"), email: email, contents: [], friends: [], requestList: [], receiveList: [])
+            self.user = User(profile: Profile(nickname: "", uiimage: nil ), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             let db = Firestore.firestore()
 

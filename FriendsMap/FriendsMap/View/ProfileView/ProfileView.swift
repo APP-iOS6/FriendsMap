@@ -85,7 +85,7 @@ struct ProfileButtonList: View {
             } label: {
                 HStack {
                     Image(systemName: "person.fill")
-                    Text("프로필")
+                    Text("프로필 수정")
                 }
                 .foregroundStyle(.black)
                 .frame(maxWidth: .infinity)
@@ -102,7 +102,7 @@ struct ProfileButtonList: View {
             } label: {
                 HStack {
                     Image(systemName: "doc.text")
-                    Text("게시물")
+                    Text("게시물 관리")
                 }
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
@@ -118,7 +118,7 @@ struct ProfileButtonList: View {
             } label: {
                 HStack {
                     Image(systemName: "person.3.sequence.fill")
-                    Text("친구")
+                    Text("친구 관리")
                 }
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
