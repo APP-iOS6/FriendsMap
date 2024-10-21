@@ -60,7 +60,6 @@ extension AuthenticationStore {
                 // 필드 값 넣어주기
                 try await userDocRef.setData([
                     "email": firebaseUser.email!,
-                    "contents": [],
                     "friends": [],
                     "requestList": [],
                     "receiveList": []
@@ -73,17 +72,6 @@ extension AuthenticationStore {
                     "nickname": "",
                     "image": ""
                 ])
-//
-//                // 콘텐츠 문서 넣어주기
-//                let contentDocRef = userDocRef.collection("Contents").document()
-//                try await contentDocRef.setData([
-//                    "contentDate" : Date(),
-//                    "image" : "",
-//                    "latitude" : 0,
-//                    "likeCount" : 0,
-//                    "longitude" : 0,
-//                    "text" : ""
-//                ])
             }
             
             let profileDoc = try await userDocRef.collection("Profile").document("profileDoc").getDocument()

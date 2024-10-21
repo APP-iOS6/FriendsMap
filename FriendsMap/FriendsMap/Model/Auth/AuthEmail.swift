@@ -64,7 +64,6 @@ extension AuthenticationStore {
             
             try await docRef.setData([
                 "email": email,
-                "contents": [],
                 "friends": [],
                 "requestList": [],
                 "receiveList": []
@@ -75,17 +74,6 @@ extension AuthenticationStore {
             try await profileDocRef.setData([
                 "nickname": "",
                 "image": ""
-            ])
-            
-            // 콘텐츠 문서 넣어주기
-            let contentDocRef = docRef.collection("Contents").document()
-            try await contentDocRef.setData([
-                "contentDate" : Date(),
-                "image" : "",
-                "latitude" : 0,
-                "likeCount" : 0,
-                "longitude" : 0,
-                "text" : ""
             ])
             
             self.user = User(profile: Profile(nickname: "", uiimage: nil), email: email, contents: [], friends: [], requestList: [], receiveList: [])
