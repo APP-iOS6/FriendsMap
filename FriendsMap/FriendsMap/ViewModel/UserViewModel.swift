@@ -91,7 +91,7 @@ class UserViewModel: ObservableObject {
     
     
     // 게시글 생성
-    func addImage(_ content: Content, _ image: Data?, _ email: String) async {
+    func addContent(_ content: Content, _ image: Data?, _ email: String) async {
         let id = "\(UUID().uuidString)"
         let storageRef = storage.reference().child("\(email)/\(id)")
         

@@ -21,6 +21,7 @@ struct UploadingImageView: View {
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
     @State var selectedImageData: Data? = nil
+    @State var text: String = ""
     @Environment(\.dismiss) var dismiss
     
     let screenWidth = UIScreen.main.bounds.width
@@ -29,62 +30,27 @@ struct UploadingImageView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center) {
-                Text("게시글 생성")
-                    .fontWeight(.bold)
-                    .font(.system(size: screenWidth * 0.07))
-                    .padding()
-                
-                if let uiImage = uiImage {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: screenHeight * 0.2)
-                }
-                
-                HStack(alignment: .center) {
-                    PhotosPicker(
-                        selection: $imageSelection,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            if imageSelection == nil {
-                                HStack{
-                                    Image(systemName: "photo.on.rectangle.angled")
-                                    Text("사진앱에서 가져오기")
-                                }
-                                .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
-                                .background(.blue)
-                                .foregroundStyle(.white)
-                                .cornerRadius(10)
-                            } else {
-                                HStack{
-                                    Image(systemName: "photo.on.rectangle.angled")
-                                    Text("사진 교체")
-                                }
-                                .frame(width: screenWidth * 0.4, height: screenHeight * 0.06)
-                                .background(.green)
-                                .foregroundStyle(.white)
-                                .cornerRadius(10)
-                            }
-                        }
-                        .onChange(of: imageSelection) { newValue in
-                            Task {
-                                if let newSelection = newValue,
-                                   let data = try? await newSelection.loadTransferable(type: Data.self) {
-                                    uiImage = UIImage(data: data)
-                                    userViewModel.extractMetadata(from: data)
-                                    selectedImageData = data
-                                    
-                                    // 새로 선택한 이미지의 메타데이터로 좌표 업데이트
-                                    selectedLatitude = userViewModel.imagelatitude
-                                    selectedLongitude = userViewModel.imagelongitude
-                                }
-                            }
-                        }
+                HStack {
+                    Button {
+                        dismiss()
+                    } label : {
+                        Text("취소")
+                    }
                     
-                    if uiImage != nil {
-                        Button {
+                    Spacer()
+
+                    
+                    Text("새 게시글")
+                        .fontWeight(.bold)
+                        .font(.system(size: screenWidth * 0.05))
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Button {
+                        if uiImage != nil {
                             Task {
-                                await userViewModel.addImage(Content(id: UUID().uuidString, text: "오늘 날씨가 좋다", contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
+                                await userViewModel.addContent(Content(id: UUID().uuidString, text: text, contentDate: userViewModel.imageDate ?? Date(), latitude: userViewModel.imagelatitude, longitude: userViewModel.imagelongitude), selectedImageData, authStore.user?.email ?? "")
                                 
                                 // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
                                 try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
@@ -100,15 +66,92 @@ struct UploadingImageView: View {
 
                                 dismiss()
                             }
-                        } label: {
-                            Text("등록하기")
-                                .frame(width: screenWidth * 0.4, height: screenHeight * 0.06)
-                                .background(.blue)
-                                .foregroundStyle(.white)
-                                .cornerRadius(10)
                         }
+                    } label : {
+                        Text("추가")
                     }
                 }
+                .padding(.horizontal)
+                
+                if let uiImage = uiImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: screenHeight * 0.2)
+                } else {
+                    Text("No Image")
+                        .frame(width: screenWidth * 0.9, height: screenHeight * 0.2)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20)
+                                .strokeBorder(.gray, style: StrokeStyle(lineWidth:1, dash: [20]))
+                        }
+                }
+                
+                PhotosPicker(
+                    selection: $imageSelection,
+                    matching: .images,
+                    photoLibrary: .shared()) {
+                        if imageSelection == nil {
+                            HStack{
+                                Image(systemName: "photo.on.rectangle.angled")
+                                Text("사진앱에서 가져오기")
+                            }
+                            .frame(width: screenWidth * 0.9, height: screenHeight * 0.06)
+                            .background(.blue)
+                            .foregroundStyle(.white)
+                            .cornerRadius(10)
+                        } else {
+                            HStack{
+                                Image(systemName: "photo.on.rectangle.angled")
+                                Text("사진 교체")
+                            }
+                            .frame(width: screenWidth * 0.9, height: screenHeight * 0.06)
+                            .background(.green)
+                            .foregroundStyle(.white)
+                            .cornerRadius(10)
+                        }
+                    }
+                    .onChange(of: imageSelection) { _ , _  in
+                        Task {
+                            if let newSelection = imageSelection,
+                               let data = try? await newSelection.loadTransferable(type: Data.self) {
+                                uiImage = UIImage(data: data)
+                                userViewModel.extractMetadata(from: data)
+                                selectedImageData = data
+                                selectedLatitude = userViewModel.imagelatitude
+                                selectedLongitude = userViewModel.imagelongitude
+                            }
+                        }
+                    }
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: screenWidth * 0.9, height: screenHeight * 0.1)
+                        .foregroundStyle(.gray.opacity(0.2))
+                    
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("\(text.count) / 50")
+                                .foregroundStyle(text.count >= 50 ? .red : .gray)
+                        }
+                        .padding()
+                    }
+                    .frame(width: screenWidth * 0.9, height: screenHeight * 0.1)
+                    
+                    VStack(alignment : .center) {
+                        TextField("내용을 입력해주세요", text: $text, axis: .vertical)
+                            .frame(width: screenWidth * 0.85)
+                            .padding()
+                            .onChange(of: text) {
+                                text = String(text.prefix(50))
+                            }
+                        Spacer()
+                    }
+                    .frame(width: screenWidth * 0.9, height: screenHeight * 0.1)
+                }
+                
                 Spacer()
             }
             .frame(width: screenWidth, height: screenHeight)
