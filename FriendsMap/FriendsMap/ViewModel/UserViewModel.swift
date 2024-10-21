@@ -11,32 +11,15 @@ import FirebaseDatabase
 import FirebaseFirestore
 import FirebaseStorage
 
-struct TestContent {
-    var id: String // 게시물 구별용
-    var uiImage: UIImage?
-    var text: String // 게시글 내용
-    var likeCount: Int = 0  // 좋아요 수
-    var contentDate: Date // 업로드 날짜
-    var latitude: Double = 0.0 // 경도
-    var longitude: Double = 0.0 // 위도
-    
-    var image: Image {
-        if let uiImage {
-            Image(uiImage: uiImage)
-        } else {
-            Image(systemName: "person.crop.circle")
-        }
-    }
-}
+
 
 final class UserViewModel: ObservableObject {
     @Published private(set) var isLoading: Bool = false
-    @Published private(set) var image: UIImage? = nil
-    
+    @Published private(set) var user = User(profile: Profile(nickname: "", uiimage: nil), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
+
     @Published var imagelatitude: Double = 0.0
     @Published var imagelongitude: Double = 0.0
     @Published var imageDate: Date?
-    @Published private(set) var user = User(profile: Profile(nickname: "", uiimage: nil), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
     var ref: DatabaseReference!
     
     // 파이어 베이스 데이터베이스 (회원 정보 및 친구 정보 저장)
@@ -61,7 +44,7 @@ final class UserViewModel: ObservableObject {
                         if !self.user.contents.contains(where: { $0.id == document.documentID }) {
                             DispatchQueue.main.async {
                                 self.user.contents.append(
-                                    TestContent(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
                                 )
                             }
                         }
