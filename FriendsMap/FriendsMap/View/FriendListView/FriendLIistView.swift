@@ -5,10 +5,10 @@
 //  Created by 박범규 on 10/16/24.
 //
 
-
 import SwiftUI
 
 struct FriendListView: View {
+    @State private var profileImage: UIImage = UIImage()
     @StateObject var viewModel = FriendViewModel()
 
     init() {
@@ -17,7 +17,6 @@ struct FriendListView: View {
         appearance.backgroundColor = UIColor(Color(hex: "#404040")) // 네비게이션 배경색 설정
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white] // 타이틀 텍스트 색상 설정
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white] // 큰 타이틀 텍스트 색상 설정
-        
         appearance.shadowColor = .clear
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -33,34 +32,43 @@ struct FriendListView: View {
                     // 친구 목록 리스트
                     List(viewModel.friends, id: \.self) { friend in
                         HStack {
+                            Image(uiImage: profileImage)
+                                .foregroundColor(.gray)
+                                .frame(width: 40, height: 40)
+                                .background(Color.white.opacity(0.2))
+                                .clipShape(Circle())
+                                .padding(.trailing, 10)
+
                             Text(friend)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .font(.system(size: 18, weight: .medium))
-                                .padding(.vertical, 9)
-                            
+                                .padding(.vertical, 10)
+
                             Spacer()
+
+                            
                         }
-                        .padding(.horizontal, 29)
-                        .background(Color.white)
+                        .padding(.horizontal)
+                        .padding(.vertical)
+                        .background(Color(hex: "#505050"))
                         .cornerRadius(10)
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 4)
-                        .listRowBackground(Color(hex: "#404040"))
+                        .listRowBackground(Color.clear)
                     }
                     .background(Color.clear)
                     .scrollContentBackground(.hidden)
-                    .cornerRadius(10)
                     .padding(.horizontal, 3)
+                    
                     
                     Spacer()
                 }
                 .onAppear {
                     Task {
-                        await viewModel.loadFriendData()
+                        await viewModel.loadFriendData() // 친구 목록 로드
                     }
                 }
             }
             .toolbar {
-                // 종 모양과 플러스 버튼을 같은 선상에 배치
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     NavigationLink(destination: FriendRequestsView(viewModel: viewModel)) {
                         Image(systemName: "bell")
@@ -74,8 +82,8 @@ struct FriendListView: View {
                     }
                 }
             }
-            .navigationTitle("친구목록")
-            .navigationBarTitleDisplayMode(.inline) // 타이틀을 자동 모드로 설정
+            .navigationTitle("친구 목록")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

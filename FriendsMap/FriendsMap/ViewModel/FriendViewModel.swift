@@ -75,39 +75,39 @@ class FriendViewModel: ObservableObject {
                return "친구 요청을 보내는 중 오류가 발생했습니다."
            }
        }
+    
     // 친구 요청 수락하기
-    func acceptFriendRequest(from friendEmail: String) async {
-        guard let email = userEmail else {
-            print("User not logged in")
-            return
-        }
-        
-        do {
-            let db = Firestore.firestore()
-            let userRef = db.collection("User").document(email)
-            let friendRef = db.collection("User").document(friendEmail)
-            
-            // 내 friends에 친구 추가하고, receiveList에서 제거
-            try await userRef.updateData([
-                "friends": FieldValue.arrayUnion([friendEmail]),
-                "receiveList": FieldValue.arrayRemove([friendEmail])
-            ])
-            
-            // 친구의 friends에도 내 이메일 추가
-            try await friendRef.updateData([
-                "friends": FieldValue.arrayUnion([email])
-            ])
-            
-            // 뷰모델의 receiveList 업데이트
-            if let index = receiveList.firstIndex(of: friendEmail) {
-                receiveList.remove(at: index)
-            }
-            
-            print("Accepted friend request from \(friendEmail)")
-        } catch {
-            print("Error accepting friend request: \(error)")
-        }
-    }
+     func acceptFriendRequest(from friendEmail: String) async {
+         guard let email = userEmail else {
+             print("User not logged in")
+             return
+         }
+
+         do {
+             let db = Firestore.firestore()
+             let userRef = db.collection("User").document(email)
+             let friendRef = db.collection("User").document(friendEmail)
+
+             // 내 friends에 친구 추가하고, receiveList에서 제거
+             try await userRef.updateData([
+                 "friends": FieldValue.arrayUnion([friendEmail]),
+                 "receiveList": FieldValue.arrayRemove([friendEmail])
+             ])
+
+             // 친구의 friends에도 내 이메일 추가
+             try await friendRef.updateData([
+                 "friends": FieldValue.arrayUnion([email]),
+                 "requestList": FieldValue.arrayRemove([email]) // 친구의 requestList에서 나의 이메일 제거
+             ])
+             
+             // 로컬 requestList에서 해당 친구 제거
+             self.requestList.removeAll { $0 == friendEmail }
+             
+             print("Accepted friend request from \(friendEmail)")
+         } catch {
+             print("Error accepting friend request: \(error)")
+         }
+     }
     
     // 친구 요청 거절하기
     func rejectFriendRequest(from friendEmail: String) async {
