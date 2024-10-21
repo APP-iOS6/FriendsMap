@@ -41,7 +41,7 @@ struct ProfileManagementView: View {
                         } else {
                             userViewModel.user.profile.image
                                 .resizable()
-                                .scaledToFit()
+                                .scaledToFill()
                                 .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                                 .clipShape(.circle)
                             Image(systemName: "pencil.circle.fill")
@@ -49,7 +49,6 @@ struct ProfileManagementView: View {
                                 .foregroundStyle(.gray)
                                 .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
                         }
-                        
                         
                     }
                     .frame(width: screenWidth * 0.7, height: screenHeight * 0.18)

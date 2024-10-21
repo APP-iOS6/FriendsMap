@@ -19,8 +19,6 @@ struct ProfileView: View {
             ZStack {
                 Color.loginViewBG.ignoresSafeArea()
                 VStack {
-                    Spacer()
-                        .frame(height: 40)
                     userViewModel.user.profile.image
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
@@ -31,22 +29,11 @@ struct ProfileView: View {
                         .font(.title3)
                         .foregroundStyle(.white)
                         .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
-                    Spacer()
-                        .frame(height: 100)
+                        .padding(.bottom, screenHeight * 0.07)
                     
-                    ProfileButtonList()
                     
-                    Spacer()
+                    ProfileButtonList(isDeleteAccountAlertPresented: $isDeleteAccountAlertPresented)
                     
-                    ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor:   Color(hex: "E5E5E5"), buttonWidth: .infinity) {
-                        authStore.signOut()
-                    }
-                    .padding(.horizontal, 27)
-                    
-                    ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
-                        isDeleteAccountAlertPresented.toggle()
-                    }
-                    .padding(.horizontal, 27)
                 }.alert(isPresented: $isDeleteAccountAlertPresented) {
                     Alert(
                         title: Text("회원탈퇴"),
@@ -79,6 +66,9 @@ struct ProfileView: View {
 }
 
 struct ProfileButtonList: View {
+    @EnvironmentObject private var authStore: AuthenticationStore
+    @Binding var isDeleteAccountAlertPresented: Bool
+    
     var body: some View {
         VStack (spacing: 25) {
             NavigationLink {
@@ -130,6 +120,16 @@ struct ProfileButtonList: View {
                 )
                 .padding(.horizontal, 27)
             }
+            
+            ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor:   Color(hex: "E5E5E5"), buttonWidth: .infinity) {
+                authStore.signOut()
+            }
+            .padding(.horizontal, 27)
+            
+            ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
+                isDeleteAccountAlertPresented.toggle()
+            }
+            .padding(.horizontal, 27)
         }
     }
 }
@@ -137,4 +137,5 @@ struct ProfileButtonList: View {
 #Preview {
     ProfileView()
         .environmentObject(UserViewModel())
+        .environmentObject(AuthenticationStore())
 }
