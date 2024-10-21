@@ -65,15 +65,15 @@ extension AuthenticationStore {
 //                    "requestList": [],
 //                    "receiveList": []
 //                ])
-//                
+
 //                // 프로필 문서 넣어주기
-//                
+//
 //                let profileDocRef = userDocRef.collection("Profile").document("profileDoc")
 //                try await profileDocRef.setData([
 //                    "nickname": "",
 //                    "image": ""
 //                ])
-//            
+//
 //                // 콘텐츠 문서 넣어주기
 //                let contentDocRef = userDocRef.collection("Contents").document()
 //                try await contentDocRef.setData([
