@@ -48,7 +48,7 @@ class FriendViewModel: ObservableObject {
               }
               
               // 친구 요청 보내기
-              try await db.collection("User").document(friendEmail).updateData([
+              try await db.collection("User").document(friendEmail).setData([
                   "receiveList": FieldValue.arrayUnion([userEmail])
               ])
               
