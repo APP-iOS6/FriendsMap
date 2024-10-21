@@ -20,12 +20,13 @@ struct ProfileView: View {
                 Color.loginViewBG.ignoresSafeArea()
                 VStack {
                     Spacer()
-                        .frame(height: 20)
+                        .frame(height: 40)
                     userViewModel.user.profile.image
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                         .clipShape(Circle())
                         .aspectRatio(contentMode: .fit)
+                        .padding(.bottom, 20)
                     Text(userViewModel.user.profile.nickname)
                         .font(.title3)
                         .foregroundStyle(.white)
