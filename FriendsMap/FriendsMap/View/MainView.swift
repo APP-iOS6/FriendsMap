@@ -8,18 +8,14 @@
 import SwiftUI
 import MapKit
 
-
-struct IdentifiableLocation: Identifiable {
-    let id = UUID()
-    var coordinate: CLLocationCoordinate2D
-    var image: String?
-}
-
 struct MainView: View {
-    @State private var isShowingSheet = false
+    @State private var isShowingUploadSheet = false // 업로드 이미지 시트 표시
+    @State private var isShowingDetailSheet = false // 이미지 디테일 시트 표시
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @State private var annotations: [IdentifiableLocation] = []
+    
+    @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
     
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject private var userViewModel: UserViewModel
@@ -47,6 +43,12 @@ struct MainView: View {
                                                 .resizable()
                                                 .frame(width: 80, height: 80)
                                                 .clipShape(Circle())
+                                                .onTapGesture {
+                                                    selectedImageUrl = imageUrl // 이미지 선택
+                                                    selectedLatitude = location.coordinate.latitude // 선택된 이미지의 위도 설정
+                                                    selectedLongitude = location.coordinate.longitude // 선택된 이미지의 경도 설정
+                                                    isShowingDetailSheet = true // 이미지 디테일 시트 표시
+                                                }
                                         } placeholder: {
                                             ProgressView()
                                         }
@@ -68,6 +70,12 @@ struct MainView: View {
                                                 .resizable()
                                                 .frame(width: 80, height: 80)
                                                 .clipShape(Circle())
+                                                .onTapGesture {
+                                                    selectedImageUrl = imageUrl // 이미지 선택
+                                                    selectedLatitude = location.coordinate.latitude // 선택된 이미지의 위도 설정
+                                                    selectedLongitude = location.coordinate.longitude // 선택된 이미지의 경도 설정
+                                                    isShowingDetailSheet = true // 이미지 디테일 시트 표시
+                                                }
                                         } placeholder: {
                                             ProgressView()
                                         }
@@ -91,12 +99,12 @@ struct MainView: View {
                             
                             Spacer()
                             
-                            if let profileImage = userViewModel.profile?.image {
+                            if let profileImage = userViewModel.profile?.image, let url = URL(string: profileImage) {
                                 NavigationLink {
                                     ProfileView()
                                 } label: {
                                     VStack {
-                                        AsyncImage(url: URL(string: profileImage)) { image in
+                                        AsyncImage(url: url) { image in
                                             image.image?
                                                 .resizable()
                                                 .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
@@ -133,7 +141,8 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             
                             Button(action: {
-                                isShowingSheet = true
+                                selectedImageUrl = nil // 이미지 선택 초기화
+                                isShowingUploadSheet = true // 업로드 이미지 시트 표시
                             }) {
                                 Image(systemName: "plus")
                                     .resizable()
@@ -166,12 +175,21 @@ struct MainView: View {
                 .navigationBarHidden(true)
             }
         }
-        
+        // 업로드 이미지 시트
+        .sheet(isPresented: $isShowingUploadSheet) {
+            UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
+                .presentationDetents(selectedLatitude == nil ? [.fraction(0.2)] : [.fraction(0.5)]) // 수정된 부분
+        }
+        // 이미지 디테일 시트
+        .sheet(isPresented: $isShowingDetailSheet) {
+            if let selectedImageUrl = selectedImageUrl {
+                ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+            }
+        }
     }
 }
 
 #Preview {
     MainView()
         .environmentObject(UserViewModel())
-    //        .environmentObject(AuthenticationStore())
 }

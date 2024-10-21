@@ -38,6 +38,7 @@ struct UploadingImageView: View {
                     }
                     
                     Spacer()
+
                     
                     Text("새 게시글")
                         .fontWeight(.bold)
@@ -59,11 +60,10 @@ struct UploadingImageView: View {
                                     IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
                                 }
                                 
-                                // 새로운 게시물을 등록한 후, 지도에서 선택된 위치를 업데이트
+                                // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
                                 selectedLatitude = userViewModel.imagelatitude
                                 selectedLongitude = userViewModel.imagelongitude
-                                
-                                
+
                                 dismiss()
                             }
                         }
@@ -164,4 +164,3 @@ struct UploadingImageView: View {
     UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]))
         .environmentObject(UserViewModel())
 }
-

@@ -72,7 +72,6 @@ class AuthenticationStore: ObservableObject {
         let storage = Storage.storage()
         do {
             let docData = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
-            
             let nickname = docData["nickname"] as? String
             let image = docData["image"] as? String
             let storageRef = storage.reference(withPath: "\(email)/\(image!)")
@@ -133,7 +132,7 @@ class AuthenticationStore: ObservableObject {
         // 이미지 등록 안한 경우
         else {
             do {
-                let docRef = db.collection("User").document(email).collection("Profile").document()
+                let docRef =  db.collection("User").document(email).collection("Profile").document("profileDoc")
                 try await docRef.setData([
                     "nickname": nickname
                 ], merge: true)
@@ -192,6 +191,9 @@ extension AuthenticationStore {
     func signOut() {
         do {
             try Auth.auth().signOut()
+            
+            self.authenticationState = .unauthenticated
+            self.flow = .login
         }
         catch {
             print(error)
@@ -199,9 +201,39 @@ extension AuthenticationStore {
         }
     }
     
-    func deleteAccount() async -> Bool {
+    func deleteAccount( _ email: String) async -> Bool {
+        let db = Firestore.firestore().collection("User").document(email)
+        let imageStoragePath = Storage.storage().reference().child("\(email)/")
+        
         do {
+            try await db.collection("Profile").document("profileDoc").delete()
+            
+            let contentsDoc =  try await db.collection("Contents").getDocuments().documents
+            
+            for doc in contentsDoc {
+                try await db.collection("Contents").document(doc.documentID).delete()
+            }
+            
+            let imageList = try await imageStoragePath.listAll()
+            
+            for item in imageList.items {
+                try await item.delete()
+            }
+            
+            try await db.collection("Contents").document().delete()
+            
+            try await db.collection("Profile").document().delete()
+            
+            try await db.collection("User").document(email).delete()
+            
+            try await db.delete()
+            
             try await firebaseUser?.delete()
+            
+            self.authenticationState = .unauthenticated
+            
+            self.flow = .login
+            
             return true
         }
         catch {

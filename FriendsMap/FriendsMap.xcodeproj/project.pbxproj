@@ -17,6 +17,8 @@
 		77A2CA712CBDFA9700C18CF4 /* AuthGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA702CBDFA9700C18CF4 /* AuthGoogle.swift */; };
 		77A2CA732CBDFAA700C18CF4 /* AuthEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2CA722CBDFAA700C18CF4 /* AuthEmail.swift */; };
 		B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F6D222CBE472A00D59FF1 /* LocationManager.swift */; };
+		B83BBE932CC554DA00C7750A /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83BBE922CC554DA00C7750A /* ImageDetailView.swift */; };
+		B83BBE952CC5981C00C7750A /* IdentifiableLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83BBE942CC5981C00C7750A /* IdentifiableLocation.swift */; };
 		CE8C79532CBD0ABA00992D4C /* UploadingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79522CBD0ABA00992D4C /* UploadingImageView.swift */; };
 		CE95DF382CBE8820006F2732 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */; };
 		CE95DF3B2CBE8C8D006F2732 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */; };
@@ -59,6 +61,8 @@
 		77A2CA702CBDFA9700C18CF4 /* AuthGoogle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthGoogle.swift; sourceTree = "<group>"; };
 		77A2CA722CBDFAA700C18CF4 /* AuthEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEmail.swift; sourceTree = "<group>"; };
 		B82F6D222CBE472A00D59FF1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		B83BBE922CC554DA00C7750A /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
+		B83BBE942CC5981C00C7750A /* IdentifiableLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableLocation.swift; sourceTree = "<group>"; };
 		CE8C79522CBD0ABA00992D4C /* UploadingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadingImageView.swift; sourceTree = "<group>"; };
 		CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CEBDD8F42CC036100046A13C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				CEBDD8F42CC036100046A13C /* MainView.swift */,
+				B83BBE922CC554DA00C7750A /* ImageDetailView.swift */,
 				2CF4D8F92CBF9491002824DC /* ProfileView */,
 				FB9D007C2CBDF424002874C1 /* LoginView */,
 				E0BCB8DD2CBF931300FF2391 /* FriendListView */,
@@ -144,6 +149,7 @@
 				2C58EF9A2CC0CE2700C4CFA7 /* UploadImageViewModel.swift */,
 				E0BCB8E92CBF93A900FF2391 /* FriendViewModel.swift */,
 				B82F6D222CBE472A00D59FF1 /* LocationManager.swift */,
+				B83BBE942CC5981C00C7750A /* IdentifiableLocation.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -341,6 +347,7 @@
 				B82F6D232CBE472A00D59FF1 /* LocationManager.swift in Sources */,
 				CEFED8D52CBD0148003938E2 /* Profile.swift in Sources */,
 				CEFED8952CBCF0E5003938E2 /* FriendsMapApp.swift in Sources */,
+				B83BBE952CC5981C00C7750A /* IdentifiableLocation.swift in Sources */,
 				2CF775382CBED9B700FE13C2 /* ImageManagementView.swift in Sources */,
 				FB9D007E2CBDF43B002874C1 /* SignUpView.swift in Sources */,
 				E0BCB8E82CBF93A100FF2391 /* FriendLIistView.swift in Sources */,
@@ -359,6 +366,7 @@
 				2C58EF9B2CC0CE2700C4CFA7 /* UploadImageViewModel.swift in Sources */,
 				CEBDD8F52CC036100046A13C /* MainView.swift in Sources */,
 				E0BCB8E62CBF938F00FF2391 /* AddFriendView.swift in Sources */,
+				B83BBE932CC554DA00C7750A /* ImageDetailView.swift in Sources */,
 				2CF775362CBED99D00FE13C2 /* ProfileManagementView.swift in Sources */,
 				2CF4D8FB2CBF98C0002824DC /* ProfileCustomButton.swift in Sources */,
 			);
