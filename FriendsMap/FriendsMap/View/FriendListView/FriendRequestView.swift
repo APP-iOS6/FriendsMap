@@ -6,7 +6,6 @@
 //
 // FriendRequestsView.swift
 
-
 import SwiftUI
 
 struct FriendRequestsView: View {
@@ -20,16 +19,25 @@ struct FriendRequestsView: View {
 
             VStack {
                 Text("받은 친구 요청")
-                    .font(.system(size: 18))
+                    .font(.system(size: 24))
                     .bold()
-                    .foregroundStyle(Color.white)
+                    .foregroundColor(.white)
                     .padding()
 
                 List {
                     ForEach(viewModel.receiveList, id: \.self) { friendEmail in
                         HStack {
+                            Image(systemName: "person.fill")
+                                .foregroundColor(.gray)
+                                .frame(width: 40, height: 40)
+                                .background(Color.white.opacity(0.2))
+                                .clipShape(Circle())
+                                .padding(.trailing, 10)
+                                .padding(.vertical)
+
                             Text(friendEmail)
                                 .foregroundColor(.white)
+                                .font(.system(size: 16))
 
                             Spacer()
 
@@ -37,7 +45,7 @@ struct FriendRequestsView: View {
                             Button(action: {
                                 Task {
                                     await viewModel.acceptFriendRequest(from: friendEmail)
-                                    viewModel.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
+                                    viewModel.receiveList.removeAll { $0 == friendEmail }
                                 }
                             }) {
                                 Image(systemName: "checkmark.circle.fill")
@@ -50,7 +58,7 @@ struct FriendRequestsView: View {
                             Button(action: {
                                 Task {
                                     await viewModel.rejectFriendRequest(from: friendEmail)
-                                    viewModel.receiveList.removeAll { $0 == friendEmail }  // 목록에서 제거
+                                    viewModel.receiveList.removeAll { $0 == friendEmail }
                                 }
                             }) {
                                 Image(systemName: "xmark.circle.fill")
@@ -59,12 +67,15 @@ struct FriendRequestsView: View {
                             }
                             .buttonStyle(.borderless)
                         }
+                        .padding(.horizontal)
+                        .padding(.vertical, 4)
+                        .background(Color(hex: "#505050"))
+                        .cornerRadius(10)
+                        .listRowBackground(Color.clear)
                     }
-                    .listRowBackground(Color.clear)
                 }
                 .background(Color.clear)
                 .scrollContentBackground(.hidden)
-                .cornerRadius(10)
                 .padding(.horizontal)
 
                 Spacer()
