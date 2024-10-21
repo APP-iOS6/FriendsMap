@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-struct ImageManagementView: View {
-    @EnvironmentObject private var userViewModel: UserViewModel
+struct ContentManagementView: View {
     @EnvironmentObject var authStore: AuthenticationStore
-    
     @State private var showAlert = false
     @State private var selectedContent: Content?
     
@@ -22,7 +20,7 @@ struct ImageManagementView: View {
                     Spacer(minLength: 20)
                     
                     VStack(spacing: 60) {
-                        ForEach(userViewModel.user.contents, id: \.id) { content in
+                        ForEach(authStore.user.contents, id: \.id) { content in
                             HStack (spacing: 30){
                                 content.image
                                     .resizable()
@@ -67,7 +65,7 @@ struct ImageManagementView: View {
                 .frame(maxWidth: .infinity)
                 .onAppear {
                     Task {
-                        try await userViewModel.fetchContents(from: authStore.user!.email)
+                        try await authStore.fetchContents(from: authStore.user.email)
                     }
                 }
                 .alert(isPresented: $showAlert) {
@@ -80,8 +78,8 @@ struct ImageManagementView: View {
                         secondaryButton: .destructive(Text("삭제"), action: {
                             if let contentToDelete = selectedContent {
                                 Task {
-                                    try await userViewModel.deleteContentImage(documentID: contentToDelete.id, email: authStore.user!.email)
-                                    try await userViewModel.fetchContents(from: authStore.user!.email)
+                                    try await authStore.deleteContentImage(documentID: contentToDelete.id, email: authStore.user.email)
+                                    try await authStore.fetchContents(from: authStore.user.email)
                                 }
                             }
                         })
@@ -95,5 +93,5 @@ struct ImageManagementView: View {
 }
 
 #Preview {
-    ImageManagementView()
+    ContentManagementView()
 }

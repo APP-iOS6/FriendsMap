@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ProfileManagementView: View {
-    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var authStore: AuthenticationStore
-    
     @State private var newProfileImage: UIImage = UIImage()
     @State private var newNickname: String = ""
-    
     @State private var isPresented: Bool = false
     @State private var changeCheck: String = ""
     
@@ -39,7 +36,7 @@ struct ProfileManagementView: View {
                                 .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
                             
                         } else {
-                            userViewModel.user.profile.image
+                            authStore.user.profile.image
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
@@ -58,7 +55,7 @@ struct ProfileManagementView: View {
                 HStack(spacing: 20) {
 //                    Text("닉네임")
 //                        .foregroundStyle(.white)
-                    createTextField(placeholder: userViewModel.user.profile.nickname, varName: $newNickname, isSecure: false)
+                    createTextField(placeholder: authStore.user.profile.nickname, varName: $newNickname, isSecure: false)
                         .frame(width: screenWidth * 0.5)
                 }
             }
@@ -68,7 +65,7 @@ struct ProfileManagementView: View {
             Button {
                 Task {
                     let imageData = newProfileImage.jpegData(compressionQuality: 0.8)
-                    let result = await authStore.updateProfile(nickname: newNickname, image: imageData, email: authStore.user!.email)
+                    let result = await authStore.updateProfile(nickname: newNickname, image: imageData, email: authStore.user.email)
                     if result {
                         changeCheck = "프로필 수정이 완료되었습니다"
                         print("업데이트 성공")

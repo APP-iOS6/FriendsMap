@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ImageDetailView: View {
-    let imageUrl: String
-    @EnvironmentObject var userViewModel: UserViewModel
-    
+struct ContentDetailView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @State private var likeCount: Int = 0 // 좋아요 수를 상태로 저장
     @State private var isLiked: Bool = false // 좋아요 버튼 상태
+    
+    let imageUrl: String
     
     var body: some View {
         VStack {
@@ -29,7 +29,7 @@ struct ImageDetailView: View {
             }
             
             // 유저의 콘텐트 관련 정보 표시
-            if let content = userViewModel.user.contents.first(where: { $0.id == imageUrl }) {
+            if let content = authStore.user.contents.first(where: { $0.id == imageUrl }) {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(content.text ?? "No description available")
                         .font(.body)

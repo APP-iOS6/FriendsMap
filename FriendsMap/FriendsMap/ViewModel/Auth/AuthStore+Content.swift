@@ -11,21 +11,7 @@ import FirebaseDatabase
 import FirebaseFirestore
 import FirebaseStorage
 
-
-
-final class UserViewModel: ObservableObject {
-    @Published private(set) var isLoading: Bool = false
-    @Published private(set) var user = User(profile: Profile(nickname: "", uiimage: nil), email: "email", contents: [], friends: [], requestList: [], receiveList: [])
-
-    @Published var imagelatitude: Double = 0.0
-    @Published var imagelongitude: Double = 0.0
-    @Published var imageDate: Date?
-    var ref: DatabaseReference!
-    
-    // 파이어 베이스 데이터베이스 (회원 정보 및 친구 정보 저장)
-    let db = Firestore.firestore()
-    // 파이어베이스 스토리지 (Image Upload)
-    let storage = Storage.storage()
+extension AuthenticationStore {
     
     func fetchContents(from email: String) async throws {
         do {
@@ -56,22 +42,33 @@ final class UserViewModel: ObservableObject {
         }
     }
     
-    func fetchProfile( _ email: String) async {
+    func fetchFriendContents(from email: String) async throws {
+        friendContents = []
         do {
-            let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument().data()
-            guard let profileDoc, let nickname = profileDoc["nickname"] as? String, let imagePath = profileDoc["image"] as? String else {
-                print("profileDoc: 값이 존재하지 않음")
-                return
-            }
-            let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
-            
-            DispatchQueue.main.async {
-                self.loadImageFromUrl(imageUrlString: imageUrlString) { uiImage in
-                    self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
+            let contents = try await db.collection("User").document(email).collection("Contents").getDocuments().documents
+            for document in contents {
+                let docData = document.data()
+                let contentDate = docData["contentDate"] as? Date
+                let imagePath = docData["image"] as? String
+                let text = docData["text"] as? String
+                let lati = docData["latitude"] as? Double
+                let longti = docData["longitude"] as? Double
+                
+                if let imagePath, let text, let lati, let longti {
+                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
+                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
+                        if !self.friendContents.contains(where: { $0.id == document.documentID }) {
+                            DispatchQueue.main.async {
+                                self.friendContents.append(
+                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         } catch {
-            print("Profile Fetch Error: \(error.localizedDescription)")
+            print("fetch date error: \(error.localizedDescription)")
         }
     }
     
@@ -213,5 +210,4 @@ final class UserViewModel: ObservableObject {
             print("Failed to update like count: \(error.localizedDescription)")
         }
     }
-
 }
