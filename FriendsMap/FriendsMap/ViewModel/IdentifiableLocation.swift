@@ -7,17 +7,18 @@
 
 import Foundation
 import CoreLocation
+import SwiftUI
 
 
 public struct IdentifiableLocation: Identifiable {
     public let id = UUID()
     public var coordinate: CLLocationCoordinate2D
-    public var image: String?
+    public var image: Image
 
   
-    public init(coordinate: CLLocationCoordinate2D, image: String? = nil) {
-        self.coordinate = coordinate
-        self.image = image
-    }
+//    public init(coordinate: CLLocationCoordinate2D, image: String? = nil) {
+//        self.coordinate = coordinate
+//        self.image = image
+//    }
 }
 

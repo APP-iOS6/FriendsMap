@@ -20,7 +20,7 @@ extension AuthenticationStore {
             try await Auth.auth().signIn(withEmail: email, password: password)
             
             authenticationState = .authenticated
-            self.user = User(profile: Profile(nickname: "", image: "수민테스트"), email: email, contents: [], friends: [], requestList: [], receiveList: [])
+//            self.user = User(profile: Profile(nickname: "", image: "수민테스트"), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             let db = Firestore.firestore()
 
@@ -64,7 +64,6 @@ extension AuthenticationStore {
             
             try await docRef.setData([
                 "email": email,
-                "contents": [],
                 "friends": [],
                 "requestList": [],
                 "receiveList": []
@@ -77,18 +76,7 @@ extension AuthenticationStore {
                 "image": ""
             ])
             
-            // 콘텐츠 문서 넣어주기
-            let contentDocRef = docRef.collection("Contents").document()
-            try await contentDocRef.setData([
-                "contentDate" : Date(),
-                "image" : "",
-                "latitude" : 0,
-                "likeCount" : 0,
-                "longitude" : 0,
-                "text" : ""
-            ])
-            
-            self.user = User(profile: Profile(nickname: "", image: ""), email: email, contents: [], friends: [], requestList: [], receiveList: [])
+            self.user = User(profile: Profile(nickname: "", uiimage: nil), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             self.flow = .profileSetting // 프로필 설정 화면으로 이동
             return true

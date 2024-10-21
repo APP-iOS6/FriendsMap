@@ -29,7 +29,7 @@ struct ImageDetailView: View {
             }
             
             // 유저의 콘텐트 관련 정보 표시
-            if let content = userViewModel.userContents.first(where: { $0.image == imageUrl }) {
+            if let content = userViewModel.user.contents.first(where: { $0.id == imageUrl }) {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(content.text ?? "No description available")
                         .font(.body)
