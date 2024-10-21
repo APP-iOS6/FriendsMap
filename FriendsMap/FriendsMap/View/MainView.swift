@@ -9,12 +9,6 @@ import SwiftUI
 import MapKit
 
 
-struct IdentifiableLocation: Identifiable {
-    let id = UUID()
-    var coordinate: CLLocationCoordinate2D
-    var image: Image
-}
-
 struct MainView: View {
     @State private var isShowingUploadSheet = false // 업로드 이미지 시트 표시
     @State private var isShowingDetailSheet = false // 이미지 디테일 시트 표시
@@ -48,7 +42,7 @@ struct MainView: View {
                                         .resizable()
                                         .frame(width: 80, height: 80)
                                         .clipShape(Circle())
-                                  
+                                    
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -64,7 +58,7 @@ struct MainView: View {
                                         .resizable()
                                         .frame(width: 80, height: 80)
                                         .clipShape(Circle())
-                                  
+                                    
                                     Image(systemName: "mappin.circle.fill")
                                         .font(.title)
                                         .foregroundColor(.red)
@@ -97,24 +91,8 @@ struct MainView: View {
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
                             }
-                            else {
-                                NavigationLink {
-                                    ProfileView()
-                                } label: {
-                                    VStack {
-                                        Image("defaultProfile")
-                                            .resizable()
-                                            .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                            .background(Color.white)
-                                            .foregroundColor(.black)
-                                            .clipShape(Circle())
-                                        
-                                    }
-                                }
-                                .padding(.trailing, geometry.size.width * 0.05)
-                            }
+                            .padding(.top, geometry.size.width * 0.02)
                         }
-                        .padding(.top, geometry.size.width * 0.02)
                         
                         Spacer()
                         
@@ -152,30 +130,30 @@ struct MainView: View {
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
                         }
-                    }
-                    .onAppear {
-                        Task {
-                            try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
-                            // 로드된 데이터를 기반으로 어노테이션 설정
-                            await userViewModel.fetchProfile(authStore.user?.email ?? "")
-                            annotations = userViewModel.user.contents.map { post in
-                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                        .onAppear {
+                            Task {
+                                try await userViewModel.fetchContents(from: authStore.user?.email ?? "")
+                                // 로드된 데이터를 기반으로 어노테이션 설정
+                                await userViewModel.fetchProfile(authStore.user?.email ?? "")
+                                annotations = userViewModel.user.contents.map { post in
+                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                                }
                             }
                         }
                     }
+                    .navigationBarHidden(true)
                 }
-                .navigationBarHidden(true)
             }
-        }
-        // 업로드 이미지 시트
-        .sheet(isPresented: $isShowingUploadSheet) {
-            UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
-                .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
-        }
-        // 이미지 디테일 시트
-        .sheet(isPresented: $isShowingDetailSheet) {
-            if let selectedImageUrl = selectedImageUrl {
-                ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+            // 업로드 이미지 시트
+            .sheet(isPresented: $isShowingUploadSheet) {
+                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
+                    .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
+            }
+            // 이미지 디테일 시트
+            .sheet(isPresented: $isShowingDetailSheet) {
+                if let selectedImageUrl = selectedImageUrl {
+                    ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+                }
             }
         }
     }
