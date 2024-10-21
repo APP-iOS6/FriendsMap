@@ -77,7 +77,7 @@ struct MainView: View {
                                 .padding(.leading, geometry.size.width * 0.05)
                             
                             Spacer()
-                            
+                           
                             NavigationLink {
                                 ProfileView()
                             } label: {
@@ -90,8 +90,6 @@ struct MainView: View {
                                         .clipShape(Circle())
                                 }
                                 .padding(.trailing, geometry.size.width * 0.05)
-                            }
-                            .padding(.top, geometry.size.width * 0.02)
                         }
                         
                         Spacer()
