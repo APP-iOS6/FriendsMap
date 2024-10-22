@@ -21,44 +21,18 @@ extension AuthenticationStore {
                 print("profileDoc: 값이 존재하지 않음")
                 return
             }
-            let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath )
+            
+            let imageUrlString = try await makeUrltoImage(email: email, imagePath: imagePath )
+            
+            let uiImage = await loadImageFromUrl(imageUrl: imageUrlString)
             
             DispatchQueue.main.async {
-                self.loadImageFromUrl(imageUrlString: imageUrlString) { uiImage in
-                    self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
-                }
+                self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
             }
         } catch {
             print("Profile Fetch Error: \(error.localizedDescription)")
         }
     }
-    
-    //이미지, 닉네임 불러오기 함수
-    func loadProfile(email: String) async {
-        let storage = Storage.storage()
-        do {
-            let docData = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
-            let nickname = docData["nickname"] as? String
-            let image = docData["image"] as? String
-            let storageRef = storage.reference(withPath: "\(email)/\(image!)")
-            
-            storageRef.downloadURL { url, error in
-                if let error = error {
-                    print("Error getting download URL: \(error)")
-                    return
-                }
-                if let url = url {
-                    self.user.profile = Profile(
-                        nickname: nickname!,
-                        uiimage: nil // ?? 왜 nil?
-                    )
-                }
-            }
-        } catch{
-            print("\(error)")
-        }
-    }
-    
     
     //이미지, 닉네임 업데이트 함수
     func updateProfile(nickname: String, image: Data?, email: String) async -> Bool{

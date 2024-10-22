@@ -17,9 +17,15 @@ struct MainView: View {
     @State private var annotations: [IdentifiableLocation] = []
     
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
+    @State private var position = MapCameraPosition.region(
+        MKCoordinateRegion(
+            //            center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275),
+            //            span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
+        )
+    )
     
     @StateObject private var locationManager = LocationManager()
-//    @EnvironmentObject private var userViewModel: UserViewModel
+    //    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
@@ -29,44 +35,30 @@ struct MainView: View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
-                    if let latitude = selectedLatitude, let longitude = selectedLongitude {
-                        let location = IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), image: Image(systemName: "person.crop.circle"), email: authStore.user.email)
-                        
-                        Map(coordinateRegion: .constant(MKCoordinateRegion(
-                            center: CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.012, longitude: location.coordinate.longitude),
-                            span: MKCoordinateSpan(latitudeDelta: 0.15, longitudeDelta: 0.15)
-                        )), showsUserLocation: true, annotationItems: annotations) { location in
-                            MapAnnotation(coordinate: location.coordinate) {
-                                VStack {
-                                    location.image
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                    
-                                    Image(systemName: "mappin.circle.fill")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                }
+                    Map (position: $position) {
+                        ForEach(annotations) { annotation in
+                            Annotation("", coordinate: annotation.coordinate) {
+                                annotation.image
+                                    .resizable()
+                                    .frame(width: 100,height: 100)
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(Circle())
                             }
                         }
-                        .edgesIgnoringSafeArea(.all)
-                    } else {
-                        Map(coordinateRegion: $locationManager.region, showsUserLocation: true, annotationItems: annotations) { location in
-                            MapAnnotation(coordinate: location.coordinate) {
-                                VStack {
-                                    location.image
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                    
-                                    Image(systemName: "mappin.circle.fill")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                }
-                            }
-                        }
-                        .edgesIgnoringSafeArea(.all)
                     }
+                    .task {
+                        do {
+                            try await authStore.fetchContents(from: authStore.user.email)
+                            await authStore.fetchProfile(authStore.user.email)
+                            
+                            annotations = authStore.user.contents.map { post in
+                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                            }
+                        } catch {
+                            print("error: \(error.localizedDescription)")
+                        }
+                    }
+                    .edgesIgnoringSafeArea(.all)
                     
                     VStack {
                         HStack {
@@ -99,10 +91,11 @@ struct MainView: View {
                             Spacer()
                             
                             Button(action: {
-                                selectedLatitude = nil
-                                selectedLongitude = nil
                                 locationManager.updateRegionToUserLocation()
+                                position =  MapCameraPosition.region ( locationManager.region
+                                )
                             }) {
+                                
                                 Image(systemName: "dot.scope")
                                     .resizable()
                                     .frame(width: geometry.size.width * 0.07, height: geometry.size.width * 0.07)
@@ -153,7 +146,7 @@ struct MainView: View {
             }
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
-                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
+                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $position)
                     .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
             }
             // 이미지 디테일 시트

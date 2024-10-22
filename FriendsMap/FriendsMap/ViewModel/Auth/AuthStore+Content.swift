@@ -11,6 +11,7 @@ import FirebaseDatabase
 import FirebaseFirestore
 import FirebaseStorage
 
+
 extension AuthenticationStore {
     
     func fetchContents(from email: String) async throws {
@@ -25,14 +26,13 @@ extension AuthenticationStore {
                 let longti = docData["longitude"] as? Double
                 
                 if let imagePath, let text, let lati, let longti {
-                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
-                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
-                        if !self.user.contents.contains(where: { $0.id == document.documentID }) {
-                            DispatchQueue.main.async {
-                                self.user.contents.append(
-                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
-                                )
-                            }
+                    let imageUrl = try await makeUrltoImage(email: email, imagePath: imagePath)
+                    let uiImage = await loadImageFromUrl(imageUrl: imageUrl)
+                    if !self.user.contents.contains(where: { $0.id == document.documentID }) {
+                        DispatchQueue.main.async {
+                            self.user.contents.append(
+                                Content(id: document.documentID, uiImage: uiImage, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                            )
                         }
                     }
                 }
@@ -45,6 +45,14 @@ extension AuthenticationStore {
     func fetchFriendContents(from email: String) async throws {
         friendContents = []
         do {
+            let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument().data()
+            guard let profileDoc, let nickname = profileDoc["nickname"] as? String, let imagePath = profileDoc["image"] as? String else {
+                print("profileDoc: 값이 존재하지 않음")
+                return
+            }
+            let imageUrl = try await makeUrltoImage(email: email, imagePath: imagePath )
+            
+            let uiImage =  await loadImageFromUrl(imageUrl: imageUrl)
             let contents = try await db.collection("User").document(email).collection("Contents").getDocuments().documents
             for document in contents {
                 let docData = document.data()
@@ -55,19 +63,18 @@ extension AuthenticationStore {
                 let longti = docData["longitude"] as? Double
                 
                 if let imagePath, let text, let lati, let longti {
-                    let imageUrlString = await makeUrltoImage(email: email, imagePath: imagePath)
-                    loadImageFromUrl(imageUrlString: imageUrlString){ image in
-                        if !self.friendContents.contains(where: { $0.id == document.documentID }) {
-                            DispatchQueue.main.async {
-                                self.friendContents.append(
-                                    Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
-                                )
-                            }
+                    let imageUrl = try await makeUrltoImage(email: email, imagePath: imagePath)
+                    let image = await loadImageFromUrl(imageUrl: imageUrl)
+                    if !self.friendContents.contains(where: { $0.id == document.documentID }) {
+                        DispatchQueue.main.async {
+                            self.friendContents.append(
+                                Content(id: document.documentID, uiImage: image, text: text, contentDate: .now, latitude: lati, longitude: longti)
+                            )
                         }
                     }
                 }
             }
-        } catch {
+        }catch {
             print("fetch date error: \(error.localizedDescription)")
         }
     }
@@ -109,14 +116,10 @@ extension AuthenticationStore {
             
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            
-            storageRef.putData(resizedImageData, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("사진 error: \(error)")
-                }
-                if let metadata = metadata {
-                    print("메타데이터: \(metadata)")
-                }
+            do {
+                let _ = try await storageRef.putDataAsync(resizedImageData, metadata: metadata)
+            } catch {
+                print("addImage Error\(error.localizedDescription)")
             }
         } else {
             print("이미지 리사이징에 실패했습니다.")
@@ -169,37 +172,26 @@ extension AuthenticationStore {
             }
         }
     }
-    func makeUrltoImage(email: String, imagePath: String) async -> String {
+    func makeUrltoImage(email: String, imagePath: String) async throws -> URL {
         do {
             let storageRef = storage.reference(withPath: "\(email)/\(imagePath)")
             let url = try await storageRef.downloadURL()
             
-            return url.absoluteString
+            return url
         } catch let makeUrlError {
-            return "make url error: \(makeUrlError)"
+            print("Make Url Error!!: \(makeUrlError.localizedDescription)")
         }
+        return URL.applicationDirectory
     }
     
-    func loadImageFromUrl(imageUrlString: String, completaion: @escaping (UIImage)-> ()) {
-        
-        guard let url = URL(string: imageUrlString) else {
-            print("Invalid URL")
-            return
+    func loadImageFromUrl(imageUrl: URL) async -> UIImage {
+        do {
+            let (data, _ ) = try await URLSession.shared.data(from: imageUrl)
+            return UIImage(data: data)!
+        } catch {
+            print("\(error.localizedDescription)")
+            return UIImage(systemName: "xmark.circle.fill")!
         }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error downloading image: \(error)")
-                return
-            }
-            
-            if let data = data, let uiImage = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    completaion(uiImage)
-                }
-            }
-        }
-        .resume()
     }
     
     func updateLikeCount(for contentId: String, newLikeCount: Int, email: String) async {
