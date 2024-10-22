@@ -17,9 +17,15 @@ struct MainView: View {
     @State private var annotations: [IdentifiableLocation] = []
     
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
+    @State private var position = MapCameraPosition.region(
+        MKCoordinateRegion(
+//            center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275),
+//            span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
+        )
+    )
     
     @StateObject private var locationManager = LocationManager()
-//    @EnvironmentObject private var userViewModel: UserViewModel
+    //    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
@@ -29,7 +35,7 @@ struct MainView: View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
-                    Map {
+                    Map (position: $position) {
                         ForEach(annotations) { annotation in
                             Annotation("", coordinate: annotation.coordinate) {
                                 annotation.image
@@ -37,6 +43,15 @@ struct MainView: View {
                                     .frame(width: 100,height: 100)
                                     .aspectRatio(contentMode: .fit)
                                     .clipShape(Circle())
+                                    .onAppear {
+                                        position =
+                                        MapCameraPosition.region(
+                                            MKCoordinateRegion(
+                                            center: annotation.coordinate,
+                                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                                            )
+                                        )
+                                    }
                             }
                         }
                     }
@@ -85,10 +100,11 @@ struct MainView: View {
                             Spacer()
                             
                             Button(action: {
-                                selectedLatitude = nil
-                                selectedLongitude = nil
                                 locationManager.updateRegionToUserLocation()
+                                position =  MapCameraPosition.region ( locationManager.region
+                                )
                             }) {
+                                
                                 Image(systemName: "dot.scope")
                                     .resizable()
                                     .frame(width: geometry.size.width * 0.07, height: geometry.size.width * 0.07)
@@ -139,7 +155,7 @@ struct MainView: View {
             }
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
-                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations)
+                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $position)
                     .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
             }
             // 이미지 디테일 시트
@@ -151,8 +167,8 @@ struct MainView: View {
         }
     }
 }
-
-#Preview {
-    MainView()
-        .environmentObject(AuthenticationStore())
-}
+        
+        #Preview {
+            MainView()
+                .environmentObject(AuthenticationStore())
+        }

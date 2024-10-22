@@ -16,6 +16,8 @@ struct UploadingImageView: View {
     @Binding var selectedLatitude: Double?
     @Binding var selectedLongitude: Double?
     @Binding var annotations: [IdentifiableLocation]
+    @Binding var position: MapCameraPosition
+    
     
     @State var imageSelection: PhotosPickerItem? = nil
     @State var uiImage: UIImage? = nil
@@ -61,8 +63,6 @@ struct UploadingImageView: View {
                                 }
                                 
                                 // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
-                                selectedLatitude = authStore.imagelatitude
-                                selectedLongitude = authStore.imagelongitude
 
                                 dismiss()
                             }
@@ -119,8 +119,15 @@ struct UploadingImageView: View {
                                 uiImage = UIImage(data: data)
                                 authStore.extractMetadata(from: data)
                                 selectedImageData = data
-                                selectedLatitude = authStore.imagelatitude
-                                selectedLongitude = authStore.imagelongitude
+                                position = MapCameraPosition.region(
+                                    MKCoordinateRegion(
+                                        center: CLLocationCoordinate2D(
+                                            latitude: authStore.imagelatitude,
+                                            longitude: authStore.imagelongitude
+                                        ),
+                                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                                    )
+                                )
                             }
                         }
                     }
@@ -161,7 +168,7 @@ struct UploadingImageView: View {
     }
 }
 
-#Preview {
-    UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]))
-        .environmentObject(AuthenticationStore())
-}
+//#Preview {
+//    UploadingImageView(selectedLatitude: .constant(nil), selectedLongitude: .constant(nil), annotations: .constant([]), position: .constant(MapCameraPosition.region(<#T##MKCoordinateRegion#>)))
+//        .environmentObject(AuthenticationStore())
+//}

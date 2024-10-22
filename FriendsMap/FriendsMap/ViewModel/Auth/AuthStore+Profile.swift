@@ -24,7 +24,7 @@ extension AuthenticationStore {
             
             let imageUrlString = try await makeUrltoImage(email: email, imagePath: imagePath )
             
-            let uiImage = try await loadImageFromUrl(imageUrl: imageUrlString)
+            let uiImage = await loadImageFromUrl(imageUrl: imageUrlString)
             
             DispatchQueue.main.async {
                 self.user.profile = Profile(nickname: nickname , uiimage: uiImage)
