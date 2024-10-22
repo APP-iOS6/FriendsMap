@@ -60,6 +60,7 @@ extension AuthenticationStore {
                return "친구 요청을 보내는 중 오류가 발생했습니다."
            }
        }
+    
     // 친구 요청 수락하기
     func acceptFriendRequest(from friendEmail: String) async {
         let email = self.user.email
@@ -77,8 +78,11 @@ extension AuthenticationStore {
             
             // 친구의 friends에도 내 이메일 추가
             try await friendRef.updateData([
-                "friends": FieldValue.arrayUnion([email])
+                "friends": FieldValue.arrayUnion([email]),
+                "requestList": FieldValue.arrayRemove([email]) // 친구의 requestList에서 나의 이메일 제거
             ])
+            
+            self.user.requestList.removeAll { $0 == friendEmail }
             
             // 뷰모델의 receiveList 업데이트
             if let index = self.user.receiveList.firstIndex(of: friendEmail) {
