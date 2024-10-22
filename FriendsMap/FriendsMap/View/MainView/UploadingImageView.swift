@@ -49,8 +49,11 @@ struct UploadingImageView: View {
                     
                     Button {
                         if uiImage != nil {
+                            
                             Task {
-                                await authStore.addContent(Content(id: UUID().uuidString, text: text, contentDate: authStore.imageDate ?? Date(), latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), selectedImageData, authStore.user.email ?? "")
+                                let id = UUID().uuidString
+                                
+                                await authStore.addContent(Content(id: id, text: text, contentDate: authStore.imageDate ?? Date(), latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), selectedImageData, authStore.user.email ?? "")
                                 
                                 // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
                                 try await authStore.fetchContents(from: authStore.user.email ?? "")
@@ -62,7 +65,7 @@ struct UploadingImageView: View {
 //                                    }
                                 
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                        annotations.append(IdentifiableLocation (contentId: "", coordinate: CLLocationCoordinate2D(latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), image: Image(uiImage: uiImage!), email: authStore.user.email))
+                                        annotations.append(IdentifiableLocation (contentId: id, coordinate: CLLocationCoordinate2D(latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), image: Image(uiImage: uiImage!), email: authStore.user.email))
                                     }
                                 }
                                 // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
