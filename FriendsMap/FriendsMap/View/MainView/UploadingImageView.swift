@@ -50,22 +50,25 @@ struct UploadingImageView: View {
                     Button {
                         if uiImage != nil {
                             Task {
-                                await authStore.addContent(Content(id: UUID().uuidString, text: text, contentDate: authStore.imageDate ?? Date(), latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), selectedImageData, authStore.user.email)
+                                await authStore.addContent(Content(id: UUID().uuidString, text: text, contentDate: authStore.imageDate ?? Date(), latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), selectedImageData, authStore.user.email ?? "")
                                 
                                 // 이미지를 업로드한 후, 사용자 데이터를 다시 로드
-                                try await authStore.fetchContents(from: authStore.user.email)
+                                try await authStore.fetchContents(from: authStore.user.email ?? "")
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
-
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    annotations = authStore.user.contents.map { post in
-                                        IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                                
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                                    annotations = authStore.user.contents.map { post in
+//                                        IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+//                                    }
+                                
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                        annotations.append(IdentifiableLocation (contentId: "", coordinate: CLLocationCoordinate2D(latitude: authStore.imagelatitude, longitude: authStore.imagelongitude), image: Image(uiImage: uiImage!), email: authStore.user.email))
                                     }
-
                                 }
                                 // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
                                 dismiss()
                             }
-                        }
+                        
                     } label : {
                         Text("추가")
                             .foregroundStyle(.blue)
