@@ -136,11 +136,10 @@ struct ProfileButtonList: View {
                 Text("로그아웃")
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(hex: "E5E5E5"))
-                    )
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 16)
+//                            .fill(Color(hex: "E5E5E5"))
+//                    )
             }
             ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 isDeleteAccountAlertPresented.toggle()
