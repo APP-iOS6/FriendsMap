@@ -18,6 +18,7 @@ struct ProfileView: View {
             ZStack {
                 Color.loginViewBG.ignoresSafeArea()
                 VStack {
+                    Spacer(minLength: 20)
                     authStore.user.profile.image
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
@@ -50,12 +51,14 @@ struct ProfileView: View {
                         )
                     )
                 }
-                Spacer()
+                Spacer(minLength: 40)
             }
             .task {
                 await authStore.fetchProfile(authStore.user.email)
             }
         }
+        .navigationTitle("설정")
+        .navigationBarTitleDisplayMode(.inline)
     }
     func deleteAccount() {
         Task {
@@ -71,7 +74,7 @@ struct ProfileButtonList: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack (spacing: 25) {
+        VStack (spacing: 30) {
             NavigationLink {
                 ProfileManagementView()
             } label: {
@@ -79,12 +82,12 @@ struct ProfileButtonList: View {
                     Image(systemName: "person.fill")
                     Text("프로필 수정")
                 }
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
@@ -97,11 +100,12 @@ struct ProfileButtonList: View {
                     Text("게시물 관리")
                 }
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
@@ -113,15 +117,18 @@ struct ProfileButtonList: View {
                     Text("친구 관리")
                 }
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .foregroundStyle(Color(hex: "E5E5E5"))
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
                 )
                 .padding(.horizontal, 27)
             }
+            .padding(.bottom, 40)
             
+
             Button {
                 authStore.signOut()
                 dismiss()
@@ -129,18 +136,14 @@ struct ProfileButtonList: View {
                 Text("로그아웃")
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(hex: "E5E5E5"))
-                    )
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 16)
+//                            .fill(Color(hex: "E5E5E5"))
+//                    )
             }
-            .padding(.horizontal, 27)
-            
             ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 isDeleteAccountAlertPresented.toggle()
             }
-            .padding(.horizontal, 27)
         }
     }
 }

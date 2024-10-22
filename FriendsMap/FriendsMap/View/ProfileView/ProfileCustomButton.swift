@@ -23,7 +23,7 @@ struct ProfileCustomButton: View {
                     .frame(maxWidth: buttonWidth)
                     .padding(.vertical, 16)
                     .background(
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 10)
                             .fill(buttonBackgroundColor)
                     )
             }
