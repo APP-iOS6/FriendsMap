@@ -12,16 +12,20 @@ import SwiftUI
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager
-    @Published var region: MKCoordinateRegion
+    @Published var region: MapCameraPosition
 
     override init() {
         locationManager = CLLocationManager()
         // 초기값을 서울로 설정
-        region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.978),
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        region = MapCameraPosition.region(
+            MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.978),
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            )
         )
+
         super.init()
+        
 
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -33,9 +37,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func updateRegionToUserLocation() {
         if let currentLocation = locationManager.location {
             let newCoordinate = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
-            region = MKCoordinateRegion(
-                center: newCoordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            region = MapCameraPosition.region(
+                MKCoordinateRegion(
+                    center: newCoordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )
             )
         } else {
             // 위치를 가져올 수 없는 경우 처리 (필요시 알림 메시지 추가 가능)
@@ -44,9 +50,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func updateRegion(to coordinate: CLLocationCoordinate2D) {
-        region = MKCoordinateRegion(
-            center: coordinate,
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        region = MapCameraPosition.region(
+            MKCoordinateRegion(
+                center: coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            )
         )
     }
 }
