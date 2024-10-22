@@ -2,32 +2,19 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
-@MainActor
-class FriendViewModel: ObservableObject {
-    @Published var friends: [String] = []
-    @Published var receiveList: [String] = []
-    @Published var requestList: [String] = []
-    
-    private var userEmail: String? {
-        return Auth.auth().currentUser?.email
-    }
-    
-    
+extension AuthenticationStore {
     func loadFriendData() async {
-        guard let email = userEmail else {
-            print("User not logged in")
-            return
-        }
+        let email = self.user.email
         
         do {
             let db = Firestore.firestore()
             let doc = try await db.collection("User").document(email).getDocument()
             
             if let data = doc.data() {
-                self.friends = data["friends"] as? [String] ?? []
-                self.receiveList = data["receiveList"] as? [String] ?? []
-                self.requestList = data["requestList"] as? [String] ?? []
-                print("Loaded friend data: \(friends)")
+                self.user.friends = data["friends"] as? [String] ?? []
+                self.user.receiveList = data["receiveList"] as? [String] ?? []
+                self.user.requestList = data["requestList"] as? [String] ?? []
+                print("Loaded friend data: \(self.user.friends)")
             } else {
                 print("No document for user: \(email)")
             }
@@ -38,12 +25,10 @@ class FriendViewModel: ObservableObject {
     
     // 친구 요청 보내기
     func sendFriendRequest(to friendEmail: String) async -> String {
-           guard let email = userEmail else {
-               return "사용자 로그인이 필요합니다."
-           }
+        let email = self.user.email
            
            // 이미 친구 요청을 보낸 경우
-           if requestList.contains(friendEmail) {
+        if self.user.requestList.contains(friendEmail) {
                return "이미 친구 요청을 보냈습니다." // 중복 요청 메시지
            }
 
@@ -62,7 +47,7 @@ class FriendViewModel: ObservableObject {
                ])
                
                // 요청 목록에 친구 추가
-               self.requestList.append(friendEmail)
+               self.user.requestList.append(friendEmail)
                try await db.collection("User").document(email).updateData([
                    "requestList": FieldValue.arrayUnion([friendEmail])
                ])
@@ -77,10 +62,7 @@ class FriendViewModel: ObservableObject {
        }
     // 친구 요청 수락하기
     func acceptFriendRequest(from friendEmail: String) async {
-        guard let email = userEmail else {
-            print("User not logged in")
-            return
-        }
+        let email = self.user.email
         
         do {
             let db = Firestore.firestore()
@@ -99,8 +81,8 @@ class FriendViewModel: ObservableObject {
             ])
             
             // 뷰모델의 receiveList 업데이트
-            if let index = receiveList.firstIndex(of: friendEmail) {
-                receiveList.remove(at: index)
+            if let index = self.user.receiveList.firstIndex(of: friendEmail) {
+                self.user.receiveList.remove(at: index)
             }
             
             print("Accepted friend request from \(friendEmail)")
@@ -111,10 +93,7 @@ class FriendViewModel: ObservableObject {
     
     // 친구 요청 거절하기
     func rejectFriendRequest(from friendEmail: String) async {
-        guard let email = userEmail else {
-            print("User not logged in")
-            return
-        }
+        let email = self.user.email
         
         do {
             let db = Firestore.firestore()
@@ -126,8 +105,8 @@ class FriendViewModel: ObservableObject {
             ])
             
             // 뷰모델의 receiveList 업데이트
-            if let index = receiveList.firstIndex(of: friendEmail) {
-                receiveList.remove(at: index)
+            if let index = self.user.receiveList.firstIndex(of: friendEmail) {
+                self.user.receiveList.remove(at: index)
             }
             
             print("Rejected friend request from \(friendEmail)")

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
@@ -14,6 +13,8 @@ import GoogleSignInSwift
 import Observation
 import FirebaseFirestore
 import FirebaseStorage
+import PhotosUI
+import FirebaseDatabase
 
 // 인증 처리 상태
 enum AuthenticationState {
@@ -50,9 +51,19 @@ class AuthenticationStore: ObservableObject {
     
     @Published var flow: AuthenticationFlow = .login
     @Published var authenticationState: AuthenticationState = .unauthenticated
-    @Published var user: User?
-    private let db = Firestore.firestore()
+    @Published var user: User = User(profile: Profile(nickname: ""), email: "default", contents: [], friends: [], requestList: [], receiveList: [])
+    let db = Firestore.firestore()
     private var authStateHandler: AuthStateDidChangeListenerHandle?
+    
+    @Published var friendContents: [Content] = []
+    @Published var imagelatitude: Double = 0.0
+    @Published var imagelongitude: Double = 0.0
+    @Published var imageDate: Date?
+    var ref: DatabaseReference!
+    
+    // 파이어베이스 스토리지 (Image Upload)
+    let storage = Storage.storage()
+    
     
     init() {
         registerAuthStateHandler()
@@ -65,84 +76,6 @@ class AuthenticationStore: ObservableObject {
                 : !(email.isEmpty || password.isEmpty || confirmPassword.isEmpty)
             }
             .assign(to: &$isValid)
-    }
-    
-    //이미지, 닉네임 불러오기 함수
-    func loadProfile(email: String) async {
-        let storage = Storage.storage()
-        do {
-            let docData = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
-            let nickname = docData["nickname"] as? String
-            let image = docData["image"] as? String
-            let storageRef = storage.reference(withPath: "\(email)/\(image!)")
-            
-            storageRef.downloadURL { url, error in
-                if let error = error {
-                    print("Error getting download URL: \(error)")
-                    return
-                }
-                if let url = url {
-                    self.user?.profile = Profile(
-                        nickname: nickname!,
-                        uiimage: nil
-                    )
-                }
-            }
-        } catch{
-            print("\(error)")
-        }
-    }
-    
-    
-    //이미지, 닉네임 업데이트 함수
-    func updateProfile(nickname: String, image: Data?, email: String) async -> Bool{
-        
-        //UserViewModel 코드 참고
-        let id = "\(UUID().uuidString)"
-        let storageRef = Storage.storage().reference().child("\(email)/\(id)")
-        
-        // 원하는 이미지 크기 (예: 300x300으로 크기 조정)
-        let targetSize = CGSize(width: 720, height: 1080)
-        
-        if let image = image,
-           let originalImage = UIImage(data: image),
-           let resizedImage = originalImage.resize(to: targetSize),
-           let resizedImageData = resizedImage.jpegData(compressionQuality: 0.8) {
-            
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            
-            do {
-                storageRef.putData(resizedImageData, metadata: metadata)
-                
-                let docRef = db.collection("User").document(email).collection("Profile").document("profileDoc")
-                try await docRef.setData([
-                    "nickname": nickname,
-                    "image": id
-                ])
-                self.user?.profile.nickname = nickname
-//                self.user?.profile.image = id
-                return true
-                
-            } catch {
-                print(error)
-                return false
-            }
-        }
-        // 이미지 등록 안한 경우
-        else {
-            do {
-                let docRef =  db.collection("User").document(email).collection("Profile").document("profileDoc")
-                try await docRef.setData([
-                    "nickname": nickname
-                ], merge: true)
-                self.user?.profile.nickname = nickname
-                return true
-            } catch {
-                print(error)
-                return false
-            }
-        }
     }
     
     func registerAuthStateHandler() {
@@ -185,9 +118,7 @@ class AuthenticationStore: ObservableObject {
         password = ""
         confirmPassword = ""
     }
-}
-
-extension AuthenticationStore {
+    
     func signOut() {
         do {
             try Auth.auth().signOut()

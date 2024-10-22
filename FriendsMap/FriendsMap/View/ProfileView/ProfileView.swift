@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
+    @State private var isDeleteAccountAlertPresented: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    @State private var isDeleteAccountAlertPresented: Bool = false
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var authStore: AuthenticationStore
     
     var body: some View {
         NavigationStack {
@@ -20,13 +19,13 @@ struct ProfileView: View {
                 Color.loginViewBG.ignoresSafeArea()
                 VStack {
                     Spacer(minLength: 20)
-                    userViewModel.user.profile.image
+                    authStore.user.profile.image
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                         .clipShape(Circle())
                         .aspectRatio(contentMode: .fit)
                         .padding(.bottom, 20)
-                    Text(userViewModel.user.profile.nickname)
+                    Text(authStore.user.profile.nickname)
                         .font(.title3)
                         .foregroundStyle(.white)
                         .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
@@ -34,6 +33,7 @@ struct ProfileView: View {
                     
                     
                     ProfileButtonList(isDeleteAccountAlertPresented: $isDeleteAccountAlertPresented)
+                        .environmentObject(authStore)
                     
                 }.alert(isPresented: $isDeleteAccountAlertPresented) {
                     Alert(
@@ -54,7 +54,7 @@ struct ProfileView: View {
                 Spacer(minLength: 40)
             }
             .task {
-                await userViewModel.fetchProfile(authStore.user?.email ?? "")
+                await authStore.fetchProfile(authStore.user.email)
             }
         }
         .navigationTitle("설정")
@@ -62,15 +62,16 @@ struct ProfileView: View {
     }
     func deleteAccount() {
         Task {
-            let isDeleted = await authStore.deleteAccount(authStore.user?.email ?? "")
+            let isDeleted = await authStore.deleteAccount(authStore.user.email)
             print(isDeleted)
         }
     }
 }
 
 struct ProfileButtonList: View {
-    @EnvironmentObject private var authStore: AuthenticationStore
+    @EnvironmentObject var authStore: AuthenticationStore
     @Binding var isDeleteAccountAlertPresented: Bool
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack (spacing: 30) {
@@ -92,7 +93,7 @@ struct ProfileButtonList: View {
             }
             
             NavigationLink {
-                ImageManagementView()
+                ContentManagementView()
             } label: {
                 HStack {
                     Image(systemName: "doc.text")
@@ -127,8 +128,19 @@ struct ProfileButtonList: View {
             }
             .padding(.bottom, 40)
             
-            ProfileCustomButton(buttonLabel: "로그아웃", buttonForegroundColor: .red, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
+
+            Button {
                 authStore.signOut()
+                dismiss()
+            } label: {
+                Text("로그아웃")
+                    .foregroundStyle(.red)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(hex: "E5E5E5"))
+                    )
             }
             ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 isDeleteAccountAlertPresented.toggle()
@@ -139,6 +151,5 @@ struct ProfileButtonList: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(UserViewModel())
         .environmentObject(AuthenticationStore())
 }
