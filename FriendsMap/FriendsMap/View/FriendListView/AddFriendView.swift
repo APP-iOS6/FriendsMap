@@ -12,84 +12,115 @@ struct AddFriendView: View {
     @State private var friendEmail = ""
     @State private var errorMessage: String? = nil
     @State private var successMessage: String? = nil
-
+    @FocusState private var isTextFieldFocused: Bool
+    
     var body: some View {
         ZStack {
             Color(hex: "#404040")
                 .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                Text("친구 추가")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(.top, 30)
 
-            VStack {
-                Text("친구추가")
-                    .font(.system(size: 18))
-                    .bold()
-                    .foregroundStyle(Color.white)
-                    .padding()
+                VStack(alignment: .leading) {
+                    Text("추가할 이메일 입력:")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.gray)
+                        .padding(.horizontal)
+                    ZStack(alignment: .leading) {
+                        // 플레이스홀더 텍스트
+                        if friendEmail.isEmpty {
+                            Text("friend@example.com")
+                                .font(.system(size: 16))
+                                .foregroundColor(.gray) // 회색 플레이스홀더 텍스트
+                                .padding(EdgeInsets(top: 12, leading: 15, bottom: 12, trailing: 15))
+                        }
 
-                TextField("이메일을 입력하세요.", text: $friendEmail)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                    .foregroundColor(.black)
+                        // 실제 입력 필드
+                        TextField("Insert Email", text: $friendEmail)
+                            .padding(EdgeInsets(top: 12, leading: 15, bottom: 12, trailing: 15))
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .foregroundColor(.black)  // 입력된 텍스트 색상 검정으로 설정
+                            .focused($isTextFieldFocused)  // 포커스 상태 처리
+                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
+                    }
                     .padding(.horizontal)
-
+                }
+                
                 Button(action: {
-                    Task {
-                        errorMessage = nil
+                    if friendEmail.isEmpty {
+                        errorMessage = "이메일을 입력하세요."
                         successMessage = nil
-
-                        // 친구 요청 보내기
-                        let resultMessage = await authStore.sendFriendRequest(to: friendEmail)
-
-                        // 결과에 따른 메시지 처리
-                        if resultMessage.contains("성공") {
-                            successMessage = resultMessage
-                        } else {
-                            errorMessage = resultMessage
+                        isTextFieldFocused = true
+                    } else {
+                        Task {
+                            errorMessage = nil
+                            successMessage = nil
+                            
+                            let resultMessage = await authStore.sendFriendRequest(to: friendEmail)
+                            
+                            if resultMessage.contains("성공") {
+                                successMessage = resultMessage
+                            } else {
+                                errorMessage = resultMessage
+                            }
                         }
                     }
                 }) {
-                    Text("친구추가 요청")
-                        .padding()
+                    Text("친구 요청 보내기")
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
                         .background(Color.gray)
-                        .cornerRadius(8)
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                        .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 5)
                 }
-
-                // 성공 메시지 표시 (초록색)
+                
                 if let successMessage = successMessage {
                     Text(successMessage)
+                        .font(.system(size: 14))
                         .foregroundColor(.green)
                         .padding(.top, 10)
                 }
-
-                // 에러 메시지 표시 (빨간색)
+                
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
+                        .font(.system(size: 14))
                         .foregroundColor(.red)
                         .padding(.top, 10)
                 }
-
-                // 친구 요청 리스트 표시 (requestList)
-                Text("보낸 친구 요청")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.top, 21)
-
-                List(authStore.user.requestList, id: \.self) { friend in
-                    Text(friend)
-                        .foregroundColor(.black)
+                
+                VStack(alignment: .leading) {
+                    Text("보낸 친구 요청목록")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.top, 30)
+                        .padding(.leading, 16)
+                    
+                    List(authStore.user.requestList, id: \.self) { friend in
+                        Text(friend)
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                            .padding(.vertical, 8)
+                            .cornerRadius(10)
+                    }
+                    .background(Color.clear)
+                    .scrollContentBackground(.hidden)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
                 }
-                .background(Color.clear)
-                .scrollContentBackground(.hidden)
-                .cornerRadius(10)
-                .padding(.horizontal)
+                
+                Spacer()
             }
-            .onAppear {
-                Task {
-                    await authStore.loadFriendData() // 뷰가 나타날 때 친구 목록 로드
-                }
-            }
+        }
+        .onTapGesture {
+            isTextFieldFocused = false
         }
     }
 }
