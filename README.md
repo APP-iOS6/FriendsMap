@@ -3,7 +3,7 @@
 </div>
 
 <br />
-<h3 align="center"> 📍 내 사진을 친구들에게 위치와 함께 공유하고, 친구들의 오늘 찍은 사진을 위치와 함께 지도에서 볼 수 있는 앱📍</h3>
+<h3 align="center"> 📍 내 사진과 친구들의 사진을 위치와 함께 지도에서 볼 수 있는 앱📍</h3>
 <br />
 
 <div align="center" style="display: flex; flex-direction: column; align-items: center;">
