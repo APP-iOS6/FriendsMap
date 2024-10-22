@@ -20,6 +20,9 @@ struct MainView: View {
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject var authStore: AuthenticationStore
     
+    @State var selectEmail: String = "" // 선택한 유저 이메일
+    @State var tripRoute: [CLLocationCoordinate2D] = [] // 루트 순서 저장용
+    
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -38,9 +41,16 @@ struct MainView: View {
                                     .clipShape(Circle())
                                     .onTapGesture {
                                         selectedImageUrl = annotation.contentId
+                                        tripRoute = filterMaps(annotation.email)
+                                        selectEmail = annotation.email
                                         isShowingDetailSheet = true
                                     }
                             }
+                        }
+                        
+                        if !selectEmail.isEmpty {
+                            MapPolyline(coordinates: tripRoute)
+                                .stroke(.blue, lineWidth: 5)
                         }
                     }
                     .task {
@@ -50,12 +60,12 @@ struct MainView: View {
                             await authStore.loadFriendData()
             
                             annotations = authStore.user.contents.map { post in
-                                IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                                IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate)
                             }
                             for friend in authStore.user.friends {
                                 try await authStore.fetchFriendContents(from: friend)
                                 for content in authStore.friendContents {
-                                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend))
+                                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate))
                                 }
                             }
                         } catch {
@@ -148,3 +158,13 @@ struct MainView: View {
     }
 }
 
+extension MainView {
+    func filterMaps(_ email: String) -> [CLLocationCoordinate2D]{
+        var filteredAnnotation = annotations.filter {
+            $0.email == email
+        }.sorted {$0.date < $1.date}
+        
+        return filteredAnnotation.map({ CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
+        })
+    }
+}
