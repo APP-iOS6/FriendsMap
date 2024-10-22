@@ -19,8 +19,8 @@ struct MainView: View {
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
     @State private var position = MapCameraPosition.region(
         MKCoordinateRegion(
-//            center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275),
-//            span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
+            //            center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275),
+            //            span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
         )
     )
     
@@ -43,15 +43,6 @@ struct MainView: View {
                                     .frame(width: 100,height: 100)
                                     .aspectRatio(contentMode: .fit)
                                     .clipShape(Circle())
-                                    .onAppear {
-                                        position =
-                                        MapCameraPosition.region(
-                                            MKCoordinateRegion(
-                                            center: annotation.coordinate,
-                                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                                            )
-                                        )
-                                    }
                             }
                         }
                     }
@@ -167,8 +158,8 @@ struct MainView: View {
         }
     }
 }
-        
-        #Preview {
-            MainView()
-                .environmentObject(AuthenticationStore())
-        }
+
+#Preview {
+    MainView()
+        .environmentObject(AuthenticationStore())
+}
