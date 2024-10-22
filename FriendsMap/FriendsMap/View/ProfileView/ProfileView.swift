@@ -71,7 +71,7 @@ struct ProfileView: View {
 struct ProfileButtonList: View {
     @EnvironmentObject var authStore: AuthenticationStore
     @Binding var isDeleteAccountAlertPresented: Bool
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack (spacing: 30) {
@@ -131,18 +131,11 @@ struct ProfileButtonList: View {
 
             Button {
                 authStore.signOut()
-                //지피티야 고마워~
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    dismiss()
-                }
+                presentationMode.wrappedValue.dismiss()
             } label: {
                 Text("로그아웃")
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity)
-//                    .background(
-//                        RoundedRectangle(cornerRadius: 16)
-//                            .fill(Color(hex: "E5E5E5"))
-//                    )
             }
             ProfileCustomButton(buttonLabel: "회원탈퇴", buttonForegroundColor: .gray, buttonBackgroundColor: .clear, buttonWidth: .infinity) {
                 isDeleteAccountAlertPresented.toggle()
