@@ -59,7 +59,7 @@ struct UploadingImageView: View {
                                 
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
                                 annotations = authStore.user.contents.map { post in
-                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                                    IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
                                 }
                                 
                                 // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
