@@ -131,7 +131,10 @@ struct ProfileButtonList: View {
 
             Button {
                 authStore.signOut()
-                dismiss()
+                //지피티야 고마워~
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    dismiss()
+                }
             } label: {
                 Text("로그아웃")
                     .foregroundStyle(.red)
