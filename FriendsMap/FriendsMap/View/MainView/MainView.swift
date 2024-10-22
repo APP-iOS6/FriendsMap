@@ -19,7 +19,7 @@ struct MainView: View {
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
     
     @StateObject private var locationManager = LocationManager()
-    @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
@@ -42,11 +42,11 @@ struct MainView: View {
                     }
                     .task {
                         do {
-                            try await userViewModel.fetchContents(from: authStore.user!.email)
-                            await userViewModel.fetchProfile(authStore.user!.email)
+                            try await authStore.fetchContents(from: authStore.user.email)
+                            await authStore.fetchProfile(authStore.user.email)
                             
-                            annotations = userViewModel.user.contents.map { post in
-                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image)
+                            annotations = authStore.user.contents.map { post in
+                                IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
                             }
                         } catch {
                             print("error: \(error.localizedDescription)")
@@ -68,7 +68,7 @@ struct MainView: View {
                                 ProfileView()
                             } label: {
                                 VStack {
-                                    userViewModel.user.profile.image
+                                    authStore.user.profile.image
                                         .resizable()
                                         .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
                                         .background(Color.white)
@@ -115,6 +115,24 @@ struct MainView: View {
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
                         }
+                        .onAppear {
+                            Task {
+                                try await authStore.fetchContents(from: authStore.user.email)
+                                // 로드된 데이터를 기반으로 어노테이션 설정
+                                await authStore.fetchProfile(authStore.user.email)
+                                await authStore.loadFriendData()
+                                annotations = authStore.user.contents.map { post in
+                                    IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                                }
+                                
+                                for friend in authStore.user.friends {
+                                    try await authStore.fetchFriendContents(from: friend)
+                                    for content in authStore.friendContents {
+                                        annotations.append(IdentifiableLocation(coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend))
+                                    }
+                                }
+                            }
+                        }
                     }
                     .navigationBarHidden(true)
                 }
@@ -127,7 +145,7 @@ struct MainView: View {
             // 이미지 디테일 시트
             .sheet(isPresented: $isShowingDetailSheet) {
                 if let selectedImageUrl = selectedImageUrl {
-                    ImageDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
+                    ContentDetailView(imageUrl: selectedImageUrl) // ImageDetailView로 시트 표시
                 }
             }
         }
@@ -136,5 +154,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .environmentObject(UserViewModel())
+        .environmentObject(AuthenticationStore())
 }

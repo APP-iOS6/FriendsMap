@@ -23,4 +23,12 @@ struct Content {
             Image(systemName: "person.crop.circle")
         }
     }
+    
+    // Date() -> String 변환 함수
+    var contentDateText: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none 
+        return formatter.string(from: contentDate)
+    }
 }

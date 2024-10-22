@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct ProfileSettingView: View {
+    @EnvironmentObject var authStore: AuthenticationStore
     @State var nickname: String = ""
     @State var nicknameWarning: String = ""
     @State private var profileImage: UIImage = UIImage()
     @State private var isPresented: Bool = false
     
-    @EnvironmentObject var authStore: AuthenticationStore
-    
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    
     
     var body: some View {
         VStack(spacing: 20) {
@@ -88,7 +86,7 @@ struct ProfileSettingView: View {
                 } else {
                     Task {
                         let imageData = profileImage.jpegData(compressionQuality: 0.8)
-                        let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user!.email)
+                        let result = await authStore.updateProfile(nickname: nickname, image: imageData, email: authStore.user.email)
                         if result {
                             authStore.flow = .main
                         } else {

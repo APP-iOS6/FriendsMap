@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
@@ -20,7 +19,7 @@ extension AuthenticationStore {
             try await Auth.auth().signIn(withEmail: email, password: password)
             
             authenticationState = .authenticated
-//            self.user = User(profile: Profile(nickname: "", image: "수민테스트"), email: email, contents: [], friends: [], requestList: [], receiveList: [])
+            self.user = User(profile: Profile(nickname: "", uiimage: nil ), email: email, contents: [], friends: [], requestList: [], receiveList: [])
             
             let db = Firestore.firestore()
 
@@ -30,7 +29,7 @@ extension AuthenticationStore {
             if profileDoc.exists {
                 if let nickname = profileDoc.get("nickname") as? String, !nickname.isEmpty {
                     // 닉네임이 비어있지 않으면 MainView로 이동
-                    await self.loadProfile(email: email)
+                    await self.fetchProfile(email)
                     self.flow = .main
                     print("사용자 닉네임: \(nickname)")
 
