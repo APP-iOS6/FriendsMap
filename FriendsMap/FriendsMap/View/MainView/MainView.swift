@@ -20,6 +20,7 @@ struct MainView: View {
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject var authStore: AuthenticationStore
     
+    
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -46,9 +47,16 @@ struct MainView: View {
                         do {
                             try await authStore.fetchContents(from: authStore.user.email)
                             await authStore.fetchProfile(authStore.user.email)
-                            
+                            await authStore.loadFriendData()
+            
                             annotations = authStore.user.contents.map { post in
                                 IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
+                            }
+                            for friend in authStore.user.friends {
+                                try await authStore.fetchFriendContents(from: friend)
+                                for content in authStore.friendContents {
+                                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend))
+                                }
                             }
                         } catch {
                             print("error: \(error.localizedDescription)")
@@ -115,24 +123,7 @@ struct MainView: View {
                             .padding(.trailing, geometry.size.width * 0.03)
                             .padding(.top, geometry.size.width * 0.02)
                         }
-                        .onAppear {
-                            Task {
-                                try await authStore.fetchContents(from: authStore.user.email)
-                                // 로드된 데이터를 기반으로 어노테이션 설정
-                                await authStore.fetchProfile(authStore.user.email)
-                                await authStore.loadFriendData()
-                                annotations = authStore.user.contents.map { post in
-                                    IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email)
-                                }
-                                
-                                for friend in authStore.user.friends {
-                                    try await authStore.fetchFriendContents(from: friend)
-                                    for content in authStore.friendContents {
-                                        annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend))
-                                    }
-                                }
-                            }
-                        }
+                        
                     }
                     .navigationBarHidden(true)
                 }
@@ -140,7 +131,7 @@ struct MainView: View {
 
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
-                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $position)
+                UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $locationManager.region)
                     .presentationDetents([.height(screenHeight * 0.5)]) // 수정된 부분
             }
             // 이미지 디테일 시트
