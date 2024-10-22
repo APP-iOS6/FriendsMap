@@ -15,17 +15,9 @@ struct MainView: View {
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @State private var annotations: [IdentifiableLocation] = []
-    
     @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
-    @State private var position = MapCameraPosition.region(
-        MKCoordinateRegion(
-            //            center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275),
-            //            span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
-        )
-    )
     
     @StateObject private var locationManager = LocationManager()
-    //    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject var authStore: AuthenticationStore
     
     let screenWidth = UIScreen.main.bounds.width
@@ -35,7 +27,7 @@ struct MainView: View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
-                    Map (position: $position) {
+                    Map (position: $locationManager.region) {
                         ForEach(annotations) { annotation in
                             Annotation("", coordinate: annotation.coordinate) {
                                 annotation.image
@@ -94,12 +86,9 @@ struct MainView: View {
                         HStack {
                             Spacer()
                             
-                            Button(action: {
+                            Button {
                                 locationManager.updateRegionToUserLocation()
-                                position =  MapCameraPosition.region ( locationManager.region
-                                )
-                            }) {
-                                
+                            }label: {
                                 Image(systemName: "dot.scope")
                                     .resizable()
                                     .frame(width: geometry.size.width * 0.07, height: geometry.size.width * 0.07)
@@ -148,6 +137,7 @@ struct MainView: View {
                     .navigationBarHidden(true)
                 }
             }
+
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
                 UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $position)
@@ -160,6 +150,7 @@ struct MainView: View {
                     ContentDetailView(contentId: selectedImageUrl)
                         .environmentObject(authStore)
                 }
+
             }
 
         }

@@ -52,6 +52,7 @@ class AuthenticationStore: ObservableObject {
     @Published var flow: AuthenticationFlow = .login
     @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var user: User = User(profile: Profile(nickname: ""), email: "default", contents: [], friends: [], requestList: [], receiveList: [])
+    @Published private(set) var isLoading: Bool = false
     let db = Firestore.firestore()
     private var authStateHandler: AuthStateDidChangeListenerHandle?
     
@@ -67,7 +68,6 @@ class AuthenticationStore: ObservableObject {
     
     init() {
         registerAuthStateHandler()
-        
         $flow
             .combineLatest($email, $password, $confirmPassword)
             .map { flow, email, password, confirmPassword in
