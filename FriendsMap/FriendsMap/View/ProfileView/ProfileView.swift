@@ -24,7 +24,7 @@ struct ProfileView: View {
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                         .clipShape(Circle())
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
                         .padding(.bottom, 10)
                     Text(authStore.user.profile.nickname)
                         .font(.title2)
