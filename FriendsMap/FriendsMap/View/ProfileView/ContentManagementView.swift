@@ -31,7 +31,7 @@ struct ContentManagementView: View {
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(content.text)
                                         .font(.headline)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.black)
                                         .frame(maxWidth: 120, alignment: .leading)
                                     
                                     Text(content.contentDateText)
