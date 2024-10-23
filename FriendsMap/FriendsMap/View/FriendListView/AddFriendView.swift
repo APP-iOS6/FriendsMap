@@ -41,6 +41,8 @@ struct AddFriendView: View {
                             }
                             
                             TextField("Insert Email", text: $friendEmail)
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
                                 .padding(EdgeInsets(top: 12, leading: 15, bottom: 12, trailing: 15))
                                 .background(Color.white)
                                 .cornerRadius(12)
