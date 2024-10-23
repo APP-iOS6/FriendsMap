@@ -35,19 +35,21 @@ struct MainView: View {
                     Map(position: $locationManager.region) {
                         ForEach(annotations) { annotation in
                             Annotation("", coordinate: annotation.coordinate) {
-                                VStack (spacing:0){
+                                VStack (alignment:.center, spacing:0){
                                     HStack(alignment: .center, spacing:2) {
                                         Image(uiImage: annotation.profileImage)
                                             .resizable()
-                                            .frame(height:14)
                                             .scaledToFit()
                                             .clipShape(.circle)
-                                            .padding(.leading, 0)
+                                            .frame(height:14)
+                                            .padding(0)
+                                        
                                         Text(annotation.nickname)
                                             .font(.system(size: 8))
+                                            .padding(.leading, 0)
                                         Spacer()
                                     }
-                                    .frame(height:18)
+                                    .frame(width:70, height:18)
                                     annotation.image
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
