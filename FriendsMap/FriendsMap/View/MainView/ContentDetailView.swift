@@ -6,31 +6,35 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ContentDetailView: View {
     @EnvironmentObject var authStore: AuthenticationStore
+    @Binding var annotations: [IdentifiableLocation]
     
-    let contentId: String
+    let identifiableLocation: IdentifiableLocation
     
     var body: some View {
         VStack {
             Spacer()
-            
-            if let content = authStore.user.contents.first(where: { $0.id == contentId }) {
-                PolaroidImageView(image: content.image, text: content.text, date: content.contentDateText, nickName: authStore.user.profile.nickname, profileImage: authStore.user.profile.image)
-            } else if let friendContent = authStore.friendContents.first(where: { $0.id == contentId }) {
-                PolaroidImageView(image: friendContent.image, text: friendContent.text, date: friendContent.contentDateText, nickName: authStore.user.profile.nickname, profileImage: authStore.user.profile.image)
-            } else {
-                Text("Content not found.")
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .padding()
+
+            VStack {
+                identifiableLocation.image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 600, height: 600)
+                    .cornerRadius(10)
+                
+                Text(identifiableLocation.date.formatted(.dateTime))
+                    .font(.title3)
+                
+                Text(identifiableLocation.email)
+                    .font(.title3)
             }
-            
-            Spacer()
         }
     }
 }
+
 
 struct PolaroidImageView: View {
     let image: Image
