@@ -14,7 +14,7 @@ func createTextField(placeholder : String, varName : Binding<String>, isSecure: 
             Text(placeholder)
                 .font(.system(size: 16))
                 .bold()
-                .foregroundStyle(.white.opacity(0.7))
+                .foregroundStyle(.black.opacity(0.6))
                 .padding()
         }
         

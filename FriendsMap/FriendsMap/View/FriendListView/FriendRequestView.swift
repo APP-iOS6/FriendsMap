@@ -15,21 +15,21 @@ struct FriendRequestsView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "#404040")
+            Color(.white)
                 .ignoresSafeArea()
 
             VStack {
                 Text("받은 친구 요청")
                     .font(.system(size: 18))
                     .bold()
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color.black)
                     .padding()
 
                 List {
                     ForEach(authStore.user.receiveList, id: \.self) { friendEmail in
                         HStack {
                             Text(friendEmail)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
 
                             Spacer()
 

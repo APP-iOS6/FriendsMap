@@ -23,7 +23,7 @@ struct SignUpView: View {
         ScrollView {
             VStack(spacing: 20) {
                 HStack { // 로고 크기 조절용
-                    Image("logo_white")
+                    Image("logoBlue")
                         .resizable()
                         .scaledToFit()
                 }
@@ -31,7 +31,7 @@ struct SignUpView: View {
                 .padding(.top, screenHeight * 0.1)
                 
                 Text("SIGN UP")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color(hex: "6C96D5"))
                     .font(.title)
                     .bold()
                     .padding(.bottom, screenHeight * 0.05)
@@ -58,7 +58,7 @@ struct SignUpView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
                                 .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
-                                .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                                .foregroundStyle(Color(hex: "6C96D5"))
                             Text("회원가입")
                                 .font(.system(size: 24))
                                 .foregroundStyle(.white)
@@ -66,13 +66,13 @@ struct SignUpView: View {
                     }
                     HStack {
                         Text("이미 계정이 있으신가요?")
-                            .foregroundStyle(.white.opacity(0.7))
+                            .foregroundStyle(Color(hex: "6C96D5").opacity(0.8))
                         
                         Button {
                             authStore.switchFlow(to: .login)
                         } label : {
                             Text("로그인")
-                                .foregroundStyle(.white.opacity(0.8))
+                                .foregroundStyle(Color(hex: "6C96D5").opacity(0.8))
                                 .underline()
                         }
                     }
@@ -83,7 +83,7 @@ struct SignUpView: View {
             .frame(width:screenWidth, height: screenHeight)
             
         }
-        .background(.loginViewBG)
+        .background(.white)
         .ignoresSafeArea(.keyboard)
         .onTapGesture {
             hideKeyboard()

@@ -26,7 +26,7 @@ struct FriendListView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(hex: "#404040")
+                Color(.white)
                     .ignoresSafeArea()
 
                 VStack {
@@ -44,7 +44,7 @@ struct FriendListView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 4)
-                        .listRowBackground(Color(hex: "#404040"))
+                        .listRowBackground(Color.white)
                     }
                     .background(Color.clear)
                     .scrollContentBackground(.hidden)
@@ -64,12 +64,12 @@ struct FriendListView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     NavigationLink(destination: FriendRequestsView()) {
                         Image(systemName: "bell")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "6C96D5"))
                             .font(.system(size: 17))
                     }
                     NavigationLink(destination: AddFriendView()) {
                         Image(systemName: "plus")
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "6C96D5"))
                             .font(.system(size: 17))
                     }
                 }

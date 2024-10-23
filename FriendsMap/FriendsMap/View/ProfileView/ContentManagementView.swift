@@ -15,7 +15,7 @@ struct ContentManagementView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.loginViewBG.ignoresSafeArea()
+                Color.white.ignoresSafeArea()
                 ScrollView {
                     Spacer(minLength: 20)
                     

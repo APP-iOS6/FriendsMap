@@ -20,7 +20,7 @@ struct ProfileSettingView: View {
     var body: some View {
         VStack(spacing: 20) {
             HStack {
-                Image("logo_white")
+                Image("logoBlue")
                     .resizable()
                     .scaledToFit()
             }
@@ -28,7 +28,7 @@ struct ProfileSettingView: View {
             .padding(.top, screenHeight * 0.14)
             
             Text("프로필 설정")
-                .foregroundStyle(.white)
+                .foregroundStyle(Color(hex: "6C96D5"))
                 .font(.title)
                 .bold()
                 .padding(.bottom, screenHeight * 0.1)
@@ -53,7 +53,7 @@ struct ProfileSettingView: View {
                             .clipShape(.circle)
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 40, weight: .bold))
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(Color(hex: "6C96D5"))
                             .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
                     }
                     
@@ -99,7 +99,7 @@ struct ProfileSettingView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: screenWidth * 0.5, height: screenHeight * 0.06)
-                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                        .foregroundStyle(Color(hex: "6C96D5"))
                     Text("시작하기")
                         .font(.system(size: 24))
                         .foregroundStyle(.white)
@@ -109,7 +109,7 @@ struct ProfileSettingView: View {
             
         }
         .frame(width:screenWidth, height: screenHeight)
-        .background(.loginViewBG)
+        .background(.white)
         .sheet(isPresented: $isPresented) {
             ImagePicker(sourceType: .photoLibrary, selectedImage: self.$profileImage)
         }

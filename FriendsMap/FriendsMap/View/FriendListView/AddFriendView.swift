@@ -16,7 +16,7 @@ struct AddFriendView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "#404040")
+            Color(.white)
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
@@ -28,7 +28,7 @@ struct AddFriendView: View {
                 VStack(alignment: .leading) {
                     Text("추가할 이메일 입력:")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black.opacity(0.8))
                         .padding(.horizontal)
                     ZStack(alignment: .leading) {
                         // 플레이스홀더 텍스트
@@ -76,7 +76,7 @@ struct AddFriendView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.gray)
+                        .background(Color(hex: "6C96D5"))
                         .cornerRadius(12)
                         .padding(.horizontal)
                         .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 5)
@@ -99,7 +99,7 @@ struct AddFriendView: View {
                 VStack(alignment: .leading) {
                     Text("보낸 친구 요청목록")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(.black.opacity(0.8))
                         .padding(.top, 30)
                         .padding(.leading, 16)
                     
