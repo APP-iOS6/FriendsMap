@@ -21,7 +21,7 @@ struct SignInView: View {
         ScrollView {
             VStack(spacing: 20) {
                 HStack { // 로고 크기 조절용
-                    Image("logo_white")
+                    Image("logoBlue")
                         .resizable()
                         .scaledToFit()
                 }
@@ -29,7 +29,7 @@ struct SignInView: View {
                 .padding(.top, screenHeight * 0.1)
                 
                 Text("SIGN IN")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color(hex: "6C96D5"))
                     .font(.title)
                     .bold()
                     .padding(.bottom, screenHeight * 0.05)
@@ -53,7 +53,7 @@ struct SignInView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
                                 .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
-                                .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                                .foregroundStyle(Color(hex: "6C96D5")) 
                             Text("로그인")
                                 .font(.system(size: 24))
                                 .foregroundStyle(.white)
@@ -62,13 +62,13 @@ struct SignInView: View {
                     
                     HStack {
                         Text("아직 회원이 아니신가요?")
-                            .foregroundStyle(.white.opacity(0.7))
+                            .foregroundStyle(Color(hex: "6C96D5").opacity(0.8))
                         
                         Button{
                             authStore.switchFlow(to: .signUp)
                         } label : {
                             Text("회원가입")
-                                .foregroundStyle(.white.opacity(0.8))
+                                .foregroundStyle(Color(hex: "6C96D5").opacity(0.8))
                                 .underline()
                         }
                     }
@@ -82,7 +82,7 @@ struct SignInView: View {
                         .foregroundStyle(.gray)
                     
                     Text("OR")
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(Color(hex: "6C96D5").opacity(0.7))
                     Rectangle()
                         .frame(width: screenWidth * 0.35, height: 1)
                         .foregroundStyle(.gray)
@@ -97,6 +97,7 @@ struct SignInView: View {
                         RoundedRectangle(cornerRadius: 5)
                             .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
                             .foregroundStyle(.white)
+                            .shadow(radius: 2, x: 1, y: 1)
                         HStack {
                             Image("googleLogo")
                                 .resizable()
@@ -117,7 +118,7 @@ struct SignInView: View {
             }
             .frame(width: screenWidth, height: screenHeight)
         }
-        .background(.loginViewBG)
+        .background(.white)
         .ignoresSafeArea(.keyboard)
         .onTapGesture {
             hideKeyboard()

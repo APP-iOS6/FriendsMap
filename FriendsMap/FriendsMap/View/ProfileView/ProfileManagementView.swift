@@ -32,7 +32,7 @@ struct ProfileManagementView: View {
                                 .clipShape(.circle)
                             Image(systemName: "pencil.circle.fill")
                                 .font(.system(size: 40, weight: .bold))
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(Color(hex: "6C96D5"))
                                 .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
                             
                         } else {
@@ -43,7 +43,7 @@ struct ProfileManagementView: View {
                                 .clipShape(.circle)
                             Image(systemName: "pencil.circle.fill")
                                 .font(.system(size: 40, weight: .bold))
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(Color(hex: "6C96D5"))
                                 .offset(x : screenWidth * 0.13, y : screenHeight * 0.055)
                         }
                         
@@ -77,7 +77,7 @@ struct ProfileManagementView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: screenWidth * 0.5, height: screenHeight * 0.06)
-                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                        .foregroundStyle(Color(hex: "6C96D5")) 
                     Text("수정하기")
                         .font(.system(size: 24))
                         .foregroundStyle(.white)
@@ -92,7 +92,7 @@ struct ProfileManagementView: View {
             .padding(.horizontal, 27)
         }
         .frame(width:screenWidth, height: screenHeight)
-        .background(.loginViewBG)
+        .background(.white)
         .sheet(isPresented: $isPresented) {
             ImagePicker(sourceType: .photoLibrary, selectedImage: self.$newProfileImage)
         }

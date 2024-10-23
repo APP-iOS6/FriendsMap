@@ -16,7 +16,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.loginViewBG.ignoresSafeArea()
+                Color.white.ignoresSafeArea()
                 VStack {
                     Spacer(minLength: 20)
                     authStore.user.profile.image
@@ -24,12 +24,13 @@ struct ProfileView: View {
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                         .clipShape(Circle())
                         .aspectRatio(contentMode: .fit)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 10)
                     Text(authStore.user.profile.nickname)
-                        .font(.title3)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
+                        .font(.title2)
+                        .foregroundStyle(Color(hex: "6C96D5"))
+//                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
                         .padding(.bottom, screenHeight * 0.07)
+                        .fontWeight(.bold)
                     
                     
                     ProfileButtonList(isDeleteAccountAlertPresented: $isDeleteAccountAlertPresented)
@@ -74,7 +75,7 @@ struct ProfileButtonList: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        VStack (spacing: 30) {
+        VStack (spacing: 40) {
             NavigationLink {
                 ProfileManagementView()
             } label: {
@@ -87,7 +88,7 @@ struct ProfileButtonList: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                        .foregroundStyle(Color(hex: "6C96D5"))
                 )
                 .padding(.horizontal, 27)
             }
@@ -105,7 +106,7 @@ struct ProfileButtonList: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                        .foregroundStyle(Color(hex: "6C96D5"))
                 )
                 .padding(.horizontal, 27)
             }
@@ -122,7 +123,7 @@ struct ProfileButtonList: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(red: 147/255, green: 147/255, blue: 147/255))
+                        .foregroundStyle(Color(hex: "6C96D5")) 
                 )
                 .padding(.horizontal, 27)
             }
