@@ -60,7 +60,7 @@ struct UploadingImageView: View {
                                 // 새로운 게시물 데이터를 기반으로 어노테이션을 업데이트
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    annotations.append(IdentifiableLocation (contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: authStore.user.email, date: content.contentDate))
+                                    annotations.append(IdentifiableLocation (contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: authStore.user.email, date: content.contentDate,text: content.text ,profileImage: authStore.user.profile.uiimage!, nickname: authStore.user.profile.nickname))
                                 }
                             }
                             // 업로드 후 지도 위치를 등록된 이미지의 위치로 이동
