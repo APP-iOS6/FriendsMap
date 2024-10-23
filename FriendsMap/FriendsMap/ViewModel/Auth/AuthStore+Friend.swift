@@ -23,6 +23,35 @@ extension AuthenticationStore {
         }
     }
     
+    // 친구 삭제하기
+        func removeFriend(to friendEmail: String) async -> String {
+            let email = self.user.email
+
+            do {
+                let db = Firestore.firestore()
+                // Firestore의 User 컬렉션에서 친구 목록 업데이트
+                let userRef = db.collection("User").document(email)
+                let friendRef = db.collection("User").document(friendEmail)
+                
+                try await userRef.updateData([
+                    "friends": FieldValue.arrayRemove([friendEmail])
+                ])
+                // 친구의 friends에도 내 이메일 제거
+                try await friendRef.updateData([
+                    "friends": FieldValue.arrayRemove([email]) // 친구의 requestList에서 나의 이메일 제거
+                ])
+                
+                // 로컬에서도 친구 목록에서 제거
+                if let index = self.user.friends.firstIndex(of: friendEmail) {
+                    self.user.friends.remove(at: index)
+                }
+                return "\(email) 친구를 성공적으로 삭제했습니다."
+            } catch {
+                print("Error removing friend from Firestore: \(error)")
+                return "친구 삭제 중 오류가 발생했습니다."
+            }
+        }
+    
     // 친구 요청 보내기
     func sendFriendRequest(to friendEmail: String) async -> String {
         let email = self.user.email
