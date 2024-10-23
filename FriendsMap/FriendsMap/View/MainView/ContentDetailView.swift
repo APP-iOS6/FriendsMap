@@ -17,20 +17,11 @@ struct ContentDetailView: View {
     var body: some View {
         VStack {
             Spacer()
+
+            PolaroidImageView(image: identifiableLocation.image, text: identifiableLocation.text, date: identifiableLocation.date, nickname: identifiableLocation.nickname, profileImage: identifiableLocation.image)
             
-            VStack {
-                identifiableLocation.image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit) 
-                    .frame(width: 600, height: 600)
-                    .cornerRadius(10)
-                
-                Text(identifiableLocation.date.formatted(.dateTime))
-                    .font(.title3)
-                
-                Text(identifiableLocation.email)
-                    .font(.title3)
-            }
+            Spacer()
+
         }
     }
 }
@@ -40,8 +31,8 @@ struct ContentDetailView: View {
 struct PolaroidImageView: View {
     let image: Image
     let text: String
-    let date: String
-    let nickName: String
+    let date: Date
+    let nickname: String
     let profileImage: Image
     
     @State private var isLiked: Bool = false
@@ -57,7 +48,7 @@ struct PolaroidImageView: View {
                         .foregroundColor(.black)
                         .clipShape(Circle())
                     
-                    Text(nickName)
+                    Text(nickname)
                         .font(.title)
                         .fontWeight(.bold)
                         .padding(8)

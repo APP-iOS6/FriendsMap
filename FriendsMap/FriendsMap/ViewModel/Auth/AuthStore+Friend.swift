@@ -147,4 +147,19 @@ extension AuthenticationStore {
             print("Error rejecting friend request: \(error)")
         }
     }
+
+    // 친구의 이메일 닉네임, 프로필 이미지 불러오기
+    func fetchFriendProfile(for email: String) async throws -> (nickname: String, profileImageUrl: UIImage) {
+        let profileDoc = try await db.collection("User").document(email).collection("Profile").document("profileDoc").getDocument()
+
+        if let data = profileDoc.data(),
+           let nickname = data["nickname"] as? String,
+           let imagePath = data["image"] as? String {
+            let imageUrlString = try await makeUrltoImage(email: email, imagePath: imagePath )
+            let uiImage = await loadImageFromUrl(imageUrl: imageUrlString)
+            return (nickname, uiImage)
+        } else {
+            return ("nil", UIImage())
+        }
+    }
 }

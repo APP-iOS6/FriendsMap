@@ -53,6 +53,25 @@ struct MainView: View {
                         locationManager.fetchAddress(for: cameraContext.camera.centerCoordinate)
                     }
                     .task {
+                        do {
+                            try await authStore.fetchContents(from: authStore.user.email)
+                            await authStore.fetchProfile(authStore.user.email)
+                            await authStore.loadFriendData()
+                            
+                            annotations = authStore.user.contents.map { post in
+                                IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate, text: post.text, profileImage: authStore.user.profile.uiimage!, nickname: authStore.user.profile.nickname)
+                            }
+                            for friend in authStore.user.friends {
+                                try await authStore.fetchFriendContents(from: friend)
+                                for content in authStore.friendContents {
+                                    let (nickname, profileImage) = try await authStore.fetchFriendProfile(for: friend)
+                                    
+                                        annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate,text: content.text, profileImage: profileImage, nickname: nickname))
+                                }
+                            }
+                        } catch {
+                            print("error: \(error.localizedDescription)")
+                        }
                         await fetchData()
                     }
                     .edgesIgnoringSafeArea(.all)
