@@ -46,6 +46,11 @@ struct MainView: View {
                             }
                         }
                     }
+                    .onMapCameraChange(frequency: .onEnd) { cameraContext in
+                        print("변경중")
+                        // locationManager.location = cameraContext.camera.centerCoordinate
+                        locationManager.fetchAddress(for: cameraContext.camera.centerCoordinate)
+                    }
                     .task {
                         do {
                             try await authStore.fetchContents(from: authStore.user.email)
@@ -68,29 +73,44 @@ struct MainView: View {
                     .edgesIgnoringSafeArea(.all)
                     
                     VStack {
-                        HStack {
-                            Image("logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.2)
-                                .padding(.leading, geometry.size.width * 0.05)
-                            
-                            Spacer()
-                            
-                            NavigationLink {
-                                ProfileView()
-                            } label: {
-                                VStack {
-                                    authStore.user.profile.image
+                        ZStack {
+                            Rectangle()
+                                .fill(LinearGradient(gradient: Gradient(colors: [Color.clear, Color.white]),
+                                                     startPoint: .bottom,
+                                                     endPoint: .top))
+                            // .blur(radius: 20)
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image("logo")
                                         .resizable()
-                                        .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                        .background(Color.white)
-                                        .foregroundColor(.black)
-                                        .clipShape(Circle())
+                                        .scaledToFit()
+                                        .frame(width: geometry.size.width * 0.2)
+                                        .padding(.leading, geometry.size.width * 0.05)
+                                    
+                                    Spacer()
+                                    
+                                    NavigationLink {
+                                        ProfileView()
+                                    } label: {
+                                        VStack {
+                                            authStore.user.profile.image
+                                                .resizable()
+                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                                .background(Color.white)
+                                                .foregroundColor(.black)
+                                                .clipShape(Circle())
+                                        }
+                                        .padding(.trailing, geometry.size.width * 0.05)
+                                    }
                                 }
-                                .padding(.trailing, geometry.size.width * 0.05)
+                                Label("\(locationManager.currentAddress ?? "")", systemImage: "location")
+                                    .font(.headline)
+                                    .padding(.leading, geometry.size.width * 0.05)
+                                    .padding(.top, 3)
                             }
                         }
+                        .frame(maxHeight: screenHeight * 0.25)
+                        .ignoresSafeArea()
                         
                         Spacer()
                         
@@ -144,7 +164,11 @@ struct MainView: View {
                     ContentDetailView(annotations: $annotations, identifiableLocation: selectedImage)
                         .environmentObject(authStore)
                 }
+
+                
             }
+            
+
         }
     }
 }

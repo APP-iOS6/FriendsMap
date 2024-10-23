@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var authStore: AuthenticationStore
     @State private var isDeleteAccountAlertPresented: Bool = false
+    @Environment(\.presentationMode) var presentationMode
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -28,7 +29,7 @@ struct ProfileView: View {
                     Text(authStore.user.profile.nickname)
                         .font(.title2)
                         .foregroundStyle(Color(hex: "6C96D5"))
-//                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
+                    //                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
                         .padding(.bottom, screenHeight * 0.07)
                         .fontWeight(.bold)
                     
@@ -64,7 +65,10 @@ struct ProfileView: View {
     func deleteAccount() {
         Task {
             let isDeleted = await authStore.deleteAccount(authStore.user.email)
-            print(isDeleted)
+            if isDeleted {
+                print("계정이 삭제되었습니다.")
+                presentationMode.wrappedValue.dismiss()
+            }
         }
     }
 }
@@ -123,13 +127,13 @@ struct ProfileButtonList: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: "6C96D5")) 
+                        .foregroundStyle(Color(hex: "6C96D5"))
                 )
                 .padding(.horizontal, 27)
             }
             .padding(.bottom, 40)
             
-
+            
             Button {
                 authStore.signOut()
                 presentationMode.wrappedValue.dismiss()
