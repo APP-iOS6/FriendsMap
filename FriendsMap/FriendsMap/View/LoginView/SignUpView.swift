@@ -16,6 +16,7 @@ struct SignUpView: View {
     @State var emailWarningText: String = ""
     @State var passwordWarningText: String = ""
     @State var checkPasswordWarningText: String = ""
+    @State private var isKeyboardVisible: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -83,10 +84,29 @@ struct SignUpView: View {
             .frame(width:screenWidth, height: screenHeight)
             
         }
+        .scrollDisabled(!isKeyboardVisible)
         .background(.white)
         .ignoresSafeArea(.keyboard)
         .onTapGesture {
             hideKeyboard()
+        }
+        .onAppear {
+            // 키보드 이벤트 감지
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = true
+                }
+            }
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = false
+                }
+            }
+        }
+        .onDisappear {
+            // 뷰가 사라질 때 옵저버 제거
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         }
     }
 }

@@ -14,6 +14,7 @@ struct SignInView: View {
     @State var emailWarningText: String = ""
     @State var passwordWarningText: String = ""
     @State var isGoogleLogin: Bool = false
+    @State private var isKeyboardVisible: Bool = false
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -38,7 +39,6 @@ struct SignInView: View {
                 
                 createTextFieldView(placeholder: "비밀번호", varName: $password, isSecure: true, width: screenWidth * 0.85, height: screenHeight * 0.08, warningText: $passwordWarningText)
                 
-                
                 VStack(spacing: 11) {
                     Button {
                         if checkValidInputs() {
@@ -53,7 +53,7 @@ struct SignInView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
                                 .frame(width: screenWidth * 0.85, height: screenHeight * 0.06)
-                                .foregroundStyle(Color(hex: "6C96D5")) 
+                                .foregroundStyle(Color(hex: "6C96D5"))
                             Text("로그인")
                                 .font(.system(size: 24))
                                 .foregroundStyle(.white)
@@ -118,10 +118,29 @@ struct SignInView: View {
             }
             .frame(width: screenWidth, height: screenHeight)
         }
+        .scrollDisabled(!isKeyboardVisible)
         .background(.white)
         .ignoresSafeArea(.keyboard)
         .onTapGesture {
             hideKeyboard()
+        }
+        .onAppear {
+            // 키보드 이벤트 감지
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = true
+                }
+            }
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = false
+                }
+            }
+        }
+        .onDisappear {
+            // 뷰가 사라질 때 옵저버 제거
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         }
     }
 }
