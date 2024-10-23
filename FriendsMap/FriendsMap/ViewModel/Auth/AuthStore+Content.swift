@@ -189,7 +189,7 @@ extension AuthenticationStore {
             let (data, _ ) = try await URLSession.shared.data(from: imageUrl)
             return UIImage(data: data)!
         } catch {
-            print("\(error.localizedDescription)")
+            print("loadImaage Error: \(error.localizedDescription)")
             return UIImage(systemName: "xmark.circle.fill")!
         }
     }

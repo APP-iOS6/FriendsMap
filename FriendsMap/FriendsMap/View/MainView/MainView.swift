@@ -15,7 +15,7 @@ struct MainView: View {
     @State private var selectedLatitude: Double? = nil
     @State private var selectedLongitude: Double? = nil
     @State private var annotations: [IdentifiableLocation] = []
-    @State private var selectedImageUrl: String? = nil // 선택된 이미지를 추적
+    @State private var selectedImage: IdentifiableLocation? = nil
     
     @StateObject private var locationManager = LocationManager()
     @EnvironmentObject var authStore: AuthenticationStore
@@ -40,17 +40,10 @@ struct MainView: View {
                                     .aspectRatio(contentMode: .fit)
                                     .clipShape(Circle())
                                     .onTapGesture {
-                                        selectedImageUrl = annotation.contentId
-                                        tripRoute = filterMaps(annotation.email)
-                                        selectEmail = annotation.email
+                                        self.selectedImage = annotation
                                         isShowingDetailSheet = true
                                     }
                             }
-                        }
-                        
-                        if !selectEmail.isEmpty {
-                            MapPolyline(coordinates: tripRoute)
-                                .stroke(.blue, lineWidth: 5)
                         }
                     }
                     .task {
@@ -58,7 +51,7 @@ struct MainView: View {
                             try await authStore.fetchContents(from: authStore.user.email)
                             await authStore.fetchProfile(authStore.user.email)
                             await authStore.loadFriendData()
-            
+                            
                             annotations = authStore.user.contents.map { post in
                                 IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate)
                             }
@@ -119,7 +112,7 @@ struct MainView: View {
                             .padding(.top, geometry.size.width * 0.02)
                             
                             Button(action: {
-                                selectedImageUrl = nil // 이미지 선택 초기화
+                                selectedImage = nil // 이미지 선택 초기화
                                 isShowingUploadSheet = true // 업로드 이미지 시트 표시
                             }) {
                                 Image(systemName: "plus")
@@ -138,7 +131,7 @@ struct MainView: View {
                     .navigationBarHidden(true)
                 }
             }
-
+            
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
                 UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $locationManager.region)
@@ -146,14 +139,12 @@ struct MainView: View {
             }
             // 이미지 디테일 시트
             .sheet(isPresented: $isShowingDetailSheet) {
-                if let selectedImageUrl = selectedImageUrl {
-                    // selectedImageUrl을 콘텐츠 ID로 사용
-                    ContentDetailView(contentId: selectedImageUrl)
+                // selectedImageUrl을 콘텐츠 ID로 사용
+                if let selectedImage {
+                    ContentDetailView(annotations: $annotations, identifiableLocation: selectedImage)
                         .environmentObject(authStore)
                 }
-
             }
-
         }
     }
 }
