@@ -53,12 +53,17 @@ struct MainView: View {
                                 .stroke(.blue, lineWidth: 5)
                         }
                     }
+                    .onMapCameraChange(frequency: .onEnd) { cameraContext in
+                        print("변경중")
+                        // locationManager.location = cameraContext.camera.centerCoordinate
+                        locationManager.fetchAddress(for: cameraContext.camera.centerCoordinate)
+                    }
                     .task {
                         do {
                             try await authStore.fetchContents(from: authStore.user.email)
                             await authStore.fetchProfile(authStore.user.email)
                             await authStore.loadFriendData()
-            
+                            
                             annotations = authStore.user.contents.map { post in
                                 IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate)
                             }
@@ -75,29 +80,44 @@ struct MainView: View {
                     .edgesIgnoringSafeArea(.all)
                     
                     VStack {
-                        HStack {
-                            Image("logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.2)
-                                .padding(.leading, geometry.size.width * 0.05)
-                            
-                            Spacer()
-                            
-                            NavigationLink {
-                                ProfileView()
-                            } label: {
-                                VStack {
-                                    authStore.user.profile.image
+                        ZStack {
+                            Rectangle()
+                                .fill(LinearGradient(gradient: Gradient(colors: [Color.clear, Color.white]),
+                                                     startPoint: .bottom,
+                                                     endPoint: .top))
+                            // .blur(radius: 20)
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image("logo")
                                         .resizable()
-                                        .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
-                                        .background(Color.white)
-                                        .foregroundColor(.black)
-                                        .clipShape(Circle())
+                                        .scaledToFit()
+                                        .frame(width: geometry.size.width * 0.2)
+                                        .padding(.leading, geometry.size.width * 0.05)
+                                    
+                                    Spacer()
+                                    
+                                    NavigationLink {
+                                        ProfileView()
+                                    } label: {
+                                        VStack {
+                                            authStore.user.profile.image
+                                                .resizable()
+                                                .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
+                                                .background(Color.white)
+                                                .foregroundColor(.black)
+                                                .clipShape(Circle())
+                                        }
+                                        .padding(.trailing, geometry.size.width * 0.05)
+                                    }
                                 }
-                                .padding(.trailing, geometry.size.width * 0.05)
+                                Label("\(locationManager.currentAddress ?? "")", systemImage: "location")
+                                    .font(.headline)
+                                    .padding(.leading, geometry.size.width * 0.05)
+                                    .padding(.top, 3)
                             }
                         }
+                        .frame(maxHeight: screenHeight * 0.25)
+                        .ignoresSafeArea()
                         
                         Spacer()
                         
@@ -138,7 +158,7 @@ struct MainView: View {
                     .navigationBarHidden(true)
                 }
             }
-
+            
             // 업로드 이미지 시트
             .sheet(isPresented: $isShowingUploadSheet) {
                 UploadingImageView(selectedLatitude: $selectedLatitude, selectedLongitude: $selectedLongitude, annotations: $annotations, position: $locationManager.region)
@@ -151,9 +171,9 @@ struct MainView: View {
                     ContentDetailView(contentId: selectedImageUrl)
                         .environmentObject(authStore)
                 }
-
+                
             }
-
+            
         }
     }
 }
