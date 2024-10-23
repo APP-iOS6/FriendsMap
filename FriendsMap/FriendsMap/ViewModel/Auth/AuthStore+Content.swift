@@ -112,7 +112,7 @@ extension AuthenticationStore {
         if let imageData = image,
            let originalImage = UIImage(data: imageData),
            let resizedImage = originalImage.resize(to: targetSize),
-           let resizedImageData = resizedImage.jpegData(compressionQuality: 0.8) { // 압축 퀄리티 조정
+           let resizedImageData = resizedImage.jpegData(compressionQuality: 0.5) { // 압축 퀄리티 조정
             
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
