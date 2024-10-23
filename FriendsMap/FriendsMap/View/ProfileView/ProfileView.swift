@@ -24,7 +24,7 @@ struct ProfileView: View {
                         .resizable()
                         .frame(width: screenWidth * 0.4, height: screenWidth * 0.4)
                         .clipShape(Circle())
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
                         .padding(.bottom, 10)
                     Text(authStore.user.profile.nickname)
                         .font(.title2)
@@ -114,6 +114,24 @@ struct ProfileButtonList: View {
                 )
                 .padding(.horizontal, 27)
             }
+            
+            NavigationLink {
+                friendsContents()
+            } label: {
+                HStack {
+                    Image(systemName: "person.3.sequence.fill")
+                    Text("친구의 게시물")
+                }
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(hex: "6C96D5"))
+                )
+                .padding(.horizontal, 27)
+            }
             NavigationLink {
                 FriendListView()
             } label: {
@@ -146,6 +164,36 @@ struct ProfileButtonList: View {
                 isDeleteAccountAlertPresented.toggle()
             }
         }
+    }
+    func friendsContents()-> some View {
+        ScrollView {
+            Spacer(minLength: 20)
+            VStack(spacing: 60) {
+                ForEach(authStore.friendContents, id: \.id) { content in
+                    HStack (spacing: 30){
+                        content.image
+                            .resizable()
+                            .frame(width: 130, height: 170)
+                            .scaledToFit()
+                            .cornerRadius(8)
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(content.text)
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .frame(maxWidth: 120, alignment: .leading)
+                            
+                            Text(content.contentDateText)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: 120, alignment: .leading)
+                        }
+                        .padding(.vertical, 10)
+                    }
+                }
+            }
+        }
+        .scrollIndicators(.hidden)
     }
 }
 
