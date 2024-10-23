@@ -66,8 +66,8 @@ Friends map - 프맵
 
 ### 3) 친구 관리 - [친구 추가 / 삭제, 친구 요청, 친구 목록]
 <div style="display: flex; justify-content: center; gap: 20px;">
-  <img src="https://github.com/user-attachments/assets/9f34247b-b179-4f8a-b73a-613fcaa13fef" width="220" height="500"/>
-  <img src="https://github.com/user-attachments/assets/05921581-28bf-42d4-90b1-df4aa9e69d88" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/3ce8542a-b8a9-4b5f-8227-561f0e3298bd" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/d315f5d8-610b-4ab7-85a9-ae418972b10d" width="220" height="500"/>
 </div>
 
 ### 4) 로그아웃, 회원탈퇴
