@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/15a9492c-f13b-466b-9ac0-4a0b4a0ce7a4" width="200" height="100"/>
+  <img src="https://github.com/user-attachments/assets/fe05977d-085f-4234-97de-0fb6775807b4" width="350" height="200"/>
 </div>
 
 <br />
@@ -53,16 +53,17 @@ Friends map - 프맵
 
 ## 2️⃣ 메인화면
 ### 1) 사진들이 지도에 표시됨 - [내가 올린 사진 + 친구들이 올린 사진]
-  <img src="https://github.com/user-attachments/assets/79fe8801-942f-4a6a-acce-1ea21731d78e" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/8fca5aee-3746-47d2-9c8d-d131fe3c9392" width="220" height="500"/>
 
 ### 2) 친구 사진 정보 자세히 보기 - [사진, 한 줄 소개, 위치]
+<img src="https://github.com/user-attachments/assets/73e1c381-56e6-4300-9729-50a61e8deb69" width="220" height="500"/>
 
 ## 3️⃣ 설정화면
 ### 1) 프로필 수정 - [프로필 이미지, 닉네임 변경]
   <img src="https://github.com/user-attachments/assets/0680bb79-169f-4ae3-9d0c-19210e1c2e01" width="220" height="500"/>
 
 ### 2) 게시물 관리 - [게시물 확인, 게시물 삭제]
-<img src="https://github.com/user-attachments/assets/62e1f38d-2aca-48ac-82ea-e20af3a1a7d9" width="220" height="500"/>
+<img src="https://github.com/user-attachments/assets/8f259f60-f156-4a6f-a39c-b8196c9713c3" width="220" height="500"/>
 
 ### 3) 친구 관리 - [친구 추가 / 삭제, 친구 요청, 친구 목록]
 <div style="display: flex; justify-content: center; gap: 20px;">
