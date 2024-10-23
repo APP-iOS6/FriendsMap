@@ -35,16 +35,32 @@ struct MainView: View {
                     Map(position: $locationManager.region) {
                         ForEach(annotations) { annotation in
                             Annotation("", coordinate: annotation.coordinate) {
-                                
-                                annotation.image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 70, height: 100)
-                                    .clipped()
-                                    .onTapGesture {
-                                        self.selectedImage = annotation
-                                        isShowingDetailSheet = true
+                                VStack (spacing:0){
+                                    HStack(alignment: .center, spacing:2) {
+                                        Image(uiImage: annotation.profileImage)
+                                            .resizable()
+                                            .frame(height:14)
+                                            .scaledToFit()
+                                            .clipShape(.circle)
+                                            .padding(.leading, 0)
+                                        Text(annotation.nickname)
+                                            .font(.system(size: 8))
+                                        Spacer()
                                     }
+                                    .frame(height:18)
+                                    annotation.image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 70, height: 100)
+                                        .clipped()
+                                        .onTapGesture {
+                                            self.selectedImage = annotation
+                                            isShowingDetailSheet = true
+                                        }
+                                }
+                                .frame(width : 75)
+                                .padding(2)
+                                .background(.white)
                             }
                             
                         }
