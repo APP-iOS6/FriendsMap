@@ -17,11 +17,11 @@ struct ContentDetailView: View {
     var body: some View {
         VStack {
             Spacer()
-
+            
             VStack {
                 identifiableLocation.image
                     .resizable()
-                    .scaledToFit()
+                    .aspectRatio(contentMode: .fit) 
                     .frame(width: 600, height: 600)
                     .cornerRadius(10)
                 
@@ -34,6 +34,7 @@ struct ContentDetailView: View {
         }
     }
 }
+
 
 
 struct PolaroidImageView: View {
@@ -69,10 +70,11 @@ struct PolaroidImageView: View {
                         .padding([.leading, .trailing], 12)
                     
                 }.padding(.horizontal)
+                
                 VStack {
                     image
                         .resizable()
-                        .scaledToFit()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: min(geometry.size.width * 0.7, 380), height: 400)
                         .cornerRadius(5)
                         .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
@@ -109,8 +111,6 @@ struct PolaroidImageView: View {
                 .background(Color.white)
                 .cornerRadius(10)
                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-                
-                
             }
             .frame(width: geometry.size.width, height: geometry.size.height) // GeometryReader의 크기를 맞춤
         }
