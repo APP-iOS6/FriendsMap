@@ -13,7 +13,7 @@ struct ContentManagementView: View {
     @State private var selectedContent: Content?
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.white.ignoresSafeArea()
                 ScrollView {
@@ -62,6 +62,7 @@ struct ContentManagementView: View {
                         }
                     }
                 }
+                .scrollIndicators(.hidden)
                 .frame(maxWidth: .infinity)
                 .onAppear {
                     Task {
@@ -86,9 +87,9 @@ struct ContentManagementView: View {
                     )
                 }
             }
+            .navigationTitle("게시물 관리")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle("게시물 관리")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -23,6 +23,7 @@ struct MainView: View {
     @State var selectEmail: String = "" // 선택한 유저 이메일
     @State var tripRoute: [CLLocationCoordinate2D] = [] // 루트 순서 저장용
     
+    @State var iscompleted: Bool = false
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -54,6 +55,7 @@ struct MainView: View {
                     }
                     .task {
                         do {
+                            iscompleted = false
                             try await authStore.fetchContents(from: authStore.user.email)
                             await authStore.fetchProfile(authStore.user.email)
                             await authStore.loadFriendData()
@@ -69,6 +71,7 @@ struct MainView: View {
                                     annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate,text: content.text, profileImage: profileImage, nickname: nickname))
                                 }
                             }
+                            iscompleted = true
                         } catch {
                             print("error: \(error.localizedDescription)")
                         }
@@ -105,6 +108,7 @@ struct MainView: View {
                                         }
                                         .padding(.trailing, geometry.size.width * 0.05)
                                     }
+                                    .disabled(!iscompleted)
                                 }
                                 Label("\(locationManager.currentAddress ?? "")", systemImage: "location")
                                     .font(.headline)

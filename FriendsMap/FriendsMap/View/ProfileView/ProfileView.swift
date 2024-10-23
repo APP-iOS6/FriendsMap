@@ -30,7 +30,7 @@ struct ProfileView: View {
                         .font(.title2)
                         .foregroundStyle(Color(hex: "6C96D5"))
                     //                        .shadow(color: .black, radius: 2, x: 1, y: 1) // 그림자 효과 추가
-                        .padding(.bottom, screenHeight * 0.07)
+                        .padding(.bottom, screenHeight * 0.015)
                         .fontWeight(.bold)
                     
                     
