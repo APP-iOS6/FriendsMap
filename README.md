@@ -71,7 +71,7 @@ Friends map - 프맵
 </div>
 
 ### 4) 로그아웃, 회원탈퇴
-  <img src="https://github.com/user-attachments/assets/444315c8-aeb8-484e-bce2-f1627fd21ded" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/65f997fe-3de3-452a-8da1-d72ac79703d1" width="220" height="500"/>
 
 ---
 
