@@ -80,14 +80,14 @@ struct ProfileManagementView: View {
                         .foregroundStyle(Color(hex: "6C96D5")) 
                     Text("수정하기")
                         .font(.system(size: 24))
-                        .foregroundStyle(Color(hex: "6C96D5"))
+                        .foregroundStyle(Color.white)
                 }
                 .padding(.bottom, 20)
             }
             
             Text(changeCheck)
                 .font(.system(size: 18))
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
             
             .padding(.horizontal, 27)
         }

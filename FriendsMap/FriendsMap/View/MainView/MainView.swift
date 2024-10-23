@@ -45,7 +45,7 @@ struct MainView: View {
                                         isShowingDetailSheet = true
                                     }
                             }
-
+                            
                         }
                     }
                     .onMapCameraChange(frequency: .onEnd) { cameraContext in
@@ -66,7 +66,7 @@ struct MainView: View {
                                 for content in authStore.friendContents {
                                     let (nickname, profileImage) = try await authStore.fetchFriendProfile(for: friend)
                                     
-                                        annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate,text: content.text, profileImage: profileImage, nickname: nickname))
+                                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate,text: content.text, profileImage: profileImage, nickname: nickname))
                                 }
                             }
                         } catch {
@@ -195,12 +195,14 @@ struct MainView: View {
             await authStore.loadFriendData()
             
             annotations = authStore.user.contents.map { post in
-                IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate)
+                IdentifiableLocation(contentId: post.id, coordinate: CLLocationCoordinate2D(latitude: post.latitude, longitude: post.longitude), image: post.image, email: authStore.user.email, date: post.contentDate, text: post.text, profileImage: authStore.user.profile.uiimage!, nickname: authStore.user.profile.nickname)
             }
             for friend in authStore.user.friends {
                 try await authStore.fetchFriendContents(from: friend)
                 for content in authStore.friendContents {
-                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate))
+                    let (nickname, profileImage) = try await authStore.fetchFriendProfile(for: friend)
+                    
+                    annotations.append(IdentifiableLocation(contentId: content.id, coordinate: CLLocationCoordinate2D(latitude: content.latitude, longitude: content.longitude), image: content.image, email: friend, date: content.contentDate,text: content.text, profileImage: profileImage, nickname: nickname))
                 }
             }
         } catch {

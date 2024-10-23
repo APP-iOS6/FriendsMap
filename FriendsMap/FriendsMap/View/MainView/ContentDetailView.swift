@@ -18,7 +18,7 @@ struct ContentDetailView: View {
         VStack {
             Spacer()
 
-            PolaroidImageView(image: identifiableLocation.image, text: identifiableLocation.text, date: identifiableLocation.date, nickname: identifiableLocation.nickname, profileImage: identifiableLocation.image)
+            PolaroidImageView(image: identifiableLocation.image, text: identifiableLocation.text, date: identifiableLocation.contentDate, nickname: identifiableLocation.nickname, profileImage: identifiableLocation.profileImage)
             
             Spacer()
 
@@ -31,9 +31,9 @@ struct ContentDetailView: View {
 struct PolaroidImageView: View {
     let image: Image
     let text: String
-    let date: Date
+    let date: String
     let nickname: String
-    let profileImage: Image
+    let profileImage: UIImage
     
     @State private var isLiked: Bool = false
     
@@ -71,20 +71,13 @@ struct PolaroidImageView: View {
                         .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     
                     HStack {
-                        VStack(alignment: .leading, spacing: 8) {
                             Text(text)
                                 .font(.body)
                                 .padding(.leading, 12)
                                 .padding(.trailing, 12)
+                                .padding(.top, 8)
                                 .background(Color.white)
                                 .cornerRadius(10)
-                            
-                            Text("사진 찍은 주소 ........")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .padding([.leading, .trailing], 12)
-                        }
-                        .padding(.top, 8)
                         
                         Spacer()
                         
