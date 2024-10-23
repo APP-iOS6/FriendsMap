@@ -43,8 +43,8 @@ Friends map - 프맵
 ## 1️⃣ 시작화면
 ### 1) 로그인 / 회원가입 - [이메일, 비밀번호 or 구글]
 <div style="display: flex; justify-content: center; gap: 300px;">
-  <img src="https://github.com/user-attachments/assets/a9e5fa4d-598e-48d1-bd0d-6f0a57624109" width="220" height="500"/>
-  <img src="https://github.com/user-attachments/assets/1edb4ab8-8037-4d5f-a315-398378970940" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/170ecb8f-a80a-4b0e-8e75-a56344a6861f" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/0bec4036-3fe1-4eb0-83cc-e1ddf617ebcb" width="220" height="500"/>
   <img src="https://github.com/user-attachments/assets/a95a177f-e8c9-4928-8f14-85d01a97f028" width="220" height="500"/>
 </div>
 
@@ -59,7 +59,7 @@ Friends map - 프맵
 
 ## 3️⃣ 설정화면
 ### 1) 프로필 수정 - [프로필 이미지, 닉네임 변경]
-  <img src="https://github.com/user-attachments/assets/30dade2e-3a11-47c9-988d-94fef2dba485" width="220" height="500"/>
+  <img src="https://github.com/user-attachments/assets/65f997fe-3de3-452a-8da1-d72ac79703d1" width="220" height="500"/>
 
 ### 2) 게시물 관리 - [게시물 확인, 게시물 삭제]
 <img src="https://github.com/user-attachments/assets/62e1f38d-2aca-48ac-82ea-e20af3a1a7d9" width="220" height="500"/>
