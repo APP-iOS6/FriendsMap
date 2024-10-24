@@ -84,7 +84,7 @@ struct AddFriendView: View {
                             .background(Color(hex: "6C96D5")) // Button color change
                             .cornerRadius(12)
                             .padding(.horizontal)
-                            
+
                     }
                     
                     if let successMessage = successMessage {
@@ -119,6 +119,7 @@ struct AddFriendView: View {
                         .scrollContentBackground(.hidden)
                         .cornerRadius(10)
                         .padding(.horizontal)
+                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
                     }
                     
                     Spacer()
