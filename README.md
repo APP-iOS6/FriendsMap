@@ -83,4 +83,4 @@ Friends map - 프맵
 
 
 # 📜 라이선스
-  Licensed under the <a href="LICENSE" style="color: #007bff;">MIT</a> license.
+  Licensed under the <a href="LICENSE" style="color: #007bff;">aLicensed under the [Apache License, version 2.0](LICENSE) license.</a> license.
