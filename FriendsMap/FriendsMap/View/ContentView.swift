@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         switch authStore.authenticationState {
         case .unauthenticated:
-            // 등록되지 않은 사용자
+            
             if authStore.flow == .signUp {
                 SignUpView()
             } else if authStore.flow == .login{

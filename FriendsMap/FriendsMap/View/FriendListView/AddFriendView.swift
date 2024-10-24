@@ -48,7 +48,7 @@ struct AddFriendView: View {
                                 .cornerRadius(12)
                                 .foregroundColor(.black)  // Text color when typing
                                 .focused($isTextFieldFocused)
-                                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
+                                
                         }
                         .padding(.horizontal)
                     }
@@ -84,7 +84,7 @@ struct AddFriendView: View {
                             .background(Color(hex: "6C96D5")) // Button color change
                             .cornerRadius(12)
                             .padding(.horizontal)
-                            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 5)
+                            
                     }
                     
                     if let successMessage = successMessage {

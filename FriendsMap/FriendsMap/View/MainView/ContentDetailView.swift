@@ -41,7 +41,7 @@ struct PolaroidImageView: View {
         GeometryReader { geometry in
             VStack {
                 HStack {
-                    image
+                    Image(uiImage: profileImage)
                         .resizable()
                         .frame(width: geometry.size.width * 0.08, height: geometry.size.width * 0.08)
                         .background(Color.white)

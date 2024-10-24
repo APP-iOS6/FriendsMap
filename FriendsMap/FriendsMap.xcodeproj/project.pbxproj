@@ -20,7 +20,6 @@
 		B83BBE932CC554DA00C7750A /* ContentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83BBE922CC554DA00C7750A /* ContentDetailView.swift */; };
 		B83BBE952CC5981C00C7750A /* IdentifiableLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83BBE942CC5981C00C7750A /* IdentifiableLocation.swift */; };
 		CE8C79532CBD0ABA00992D4C /* UploadingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C79522CBD0ABA00992D4C /* UploadingImageView.swift */; };
-		CE95DF382CBE8820006F2732 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */; };
 		CE95DF3B2CBE8C8D006F2732 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CE95DF3A2CBE8C8D006F2732 /* FirebaseFirestore */; };
 		CE95DF3D2CBE8C92006F2732 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CE95DF3C2CBE8C92006F2732 /* FirebaseStorage */; };
 		CEBDD8F52CC036100046A13C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBDD8F42CC036100046A13C /* MainView.swift */; };
@@ -67,14 +66,13 @@
 		B83BBE922CC554DA00C7750A /* ContentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDetailView.swift; sourceTree = "<group>"; };
 		B83BBE942CC5981C00C7750A /* IdentifiableLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableLocation.swift; sourceTree = "<group>"; };
 		CE8C79522CBD0ABA00992D4C /* UploadingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadingImageView.swift; sourceTree = "<group>"; };
-		CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CEBDD8F42CC036100046A13C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		CEFED8792CBCF09D003938E2 /* FriendsMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendsMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEFED88F2CBCF0E5003938E2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CEFED8902CBCF0E5003938E2 /* FriendsMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsMapApp.swift; sourceTree = "<group>"; };
 		CEFED8CE2CBCF2E3003938E2 /* FriendsMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FriendsMap.entitlements; sourceTree = "<group>"; };
-		CEFED8CF2CBCF43D003938E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CEFED8CF2CBCF43D003938E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CEFED8D22CBCF6EB003938E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEFED8D42CBD0144003938E2 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		CEFED8D62CBD015C003938E2 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
@@ -202,10 +200,8 @@
 				CEFED88B2CBCF0E5003938E2 /* Model */,
 				CE8C79512CBD0A2700992D4C /* View */,
 				CE8C79542CBD0DFF00992D4C /* ViewModel */,
-				CE95DF372CBE8820006F2732 /* GoogleService-Info.plist */,
 				FB9D00812CBDF4AD002874C1 /* Modifier */,
 				FB9D00892CBDFE8D002874C1 /* ImagePicker.swift */,
-				CEFED8CF2CBCF43D003938E2 /* Info.plist */,
 				CEFED8CE2CBCF2E3003938E2 /* FriendsMap.entitlements */,
 				CEFED88E2CBCF0E5003938E2 /* Assets.xcassets */,
 			);
@@ -243,6 +239,7 @@
 		FB9D00812CBDF4AD002874C1 /* Modifier */ = {
 			isa = PBXGroup;
 			children = (
+				CEFED8CF2CBCF43D003938E2 /* Info.plist */,
 				FB9D00822CBDF4B7002874C1 /* LoginView */,
 				2C58EF9A2CC0CE2700C4CFA7 /* UIImage+.swift */,
 			);
@@ -345,7 +342,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEFED8932CBCF0E5003938E2 /* Assets.xcassets in Resources */,
-				CE95DF382CBE8820006F2732 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,25 +17,26 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var currentAddress: String? // 주소를 저장할 프로퍼티
     
     override init() {
-        geocoder = CLGeocoder() // Geocoder 초기화
-        currentAddress = nil
-        
-        locationManager = CLLocationManager()
-        // 초기값을 서울로 설정
-        region = MapCameraPosition.region(
-            MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.978),
-                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            geocoder = CLGeocoder() // Geocoder 초기화
+            currentAddress = nil
+            
+            locationManager = CLLocationManager()
+            // 초기값을 서울로 설정
+            region = MapCameraPosition.region(
+                MKCoordinateRegion(
+                    center: CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.978),
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )
             )
-        )
-        
-        super.init()
-        
-        
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-    }
+            
+            super.init()
+            
+            
+            locationManager.delegate = self
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+            updateRegionToUserLocation()
+        }
     
     
     
